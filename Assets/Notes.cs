@@ -18,9 +18,14 @@ public class Notes : MonoBehaviour
 }
 
 /* TODO
- * Rakel Resolution
- * Texture Resolution
- * + irgendwie abhängig von den Maßen des Canvas
+ * GUI
+ * - Rakel-Ausrichtung
+ * - Farben
+ * 
+ * Haken am Rand beim Ziehen
+ * - Berechnungen optimieren
+ * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
+ *   - wird Anwendung weniger flüssig machen
  * 
  * Optimieren
  * - Mask cachen

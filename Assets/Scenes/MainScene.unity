@@ -249,8 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22f31cad736ac4eb69f95d4ab1de48c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextureResolution_x: 1024
-  TextureResolution_y: 512
+  TextureResolution: 100
 --- !u!64 &882033353
 MeshCollider:
   m_ObjectHideFlags: 0

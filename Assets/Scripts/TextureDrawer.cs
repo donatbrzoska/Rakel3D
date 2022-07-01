@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class TextureDrawer : MonoBehaviour
 {
-    // TODO compress to one attribute, so that these don't have to be matched with the canvas size -> which would then implicitly define the following two values
-    public int TextureResolution_x = 1024; // canvas texture space
-    public int TextureResolution_y = 512; // canvas texture space
-
-    private OilPaintTexture Texture;
     private Camera Camera;
+
     private int CanvasColliderID;
-    private float CanvasSize_x; // world space
-    private float CanvasSize_y; // world space
+    private float CanvasWidth; // world space
+    private float CanvasHeight; // world space
+
+    public int TextureResolution = 100; // texture space pixels per 1 world space // TODO GUI
+    private OilPaintTexture Texture;
+    private int TextureWidth; // texure space
+    private int TextureHeight; // texture space
 
     private Rakel Rakel;
-    private Vector2 PreviousPreciseBrushPosition;
+    private float RakelLength = 2.5f; // world space // TODO GUI
+    private float RakelWidth = 1f; // world space // TODO GUI
 
     // Start is called before the first frame update
     void Start()
@@ -23,14 +25,18 @@ public class TextureDrawer : MonoBehaviour
         Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         CanvasColliderID = GameObject.Find("Canvas").GetComponent<MeshCollider>().GetInstanceID();
 
-        CanvasSize_x = GameObject.Find("Canvas").GetComponent<Transform>().localScale.x * 10;//20;
-        CanvasSize_y = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;//10;
+        // convert scale attribute to world space
+        CanvasWidth = GameObject.Find("Canvas").GetComponent<Transform>().localScale.x * 10;
+        CanvasHeight = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;
 
-        Texture = new OilPaintTexture(TextureResolution_x, TextureResolution_y);
+        TextureWidth = (int)(TextureResolution * CanvasWidth);
+        TextureHeight = (int)(TextureResolution * CanvasHeight);
+        Texture = new OilPaintTexture(TextureWidth, TextureHeight);
         GetComponent<Renderer>().material.SetTexture("_MainTex", this.Texture.Texture);
 
-        // TODO choose useful values
-        Rakel = new Rakel(111, 33);
+        int rakelLength_textureSpace = (int)(TextureResolution * RakelLength);
+        int rakelWidth_textureSpace = (int)(TextureResolution * RakelWidth);
+        Rakel = new Rakel(rakelLength_textureSpace, rakelWidth_textureSpace);
         //Rakel = new Rakel(1, 1);
     }
 
@@ -51,12 +57,12 @@ public class TextureDrawer : MonoBehaviour
     Vector2Int ToCanvasTextureSpacePoint(Vector3 worldSpacePoint)
     {
         // "move" canvas to positive coordinates only, so further calculations are simplified
-        float absX = worldSpacePoint.x + CanvasSize_x / 2; // TODO what about odd numbers?
-        float absY = worldSpacePoint.z + CanvasSize_y / 2; // TODO what about odd numbers?
+        float absX = worldSpacePoint.x + CanvasWidth / 2; // TODO what about odd numbers?
+        float absY = worldSpacePoint.z + CanvasHeight / 2; // TODO what about odd numbers?
 
         // for the space conversion, a ratio between the two sizes is needed
-        float xMultiplier = TextureResolution_x / CanvasSize_x; // Calculate: How much wider is the texture than the world space?
-        float yMultiplier = TextureResolution_y / CanvasSize_y;
+        float xMultiplier = TextureWidth / CanvasWidth; // Calculate: How much wider is the texture than the world space?
+        float yMultiplier = TextureHeight / CanvasHeight;
 
         int textureX = Mathf.RoundToInt(absX * xMultiplier);
         int textureY = Mathf.RoundToInt(absY * yMultiplier);
