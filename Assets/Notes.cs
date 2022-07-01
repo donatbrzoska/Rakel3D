@@ -21,9 +21,13 @@ public class Notes : MonoBehaviour
  * Rakel Resolution
  * Texture Resolution
  * + irgendwie abhängig von den Maßen des Canvas
- *
+ * 
+ * Optimieren
+ * - Mask cachen
+ * - Apply nur bei Position Change
  *
  */
+
 
 
 /* Koordinatensysteme 
@@ -51,7 +55,20 @@ public class Notes : MonoBehaviour
 
 
 
-/* TDD
+/* Bugsources
+ * 
+ * 2 innere For-Schleifen
+ * - die zweite modifiziert die Zählvariable der äußeren For-Schleife (i statt k) ...
+ * 
+ * Das ausgegebene Array ist gar nicht das Ergebnis-Array im Test, sondern ein Zwischenstand aber noch VORM Rechteck füllen.
+ * Der tatsächliche Fehler war, dass ich das erwartete Ergebnis falsch definiert hatte (Maske um zwei Spalten nach links verschoben, durch vorheriges Copy-Paste)
+ *
+ * Vector3 kann man nicht mit == vergleichen ... (auch wenn es nicht nullable ist)
+ */
+
+
+
+/* Log
  * 
  * - Input:
  *   - Maus-Position in Canvas-Space (float)
@@ -124,16 +141,4 @@ public class Notes : MonoBehaviour
  *      
  * 01.07.2022
  * - 
- */
-
-
-/* Bugsources
- * 
- * 2 innere For-Schleifen
- * - die zweite modifiziert die Zählvariable der äußeren For-Schleife (i statt k) ...
- * 
- * Das ausgegebene Array ist gar nicht das Ergebnis-Array im Test, sondern ein Zwischenstand aber noch VORM Rechteck füllen.
- * Der tatsächliche Fehler war, dass ich das erwartete Ergebnis falsch definiert hatte (Maske um zwei Spalten nach links verschoben, durch vorheriges Copy-Paste)
- *
- * Vector3 kann man nicht mit == vergleichen ... (auch wenn es nicht nullable ist)
  */

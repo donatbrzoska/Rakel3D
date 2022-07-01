@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class Rakel
 {
+    private int Length;
     private int Width;
-    private int Thickness;
     private Color Color;
     private Vector2Int Position;
     private Vector2 Normal;
 
-    public Rakel(int width, int thickness)
+    public Rakel(int length, int width)
     {
-        this.Width = width; // TODO always keep uneven so there is a center to rotate around
-        this.Thickness = thickness;
+        this.Length = length; // TODO always keep uneven so there is a center to rotate around
+        this.Width = width;
     }
 
     public void UpdateColor(Color color)
@@ -32,7 +32,7 @@ public class Rakel
 
     public void ApplyToCanvas(OilPaintTexture texture)
     {
-        bool[,] mask = new RectangleFootprint(Width, Thickness, Normal).GenerateMask();
+        bool[,] mask = new RectangleFootprint(Length, Width, Normal).GenerateMask();
         ApplyMask(mask, Position, texture);
     }
 
