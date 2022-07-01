@@ -12,7 +12,7 @@ public class OptimizedRakel : Rakel
 
     }
 
-    override public void UpdateDirection(Vector2 normal)
+    override public void UpdateNormal(Vector2 normal)
     {
         PreviousNormal = Normal;
         Normal = normal;

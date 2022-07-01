@@ -50,7 +50,7 @@ public class TextureDrawer : MonoBehaviour
             Vector2Int preciseBrushPosition = ToCanvasTextureSpacePoint(worldSpaceHit);
             Rakel.UpdateColor(new Color(0.3f, 0, 0.7f));
             Rakel.UpdatePosition(preciseBrushPosition);
-            Rakel.UpdateDirection(new Vector2(1, -1));
+            Rakel.UpdateNormal(new Vector2(1, -1));
             Rakel.ApplyToCanvas(Texture);
         }
     }

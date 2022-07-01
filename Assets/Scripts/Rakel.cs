@@ -20,7 +20,7 @@ public class Rakel
         this.Color = color;
     }
 
-    virtual public void UpdateDirection(Vector2 normal)
+    virtual public void UpdateNormal(Vector2 normal)
     {
         this.Normal = normal;
     }
@@ -44,8 +44,8 @@ public class Rakel
             {
                 if (mask[i, j] == true)
                 {
-                    // NOTE the i needs to be converted to coordinate system space because MaskPointToTexturePoint assumes this format
-                    Vector2Int tc = MaskPointToTexturePoint(j, mask.GetLength(0) - 1 - i, mask.GetLength(0), maskPosition);
+                    // NOTE the i needs to be converted to coordinate system space because MaskSpaceToTextureSpace assumes this format
+                    Vector2Int tc = MaskSpaceToTextureSpace(j, mask.GetLength(0) - 1 - i, mask.GetLength(0), maskPosition);
                     //Debug.Log("Setting pixel at [" + tc.x + "," + tc.y + "]");
                     texture.SetPixel(tc.x, tc.y, Color);
                 }
@@ -74,7 +74,7 @@ public class Rakel
      * MaskPoint 1,1 is now TexturePoint 4,3
      *
      */
-    private Vector2Int MaskPointToTexturePoint(int maskX, int maskY, int maskSize, Vector2Int maskPosition)
+    private Vector2Int MaskSpaceToTextureSpace(int maskX, int maskY, int maskSize, Vector2Int maskPosition)
     {
         int maskX0OnTexture = maskPosition.x - maskSize / 2;
         int maskY0OnTexture = maskPosition.y - maskSize / 2;

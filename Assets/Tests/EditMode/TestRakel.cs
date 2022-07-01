@@ -14,7 +14,7 @@ public class TestRakel
 
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(1, 1));
-        r.UpdateDirection(Vector2Int.right);
+        r.UpdateNormal(Vector2Int.right);
         r.ApplyToCanvas(t);
 
         Color[] colors = t.GetPixels();
@@ -37,7 +37,7 @@ public class TestRakel
 
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(2, 1));
-        r.UpdateDirection(Vector2Int.right);
+        r.UpdateNormal(Vector2Int.right);
         r.ApplyToCanvas(t);
 
         Color[] colors = t.GetPixels();
@@ -60,7 +60,7 @@ public class TestRakel
 
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(1, 1));
-        r.UpdateDirection(Vector2Int.down);
+        r.UpdateNormal(Vector2Int.down);
         r.ApplyToCanvas(t);
 
         Color[] colors = t.GetPixels();
@@ -85,7 +85,7 @@ public class TestRakel
 
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(1, 4));
-        r.UpdateDirection(Vector2Int.down);
+        r.UpdateNormal(Vector2Int.down);
         r.ApplyToCanvas(t);
 
         Color[] colors = t.GetPixels();
