@@ -22,6 +22,13 @@ public class Notes : MonoBehaviour
  * - Rakel-Ausrichtung
  * - Farben
  * 
+ * Farbmenge über BumpMap / NormalMap
+ * 
+ * Bidirektionaler Farbaustausch
+ * - Farbschichten auf Rakel
+ *   - Form wie Maske im initial State
+ * - Mapping von Maskenkoordinaten auf Farbschichten in ApplyMask
+ * 
  * Haken am Rand beim Ziehen
  * - Berechnungen optimieren -> bringt nicht wirklich was, wahrscheinlich wird Update() einfach gar nicht oft genug aufgerufen
  * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
