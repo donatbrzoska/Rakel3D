@@ -36,7 +36,8 @@ public class TextureDrawer : MonoBehaviour
 
         int rakelLength_textureSpace = (int)(TextureResolution * RakelLength);
         int rakelWidth_textureSpace = (int)(TextureResolution * RakelWidth);
-        Rakel = new Rakel(rakelLength_textureSpace, rakelWidth_textureSpace);
+        //Rakel = new Rakel(rakelLength_textureSpace, rakelWidth_textureSpace);
+        Rakel = new OptimizedRakel(rakelLength_textureSpace, rakelWidth_textureSpace);
         //Rakel = new Rakel(1, 1);
     }
 

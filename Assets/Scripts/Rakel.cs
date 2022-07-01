@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Rakel
 {
-    private int Length;
-    private int Width;
+    protected int Length;
+    protected int Width;
     private Color Color;
-    private Vector2Int Position;
-    private Vector2 Normal;
+    protected Vector2Int Position;
+    protected Vector2 Normal;
 
     public Rakel(int length, int width)
     {
@@ -20,23 +20,23 @@ public class Rakel
         this.Color = color;
     }
 
-    public void UpdateDirection(Vector2 normal)
+    virtual public void UpdateDirection(Vector2 normal)
     {
         this.Normal = normal;
     }
 
-    public void UpdatePosition(Vector2Int position)
+    virtual public void UpdatePosition(Vector2Int position)
     {
         this.Position = position;
     }
 
-    public void ApplyToCanvas(OilPaintTexture texture)
+    virtual public void ApplyToCanvas(OilPaintTexture texture)
     {
         bool[,] mask = new RectangleFootprint(Length, Width, Normal).GenerateMask();
         ApplyMask(mask, Position, texture);
     }
 
-    private void ApplyMask(bool[,] mask, Vector2Int maskPosition, OilPaintTexture texture)
+    protected void ApplyMask(bool[,] mask, Vector2Int maskPosition, OilPaintTexture texture)
     {
         for (int i = 0; i < mask.GetLength(0); i++)
         {

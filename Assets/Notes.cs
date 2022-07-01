@@ -23,13 +23,10 @@ public class Notes : MonoBehaviour
  * - Farben
  * 
  * Haken am Rand beim Ziehen
- * - Berechnungen optimieren
+ * - Berechnungen optimieren -> bringt nicht wirklich was, wahrscheinlich wird Update() einfach gar nicht oft genug aufgerufen
  * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
  *   - wird Anwendung weniger flüssig machen
  * 
- * Optimieren
- * - Mask cachen
- * - Apply nur bei Position Change
  *
  */
 
