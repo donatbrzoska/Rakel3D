@@ -17,6 +17,14 @@ public class Notes : MonoBehaviour
     }
 }
 
+/* TODO
+ * Rakel Resolution
+ * Texture Resolution
+ * + irgendwie abhängig von den Maßen des Canvas
+ *
+ *
+ */
+
 
 /* Koordinatensysteme 
  * 

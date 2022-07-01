@@ -13,7 +13,6 @@ public class TextureDrawer : MonoBehaviour
     private int CanvasColliderID;
     private float CanvasSize_x; // world space
     private float CanvasSize_y; // world space
-    //public int speed = 128;
 
     private Rakel Rakel;
     private Vector2 PreviousPreciseBrushPosition;
@@ -29,8 +28,6 @@ public class TextureDrawer : MonoBehaviour
 
         Texture = new OilPaintTexture(TextureResolution_x, TextureResolution_y);
         GetComponent<Renderer>().material.SetTexture("_MainTex", this.Texture.Texture);
-        //GetComponent<Renderer>().material.mainTexture = this.Texture;
-        //GetComponent<Renderer>().material.
 
         // TODO choose useful values
         Rakel = new Rakel(111, 33);
@@ -40,13 +37,6 @@ public class TextureDrawer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //      for (int i=0; i<speed; i++)
-        //{
-        //	var x = Random.Range(0, width);
-        //	var y = Random.Range(0, height);
-        //	Texture.SetPixel(x, y, Random.ColorHSV(0f, 1f, 0f, 1f, 0f, 1f, 0f, 1f));
-        //}
-
         Vector3 worldSpaceHit = InputUtil.GetMouseHit(Camera, CanvasColliderID);
         if (!worldSpaceHit.Equals(Vector3.negativeInfinity))
         {
@@ -55,48 +45,7 @@ public class TextureDrawer : MonoBehaviour
             Rakel.UpdatePosition(preciseBrushPosition);
             Rakel.UpdateDirection(new Vector2(1, -1));
             Rakel.ApplyToCanvas(Texture);
-
-            //Vector2 preciseStrokeDirection = PreviousPreciseBrushPosition - preciseBrushPosition;
-            //Debug.Log("previous direction: " + PreviousPreciseBrushPosition);
-            //Debug.Log("precise stroke direction: " + preciseStrokeDirection);
-            //if (preciseStrokeDirection != PreviousPreciseBrushPosition)
-            //{
-            //    Brush.UpdateDirection(preciseStrokeDirection);
-            //    Brush.UpdateDirection(Vector2.one);
-            //    PreviousPreciseBrushPosition = preciseBrushPosition;
-            //}
-            //Brush.UpdateDirection(Vector2.down);
-
-            //Brush.UpdateTexture(Texture);
         }
-
-        //if (Input.GetMouseButton(0))
-        //{
-        //    RaycastHit hit;
-        //    Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
-        //    Physics.Raycast(ray, out hit);
-
-        //    if (hit.colliderInstanceID == CanvasColliderID)
-        //    {
-        //        //Debug.Log("hit canvas at " + hit.point);
-        //        //Debug.Log("hit canvas at texture " + ToCanvasTextureSpacePoint(hit.point));
-        //        Vector2 preciseBrushPosition = ToCanvasTextureSpacePoint(hit.point);
-        //        Brush.UpdatePosition(preciseBrushPosition);
-
-        //        Vector2 preciseStrokeDirection = PreviousPreciseBrushPosition - preciseBrushPosition;
-        //        Debug.Log("previous direction: " + PreviousPreciseBrushPosition);
-        //        Debug.Log("precise stroke direction: " + preciseStrokeDirection);
-        //        if (preciseStrokeDirection != PreviousPreciseBrushPosition)
-        //        {
-        //            Brush.UpdateDirection(preciseStrokeDirection);
-        //            Brush.UpdateDirection(Vector2.one);
-        //            PreviousPreciseBrushPosition = preciseBrushPosition;
-        //        }
-
-        //        Brush.UpdateTexture(Texture);
-
-        //    }
-        //}
     }
 
     Vector2Int ToCanvasTextureSpacePoint(Vector3 worldSpacePoint)
@@ -113,12 +62,6 @@ public class TextureDrawer : MonoBehaviour
         int textureY = Mathf.RoundToInt(absY * yMultiplier);
 
         return new Vector2Int(textureX, textureY);
-
-        // now invert, because texture 0,0 is in the upper right corner whereas screen 0,0 is in the lower left
-        //float invertedTextureX = textureX - TextureResolution_x;
-        //float invertedTextureY = textureY - TextureResolution_y;
-
-        //return new Vector2(System.Math.Abs(invertedTextureX), System.Math.Abs(invertedTextureY));
     }
 
     /*

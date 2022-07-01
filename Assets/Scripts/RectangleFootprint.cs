@@ -60,24 +60,6 @@ public class RectangleFootprint
         return result;
     }
 
-    ///* Returns vertices of a rectangle, which is centered like this:
-    // *    |
-    // *   ##
-    // * --##--------
-    // *   ##
-    // *    |
-    // * Order of coordinates is upper left, upper right, lower left, lower right
-    // */
-    //private List<Vector2Int> InitialRectangleVertices(int width, int height)
-    //{
-    //    Vector2Int ul = new Vector2Int(-width + 1, height / 2);
-    //    Vector2Int ur = new Vector2Int(0, height / 2);
-    //    Vector2Int ll = new Vector2Int(-width + 1, -height / 2);
-    //    Vector2Int lr = new Vector2Int(0, -width / 2);
-
-    //    return new List<Vector2Int> { ul, ur, ll, lr };
-    //}
-
 
     /* returns vertices of a rectangle, which is centered like this:
      *    |
@@ -94,11 +76,9 @@ public class RectangleFootprint
         Vector2Int ur = new Vector2Int(0, height / 2);
         Vector2Int ll = new Vector2Int(-width + 1, -height / 2);
         Vector2Int lr = new Vector2Int(0, -height / 2);
-        //LogUtil.Log(new List<Vector2Int> { ul, ur, ll, lr}, "right after generating");
 
         // 2. Rotate vertices
         float angle = Vector2.Angle(Vector2.right, direction);
-        //Debug.Log("Angle between " + Vector2.right.normalized + " and " + direction.normalized + " is " + angle);
         return new List<Vector2Int> {
             RotateAroundOrigin(ul, angle),
             RotateAroundOrigin(ur, angle),
@@ -107,23 +87,15 @@ public class RectangleFootprint
         };
     }
 
+    // inspired by https://answers.unity.com/questions/1229302/rotate-a-vector2-around-the-z-axis-on-a-mathematic.html
     private Vector2Int RotateAroundOrigin(Vector2Int vec, float angle)
     {
-        //float angle_rad = angle * Mathf.Deg2Rad;
-        //float angle_minus_90_rad = (angle - 90) * Mathf.Deg2Rad;
-        //Vector2Int result = new Vector2Int(
-        //    Mathf.RoundToInt(Mathf.Cos(-angle_rad) * vec.x + Mathf.Cos(angle_minus_90_rad)),
-        //    Mathf.RoundToInt(Mathf.Sin(-angle_rad) * vec.y + Mathf.Sin(angle_minus_90_rad)));
-        //Debug.Log(vec + " is now " + result);
-        //return result;
-
         float rad = angle * Mathf.Deg2Rad;
         float s = Mathf.Sin(rad);
         float c = Mathf.Cos(rad);
         Vector2Int result = new Vector2Int(
             Mathf.RoundToInt(vec.x * c + vec.y * s),
             Mathf.RoundToInt(vec.y * c - vec.x * s));
-        //Debug.Log(vec + " is now " + result);
         return result;
     }
 
@@ -132,20 +104,16 @@ public class RectangleFootprint
         List<Vector2Int> asv = ToPositiveSpace(vertices, target.GetLength(0));
 
         DrawLine(asv[0].x, asv[0].y, asv[1].x, asv[1].y, target);
-        //LogUtil.Log(target, "1");
         DrawLine(asv[1].x, asv[1].y, asv[2].x, asv[2].y, target);
-        //LogUtil.Log(target, "2");
         DrawLine(asv[2].x, asv[2].y, asv[3].x, asv[3].y, target);
-        //LogUtil.Log(target, "3");
         DrawLine(asv[3].x, asv[3].y, asv[0].x, asv[0].y, target);
-        //LogUtil.Log(target, "4");
     }
 
     /* Normal space:
      *    |
-     *   ##
-     * --##--------
-     *   ##
+     *   11
+     * --11--------
+     *   11
      *    |
      *
      * Positive space:
@@ -196,7 +164,6 @@ public class RectangleFootprint
         int numerator = longest >> 1;
         for (int i = 0; i <= longest; i++)
         {
-            //Debug.Log("drawing at " + x1 + "/" + y1);
             Vector2Int arrayIJ = ToArraySpace(x1, y1, target.GetLength(0));
             target[arrayIJ.x, arrayIJ.y] = true;
             numerator += shortest;
@@ -258,63 +225,4 @@ public class RectangleFootprint
             }
         }
     }
-
-
-    //private List<Vector2Int> DrawRectangle(List<Vector2Int> rectangleVertices)
-    //{
-    //    DrawRectangleLines(rectangleVertices);
-    //    FillRectangle();
-    //}
-
-    //private void DrawRectangleLines(List<Vector2Int> rectangleVertices)
-    //{
-    //    DrawLine(target, (int)vertices[0].x, (int)vertices[0].y, (int)vertices[1].x, (int)vertices[1].y);
-    //    DrawLine(target, (int)vertices[1].x, (int)vertices[1].y, (int)vertices[2].x, (int)vertices[2].y);
-    //    DrawLine(target, (int)vertices[2].x, (int)vertices[2].y, (int)vertices[3].x, (int)vertices[3].y);
-    //    DrawLine(target, (int)vertices[3].x, (int)vertices[3].y, (int)vertices[0].x, (int)vertices[0].y);
-    //}
-
-    //// Bresenham from https://stackoverflow.com/a/11683720
-    //public List<Vector2Int> DrawLine(int x1, int y1, int x2, int y2)
-    //{
-    //    List<Vector2Int> coordinates = new List<Vector2Int>();
-
-    //    int w = x2 - x1;
-    //    int h = y2 - y1;
-    //    int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
-    //    if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
-    //    if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
-    //    if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
-    //    int longest = Mathf.Abs(w);
-    //    int shortest = Mathf.Abs(h);
-    //    if (!(longest > shortest))
-    //    {
-    //        longest = Mathf.Abs(h);
-    //        shortest = Mathf.Abs(w);
-    //        if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
-    //        dx2 = 0;
-    //    }
-    //    int numerator = longest >> 1;
-    //    for (int i = 0; i <= longest; i++)
-    //    {
-    //        //Debug.Log("drawing at " + x1 + "/" + y1);
-    //        //target[x1, y1] = true;
-    //        coordinates.Add(new Vector2Int(x1, y1));
-    //        numerator += shortest;
-    //        if (!(numerator < longest))
-    //        {
-    //            numerator -= longest;
-    //            x1 += dx1;
-    //            y1 += dy1;
-    //        }
-    //        else
-    //        {
-    //            x1 += dx2;
-    //            y1 += dy2;
-    //        }
-    //    }
-
-    //    return coordinates;
-    //}
-
 }

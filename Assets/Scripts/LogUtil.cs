@@ -53,10 +53,6 @@ public class LogUtil
         }
 
         string result = "";
-        //for (int i = 0; i < colors.GetLength(0); i++)
-        //{
-        //    result += colors[i].ToString() + " ";
-        //}
         int cols = colors.GetLength(0) / rows;
         for (int i=0; i<rows; i++)
         {
