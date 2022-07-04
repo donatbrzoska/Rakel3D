@@ -7,39 +7,53 @@ public class OilPaintEngine : MonoBehaviour
     private Camera Camera;
 
     private int CanvasColliderID;
+    private Renderer CanvasRenderer;
     private float CanvasWidth; // world space
     private float CanvasHeight; // world space
 
-    public int TextureResolution = 100; // texture space pixels per 1 world space // TODO GUI
+    public int TextureResolution { get; private set; } = 100; // texture space pixels per 1 world space
     private OilPaintTexture Texture;
-    private int TextureWidth; // texure space
+    private int TextureWidth; // texture space
     private int TextureHeight; // texture space
 
     public Rakel Rakel { get; private set; }
-    private float RakelLength = 2.5f; // world space // TODO GUI
-    private float RakelWidth = 1f; // world space // TODO GUI
+    public Vector2 RakelNormal { get; private set; } = new Vector2(1, 0);
+    public Color RakelColor { get; private set; } = new Color(0.3f, 0, 0.7f);
+    public float RakelLength { get; private set; } = 2.5f; // world space
+    public float RakelWidth { get; private set; } = 1f; // world space
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
         CanvasColliderID = GameObject.Find("Canvas").GetComponent<MeshCollider>().GetInstanceID();
+        CanvasRenderer = GameObject.Find("Canvas").GetComponent<Renderer>();
 
         // convert scale attribute to world space
         CanvasWidth = GameObject.Find("Canvas").GetComponent<Transform>().localScale.x * 10;
         CanvasHeight = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;
 
-        TextureWidth = (int)(TextureResolution * CanvasWidth);
-        TextureHeight = (int)(TextureResolution * CanvasHeight);
-        Texture = new OilPaintTexture(TextureWidth, TextureHeight);
-        GameObject.Find("Canvas").GetComponent<Renderer>().material.SetTexture("_MainTex", Texture.Texture);
+        CreateTexture();
 
-        int rakelLength_textureSpace = (int)(TextureResolution * RakelLength);
-        int rakelWidth_textureSpace = (int)(TextureResolution * RakelWidth);
-        //Rakel = new Rakel(rakelLength_textureSpace, rakelWidth_textureSpace);
-        Rakel = new OptimizedRakel(rakelLength_textureSpace, rakelWidth_textureSpace);
-        Rakel.UpdateNormal(new Vector2(1, 0));
-        //Rakel = new Rakel(1, 1);
+        //Rakel = new Rakel();
+        Rakel = new OptimizedRakel();
+        InitializeRakel();
+    }
+
+    void CreateTexture()
+    {
+        TextureWidth = WorldSpaceLengthToTextureSpaceLength(CanvasWidth, TextureResolution);
+        TextureHeight = WorldSpaceLengthToTextureSpaceLength(CanvasHeight, TextureResolution);
+        Texture = new OilPaintTexture(TextureWidth, TextureHeight);
+        CanvasRenderer.material.SetTexture("_MainTex", Texture.Texture);
+    }
+
+    void InitializeRakel()
+    {
+        Rakel.UpdateLength(WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution));
+        Rakel.UpdateWidth(WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution));
+        Rakel.UpdateNormal(RakelNormal);
+        Rakel.UpdateColor(RakelColor);
     }
 
     // Update is called once per frame
@@ -49,7 +63,6 @@ public class OilPaintEngine : MonoBehaviour
         if (!worldSpaceHit.Equals(Vector3.negativeInfinity))
         {
             Vector2Int preciseBrushPosition = ToCanvasTextureSpacePoint(worldSpaceHit);
-            Rakel.UpdateColor(new Color(0.3f, 0, 0.7f));
             Rakel.UpdatePosition(preciseBrushPosition);
             Rakel.ApplyToCanvas(Texture);
         }
@@ -71,14 +84,38 @@ public class OilPaintEngine : MonoBehaviour
         return new Vector2Int(textureX, textureY);
     }
 
+    int WorldSpaceLengthToTextureSpaceLength(float worldSpaceLength, int textureResolution)
+    {
+        return (int)(textureResolution * worldSpaceLength);
+    }
+
     /*
      MouseInput: Canvas hitpoint in world space
      Canvas:     Convert world space hitpoint --> canvas texture space hitpoint
      Brush:      Do stuff with texture space hitpoint
     */
 
+    public void UpdateRakelLength(float worldSpaceLength)
+    {
+        RakelLength = worldSpaceLength;
+        Rakel.UpdateLength(WorldSpaceLengthToTextureSpaceLength(worldSpaceLength, TextureResolution));
+    }
+
+    public void UpdateRakelWidth(float worldSpaceWidth)
+    {
+        RakelWidth = worldSpaceWidth;
+        Rakel.UpdateWidth(WorldSpaceLengthToTextureSpaceLength(worldSpaceWidth, TextureResolution));
+    }
+
     public void UpdateRakelNormal(Vector2 normal)
     {
         Rakel.UpdateNormal(normal);
+    }
+
+    public void UpdateTextureResolution(int pixelsPerWorldSpaceUnit)
+    {
+        TextureResolution = pixelsPerWorldSpaceUnit;
+        CreateTexture();
+        InitializeRakel(); // Rakel is dependent on TextureResolution
     }
 }

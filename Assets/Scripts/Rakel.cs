@@ -9,10 +9,17 @@ public class Rakel
     protected Vector2Int Position;
     protected Vector2 Normal;
 
-    public Rakel(int length, int width)
+    public Rakel() { }
+
+    virtual public void UpdateLength(int length)
     {
-        this.Length = length; // TODO always keep uneven so there is a center to rotate around
-        this.Width = width;
+        // TODO always keep uneven so there is a center to rotate around
+        Length = length;
+    }
+
+    virtual public void UpdateWidth(int width)
+    {
+        Width = width;
     }
 
     public void UpdateColor(Color color)

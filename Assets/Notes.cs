@@ -22,6 +22,7 @@ public class Notes : MonoBehaviour
  * - Rakel-Ausrichtung und Größe
  *   + "Preview"
  * - Farben
+ * - Resolution
  * 
  * Farbmenge über BumpMap / NormalMap
  * 
@@ -30,11 +31,20 @@ public class Notes : MonoBehaviour
  *   - Form wie Maske im initial State
  * - Mapping von Maskenkoordinaten auf Farbschichten in ApplyMask
  * 
+ * Maske optimieren
+ * - größere Rakel ziemlich langsam
+ * 
  * Haken am Rand beim Ziehen
  * - Berechnungen optimieren -> bringt nicht wirklich was, wahrscheinlich wird Update() einfach gar nicht oft genug aufgerufen
  * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
  *   - wird Anwendung weniger flüssig machen
  * 
+ * Tests
+ * - OptimizedRakel
+ * 
+ * Bugs
+ * - RakelWidth 0 macht trotzdem eine Linie
+ * - Wertebereiche bei InputFields nicht definierbar
  *
  */
 

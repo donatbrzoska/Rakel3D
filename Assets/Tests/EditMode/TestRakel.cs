@@ -10,8 +10,9 @@ public class TestRakel
     public void Apply_Point()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        Rakel r = new Rakel(1, 1);
-
+        Rakel r = new Rakel();
+        r.UpdateLength(1);
+        r.UpdateWidth(1);
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(1, 1));
         r.UpdateNormal(Vector2Int.right);
@@ -33,8 +34,9 @@ public class TestRakel
     public void Apply_Rectangle()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        Rakel r = new Rakel(3, 2);
-
+        Rakel r = new Rakel();
+        r.UpdateLength(3);
+        r.UpdateWidth(2);
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(2, 1));
         r.UpdateNormal(Vector2Int.right);
@@ -56,8 +58,9 @@ public class TestRakel
     public void Apply_Rectangle_Rotated90_SymmetricCase()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        Rakel r = new Rakel(3, 2);
-
+        Rakel r = new Rakel();
+        r.UpdateLength(3);
+        r.UpdateWidth(2);
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(1, 1));
         r.UpdateNormal(Vector2Int.down);
@@ -81,8 +84,9 @@ public class TestRakel
     public void Apply_Rectangle_Rotated90_LargerTextureAsymmetricCase()
     {
         OilPaintTexture t = new OilPaintTexture(3, 6);
-        Rakel r = new Rakel(3, 2);
-
+        Rakel r = new Rakel();
+        r.UpdateLength(3);
+        r.UpdateWidth(2);
         r.UpdateColor(new Color(0, 0.4f, 0.8f));
         r.UpdatePosition(new Vector2Int(1, 4));
         r.UpdateNormal(Vector2Int.down);
