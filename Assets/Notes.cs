@@ -19,7 +19,8 @@ public class Notes : MonoBehaviour
 
 /* TODO
  * GUI
- * - Rakel-Ausrichtung
+ * - Rakel-Ausrichtung und Größe
+ *   + "Preview"
  * - Farben
  * 
  * Farbmenge über BumpMap / NormalMap

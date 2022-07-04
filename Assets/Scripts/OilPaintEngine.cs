@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TextureDrawer : MonoBehaviour
+public class OilPaintEngine : MonoBehaviour
 {
     private Camera Camera;
 
@@ -15,7 +15,7 @@ public class TextureDrawer : MonoBehaviour
     private int TextureWidth; // texure space
     private int TextureHeight; // texture space
 
-    private Rakel Rakel;
+    public Rakel Rakel { get; private set; }
     private float RakelLength = 2.5f; // world space // TODO GUI
     private float RakelWidth = 1f; // world space // TODO GUI
 
@@ -32,12 +32,13 @@ public class TextureDrawer : MonoBehaviour
         TextureWidth = (int)(TextureResolution * CanvasWidth);
         TextureHeight = (int)(TextureResolution * CanvasHeight);
         Texture = new OilPaintTexture(TextureWidth, TextureHeight);
-        GetComponent<Renderer>().material.SetTexture("_MainTex", this.Texture.Texture);
+        GameObject.Find("Canvas").GetComponent<Renderer>().material.SetTexture("_MainTex", Texture.Texture);
 
         int rakelLength_textureSpace = (int)(TextureResolution * RakelLength);
         int rakelWidth_textureSpace = (int)(TextureResolution * RakelWidth);
         //Rakel = new Rakel(rakelLength_textureSpace, rakelWidth_textureSpace);
         Rakel = new OptimizedRakel(rakelLength_textureSpace, rakelWidth_textureSpace);
+        Rakel.UpdateNormal(new Vector2(1, 0));
         //Rakel = new Rakel(1, 1);
     }
 
@@ -50,7 +51,6 @@ public class TextureDrawer : MonoBehaviour
             Vector2Int preciseBrushPosition = ToCanvasTextureSpacePoint(worldSpaceHit);
             Rakel.UpdateColor(new Color(0.3f, 0, 0.7f));
             Rakel.UpdatePosition(preciseBrushPosition);
-            Rakel.UpdateNormal(new Vector2(1, -1));
             Rakel.ApplyToCanvas(Texture);
         }
     }
@@ -76,4 +76,9 @@ public class TextureDrawer : MonoBehaviour
      Canvas:     Convert world space hitpoint --> canvas texture space hitpoint
      Brush:      Do stuff with texture space hitpoint
     */
+
+    public void UpdateRakelNormal(Vector2 normal)
+    {
+        Rakel.UpdateNormal(normal);
+    }
 }

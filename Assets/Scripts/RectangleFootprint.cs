@@ -80,23 +80,11 @@ public class RectangleFootprint
         // 2. Rotate vertices
         float angle = Vector2.Angle(Vector2.right, direction);
         return new List<Vector2Int> {
-            RotateAroundOrigin(ul, angle),
-            RotateAroundOrigin(ur, angle),
-            RotateAroundOrigin(lr, angle),
-            RotateAroundOrigin(ll, angle),
+            MathUtil.RotateAroundOrigin(ul, angle),
+            MathUtil.RotateAroundOrigin(ur, angle),
+            MathUtil.RotateAroundOrigin(lr, angle),
+            MathUtil.RotateAroundOrigin(ll, angle),
         };
-    }
-
-    // inspired by https://answers.unity.com/questions/1229302/rotate-a-vector2-around-the-z-axis-on-a-mathematic.html
-    private Vector2Int RotateAroundOrigin(Vector2Int vec, float angle)
-    {
-        float rad = angle * Mathf.Deg2Rad;
-        float s = Mathf.Sin(rad);
-        float c = Mathf.Cos(rad);
-        Vector2Int result = new Vector2Int(
-            Mathf.RoundToInt(vec.x * c + vec.y * s),
-            Mathf.RoundToInt(vec.y * c - vec.x * s));
-        return result;
     }
 
     private void DrawLines(List<Vector2Int> vertices, bool[,] target)
