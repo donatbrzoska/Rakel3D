@@ -84,6 +84,8 @@ public class Notes : MonoBehaviour
  * Der tatsächliche Fehler war, dass ich das erwartete Ergebnis falsch definiert hatte (Maske um zwei Spalten nach links verschoben, durch vorheriges Copy-Paste)
  *
  * Vector3 kann man nicht mit == vergleichen ... (auch wenn es nicht nullable ist)
+ * 
+ * Copy and Paste, Controller benutzt falschen Setter und tut damit natürlich was anderes als erwartet
  */
 
 
