@@ -51,7 +51,7 @@ public class TestOilPaintTexture
     }
 
     [Test]
-    public void SetPixel_Upper_OO()
+    public void SetPixel_Upper_OOB()
     {
         OilPaintTexture t = new OilPaintTexture(2, 2);
 
@@ -69,7 +69,7 @@ public class TestOilPaintTexture
     }
 
     [Test]
-    public void SetPixel_Right_OO()
+    public void SetPixel_Right_OOB()
     {
         OilPaintTexture t = new OilPaintTexture(2, 2);
 
@@ -87,7 +87,7 @@ public class TestOilPaintTexture
     }
 
     [Test]
-    public void SetPixel_Lower_OO()
+    public void SetPixel_Lower_OOB()
     {
         OilPaintTexture t = new OilPaintTexture(2, 2);
 
@@ -105,7 +105,7 @@ public class TestOilPaintTexture
     }
 
     [Test]
-    public void SetPixel_Left_OO()
+    public void SetPixel_Left_OOB()
     {
         OilPaintTexture t = new OilPaintTexture(2, 2);
 
