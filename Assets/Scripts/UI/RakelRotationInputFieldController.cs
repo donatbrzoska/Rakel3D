@@ -16,7 +16,7 @@ public class RakelRotationInputFieldController : InputFieldController
     override public void OnValueChanged(string arg0)
     {
         int value = int.Parse(arg0);
-        Vector2 normal = MathUtil.RotateAroundOrigin(Vector2Int.right, value);
+        Vector2 normal = MathUtil.RotateAroundOrigin(Vector2.right, value);
         OilPaintEngine.UpdateRakelNormal(normal);
     }
 }
