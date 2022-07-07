@@ -68,7 +68,7 @@ public class Notes : MonoBehaviour
  * ALT: Rotieren
  *
  * Command + D/Linksklick: Springe zu Deklaration
- * CMD + ALT + LEFT/RIGHT: Springe zu vorheriger/nächster Curserposition
+ * CMD + CTRL + LEFT/RIGHT: Springe zu vorheriger/nächster Curserposition
  * 
  * ALT + Mouse: Spaltenweise Mutliline-Markierung
  */
@@ -163,4 +163,16 @@ public class Notes : MonoBehaviour
  *      
  * 01.07.2022
  * - 
+ * 
+ * 04.07.2022
+ * - Maske optimieren, so dass das Ergebnis eine Sparse-Repräsentation ist wodurch das Apply um ein vielfaches schneller stattfinden kann
+ *   - Scanline benötigt Zeilen -> Möglichkeiten für Datenstrukturen:
+ *     - Array mit so vielen Zeilen wie es y-Werte gibt und zwei Spalten (x-Anfang, x-Ende)
+ *       - es muss herausgefunden werden, wie viele y-Werte es gibt (Array-Erstellung)
+ *         -> scheint machbar, ansonsten List verwenden?
+ *       - es muss herausgefunden werden, wie die Werte der Maske auf den TextureSpace gemappt werden können
+ *          - y-Koordinaten verraten wie weit wir vom Center entfernt sind
+ *     - Dictionary mit einem Key für jede Zeile, Zeilen sind Arrays mit zwei Werten
+ * - evtl. is es auch sinnvoller zuerst den bidirektionalen Farbaustausch zu implementieren, damit man dann weiß
+ *   in welcher Form die Maske vorliegen soll
  */
