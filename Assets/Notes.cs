@@ -208,4 +208,11 @@ public class Notes : MonoBehaviour
  *   - Effiziente Speichernutzung (nur Anfangs- und Endkoordinaten)
  *   - Einmalige Speicherallokation (Array, keine Vektoren)
  *   - Einsparung von Rechenschritten (nur Anfangs- und Endkoordinaten bedeutet, dass das Fill auf später verschoben werden kann, um es direkt mit einem weiteren Schritt zu verbinden)
+ *   
+ * aufgehört bei:
+ * - Zeit für Berechnung und Anwendung der Maske messen
+ * - Es scheint irgendeinen Bug zu geben, weil die Maske stets neu berechnet wird
+ *   - Irgendwer setzt zwischendurch die Normale auf 0,0
+ *   - Nein, ganz am Anfang ist sie 0,0 und dann bleibt sie bei 0,0 und natürlich ist dann Normal nie PreviousNormal ....
+ *   - Hätte man einen Test gehabt, wär das vermutlich schon aufgefallen
  */

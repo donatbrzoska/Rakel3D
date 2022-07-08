@@ -1,25 +1,39 @@
 ﻿using System;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Rakel
 {
-    protected int Length;
-    protected int Width;
     private Color Color;
-    protected Vector2Int Position;
-    protected Vector2 Normal;
 
-    public Rakel() { }
+    private int Length;
+    private int Width;
+    private Vector2 Normal;
+    private bool RecalculateMask;
+    private BasicRectangleCalculator RectangleCalculator;
+    private bool[,] LatestMask;
 
-    virtual public void UpdateLength(int length)
+    private Vector2Int Position;
+    private bool ReapplyMask;
+    private MaskApplicator MaskApplicator;
+
+    public Rakel(BasicRectangleCalculator rectangleCalculator, MaskApplicator maskApplicator)
+    {
+        RectangleCalculator = rectangleCalculator;
+        MaskApplicator = maskApplicator;
+    }
+
+    public void UpdateLength(int length)
     {
         // TODO always keep uneven so there is a center to rotate around
         Length = length;
+        RecalculateMask = true;
     }
 
-    virtual public void UpdateWidth(int width)
+    public void UpdateWidth(int width)
     {
         Width = width;
+        RecalculateMask = true;
     }
 
     public void UpdateColor(Color color)
@@ -27,64 +41,38 @@ public class Rakel
         this.Color = color;
     }
 
-    virtual public void UpdateNormal(Vector2 normal)
+    public void UpdateNormal(Vector2 normal)
     {
         this.Normal = normal;
+        RecalculateMask = true;
     }
 
-    virtual public void UpdatePosition(Vector2Int position)
+    public void UpdatePosition(Vector2Int position)
     {
         this.Position = position;
+        ReapplyMask = true;
     }
 
-    virtual public void ApplyToCanvas(OilPaintTexture texture)
+    public void ApplyToCanvas(OilPaintTexture texture)
     {
-        bool[,] mask = new RectangleFootprint(Length, Width, Normal).GenerateMask();
-        ApplyMask(mask, Position, texture);
-    }
-
-    protected void ApplyMask(bool[,] mask, Vector2Int maskPosition, OilPaintTexture texture)
-    {
-        for (int i = 0; i < mask.GetLength(0); i++)
+        if (RecalculateMask)
         {
-            for (int j = 0; j < mask.GetLength(1); j++) // NOTE mask.GetLength(0) would also work, since the mask is a perfect square
-            {
-                if (mask[i, j] == true)
-                {
-                    // NOTE the i needs to be converted to coordinate system space because MaskSpaceToTextureSpace assumes this format
-                    Vector2Int tc = MaskSpaceToTextureSpace(j, mask.GetLength(0) - 1 - i, mask.GetLength(0), maskPosition);
-                    //Debug.Log("Setting pixel at [" + tc.x + "," + tc.y + "]");
-                    texture.SetPixel(tc.x, tc.y, Color);
-                }
-            }
-        }
-        texture.Apply();
-    }
+            RecalculateMask = false; // reset
+            ReapplyMask = true;
 
-    /* Mask:
-     *    |
-     *    0 0 0
-     *    0 1 0
-     * ---0 0 0-----
-     *    |
-     *    
-     * Texture + Mask with maskPosition M on texture:
-     *    |
-     *    # # # # # # #
-     *    # # # 0 0 0 #
-     *    # # # 0 M 0 #
-     *    # # # 0 0 0 #
-     *    # # # # # # #
-     * ---# # # # # # #--
-     *    |
-     * 
-     * MaskPoint 1,1 is now TexturePoint 4,3
-     *
-     */
-    private Vector2Int MaskSpaceToTextureSpace(int maskX, int maskY, int maskSize, Vector2Int maskPosition)
-    {
-        int maskX0OnTexture = maskPosition.x - maskSize / 2;
-        int maskY0OnTexture = maskPosition.y - maskSize / 2;
-        return new Vector2Int(maskX0OnTexture + maskX, maskY0OnTexture + maskY);
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            LatestMask = RectangleCalculator.Calculate(Length, Width, Normal);
+            //UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
+        }
+
+        if (ReapplyMask)
+        {
+            ReapplyMask = false;
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            MaskApplicator.Apply(LatestMask, Position, texture, Color);
+            //UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
+        }
     }
 }

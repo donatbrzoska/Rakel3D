@@ -4,13 +4,13 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class TestRectangleFootprint
+public class TestBasicRectangleCalculator
 {
     [Test]
     public void InitialState_Line()
     {
-        RectangleFootprint r = new RectangleFootprint(3, 1, Vector2.right);
-        bool[,] mask = r.GenerateMask();
+        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        bool[,] mask = r.Calculate(3, 1, Vector2.right);
 
         //Debug.Log("InitialState_Line\n" + r.ToString());
 
@@ -29,8 +29,8 @@ public class TestRectangleFootprint
     [Test]
     public void InitialState_Lines()
     {
-        RectangleFootprint r = new RectangleFootprint(3, 2, Vector2.right);
-        bool[,] mask = r.GenerateMask();
+        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        bool[,] mask = r.Calculate(3, 2, Vector2.right);
 
         //Debug.Log("InitialState_Lines\n" + r.ToString());
 
@@ -49,8 +49,8 @@ public class TestRectangleFootprint
     [Test]
     public void InitialState_Rectangle()
     {
-        RectangleFootprint r = new RectangleFootprint(5, 3, Vector2.right);
-        bool[,] mask = r.GenerateMask();
+        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        bool[,] mask = r.Calculate(5, 3, Vector2.right);
 
         Assert.AreEqual(
             new bool[11, 11] {
@@ -71,8 +71,8 @@ public class TestRectangleFootprint
     [Test]
     public void Rotated90_Line()
     {
-        RectangleFootprint r = new RectangleFootprint(3, 1, Vector2.down);
-        bool[,] mask = r.GenerateMask();
+        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        bool[,] mask = r.Calculate(3, 1, Vector2.down);
 
         Assert.AreEqual(
             new bool[7, 7] {
@@ -89,8 +89,8 @@ public class TestRectangleFootprint
     [Test]
     public void Rotated90_Lines()
     {
-        RectangleFootprint r = new RectangleFootprint(3, 2, Vector2.down);
-        bool[,] mask = r.GenerateMask();
+        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        bool[,] mask = r.Calculate(3, 2, Vector2.down);
 
         //Debug.Log("Rotated90_Lines\n" + r.ToString());
 
@@ -109,8 +109,8 @@ public class TestRectangleFootprint
     [Test]
     public void Rotated45_Line()
     {
-        RectangleFootprint r = new RectangleFootprint(3, 1, new Vector2(1, -1));
-        bool[,] mask = r.GenerateMask();
+        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        bool[,] mask = r.Calculate(3, 1, new Vector2(1, -1));
 
         Assert.AreEqual(
             new bool[7, 7] {

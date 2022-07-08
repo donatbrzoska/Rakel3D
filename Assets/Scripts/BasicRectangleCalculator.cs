@@ -2,64 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RectangleFootprint
+public class BasicRectangleCalculator
 {
-    private int Height;
-    private int Width;
-    private Vector2 Normal;
+    public BasicRectangleCalculator() { }
 
-    /* initial orientation:
+    /*
+     * Returns a mask as an array which can be layed onto a coordinate system as it is
+     * 
+     * initial orientation:
      *    |
      *   ##
      * --##--------
      *   ##
      *    |
      */
-    public RectangleFootprint(int height, int width, Vector2 normal)
+    public virtual bool[,] Calculate(int height, int width, Vector2 normal)
     {
-        Height = height; // TODO ensure uneven values so there always is a center
-        Width = width;
-        Normal = normal;
-    }
+        if (height % 2 == 0)
+            height += 1;
 
-    /*
-     * Returns a mask as an array which can be layed onto a coordinate system as it is
-     */
-    public bool[,] GenerateMask()
-    {
-        List<Vector2Int> rectangleVertices = RectangleVerticesFromNormal(Height, Width, Normal);
+        List<Vector2Int> rectangleVertices = RectangleVerticesFromNormal(height, width, normal);
 
-        int maskSize = Mathf.Max(Height, Width) * 2 + 1; // always ensure a precise center
+        int maskSize = Mathf.Max(height, width) * 2 + 1; // always ensure a precise center
         bool[,] mask = new bool[maskSize, maskSize];
         DrawLines(rectangleVertices, mask);
         FillRectangle(mask);
 
         return mask;
     }
-
-    public override string ToString()
-    {
-        string result = "";
-
-        bool[,] mask = GenerateMask();
-        for (int i=0; i<mask.GetLength(0); i++)
-        {
-            for (int j=0; j<mask.GetLength(1); j++)
-            {
-                if (mask[i,j] == true)
-                {
-                    result += " 1";
-                }
-                else
-                {
-                    result += " 0";
-                }
-            }
-            result += "\n";
-        }
-        return result;
-    }
-
 
     /* returns vertices of a rectangle, which is centered like this:
      *    |
