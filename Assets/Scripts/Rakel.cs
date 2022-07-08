@@ -27,11 +27,6 @@ public abstract class Rakel
         RecalculateMask = true;
     }
 
-    public void UpdateColor(Color color)
-    {
-        Color = color;
-    }
-
     public void UpdateNormal(Vector2 normal)
     {
         Normal = normal;
@@ -42,6 +37,11 @@ public abstract class Rakel
     {
         Position = position;
         ReapplyMask = true;
+    }
+
+    public void UpdateColor(Color color)
+    {
+        Color = color;
     }
 
     public void ApplyToCanvas(OilPaintTexture texture)
