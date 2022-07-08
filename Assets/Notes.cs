@@ -175,4 +175,37 @@ public class Notes : MonoBehaviour
  *     - Dictionary mit einem Key für jede Zeile, Zeilen sind Arrays mit zwei Werten
  * - evtl. is es auch sinnvoller zuerst den bidirektionalen Farbaustausch zu implementieren, damit man dann weiß
  *   in welcher Form die Maske vorliegen soll
+ *   
+ * 05.07.2022
+ * - Neue Implementierung für die Maske
+ * 1. Koordinaten der Maske im InitialState berechnen
+ * 2. Koordinaten um 0,0 rotieren
+ * 3. Koordinaten an Stelle verschieben
+ * 4. ApplyMask macht dann was für alle Koordinaten
+ * 
+ * 08.07.2022
+ * -> es entstehen Löcher, siehe Grid.keynote
+ * - es braucht also mehr Schritte
+ * -> ApplyToCanvas macht dann:
+ * 1. rotiertes Rechteck ausrechnen, auf dem Farben aufgetragen werden
+ * -> aligned rectangle muss effizient berechnet werden
+ * (2. Für jeden Pixel dieses Rechtecks auf den Farbspeicher in initialer Rotation mappen)
+ * (-> Pixelkoordinaten zurückrotieren)
+ * 3. Textur an Position <Rakelposition + Pixelkoordinate aligned rectangle> entspricht dann der zurückrotiert(Pixelkoordinate aligned rectangle)
+ * -> Farbe auftragen / Farbe mitnehmen
+ * 
+ * Es gibt also die Komponenten:
+ * - RectangleFootprint(Calculator)
+ * - ColorReservoir + PickupMap
+ * - RectangleFootprintMapper (auf ColorReservoir), evtl. reicht hier auch eine Funktion
+ * 
+ * Efficient Aligned Rectangle
+ * - Repräsentation als 2D Array
+ *   - So viele Zeilen wie y-Koordinaten
+ *   - 2 Spalten, [0] x-Anfang, [1] x-Ende
+ *   - Bresenham in dieses Array wird interessant
+ * -> enthaltenene Optimierungen:
+ *   - Effiziente Speichernutzung (nur Anfangs- und Endkoordinaten)
+ *   - Einmalige Speicherallokation (Array, keine Vektoren)
+ *   - Einsparung von Rechenschritten (nur Anfangs- und Endkoordinaten bedeutet, dass das Fill auf später verschoben werden kann, um es direkt mit einem weiteren Schritt zu verbinden)
  */
