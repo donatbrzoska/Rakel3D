@@ -36,7 +36,7 @@ public class OilPaintEngine : MonoBehaviour
         CreateTexture();
 
         //Rakel = new Rakel();
-        Rakel = new Rakel(new BasicRectangleCalculator(), new MaskApplicator());
+        Rakel = new Rakel(new BasicMaskCalculator(), new BasicMaskApplicator());
         InitializeRakel();
     }
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-public class MaskApplicator
+public class BasicMaskApplicator
 {
-    public MaskApplicator() {}
+    public BasicMaskApplicator() {}
 
     public virtual void Apply(bool[,] mask, Vector2Int maskPosition, OilPaintTexture texture, Color color)
     {

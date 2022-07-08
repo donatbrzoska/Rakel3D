@@ -4,12 +4,12 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class TestBasicRectangleCalculator
+public class TestBasicMaskCalculator
 {
     [Test]
     public void InitialState_Line()
     {
-        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        BasicMaskCalculator r = new BasicMaskCalculator();
         bool[,] mask = r.Calculate(3, 1, Vector2.right);
 
         //Debug.Log("InitialState_Line\n" + r.ToString());
@@ -29,7 +29,7 @@ public class TestBasicRectangleCalculator
     [Test]
     public void InitialState_Lines()
     {
-        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        BasicMaskCalculator r = new BasicMaskCalculator();
         bool[,] mask = r.Calculate(3, 2, Vector2.right);
 
         //Debug.Log("InitialState_Lines\n" + r.ToString());
@@ -49,7 +49,7 @@ public class TestBasicRectangleCalculator
     [Test]
     public void InitialState_Rectangle()
     {
-        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        BasicMaskCalculator r = new BasicMaskCalculator();
         bool[,] mask = r.Calculate(5, 3, Vector2.right);
 
         Assert.AreEqual(
@@ -71,7 +71,7 @@ public class TestBasicRectangleCalculator
     [Test]
     public void Rotated90_Line()
     {
-        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        BasicMaskCalculator r = new BasicMaskCalculator();
         bool[,] mask = r.Calculate(3, 1, Vector2.down);
 
         Assert.AreEqual(
@@ -89,7 +89,7 @@ public class TestBasicRectangleCalculator
     [Test]
     public void Rotated90_Lines()
     {
-        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        BasicMaskCalculator r = new BasicMaskCalculator();
         bool[,] mask = r.Calculate(3, 2, Vector2.down);
 
         //Debug.Log("Rotated90_Lines\n" + r.ToString());
@@ -109,7 +109,7 @@ public class TestBasicRectangleCalculator
     [Test]
     public void Rotated45_Line()
     {
-        BasicRectangleCalculator r = new BasicRectangleCalculator();
+        BasicMaskCalculator r = new BasicMaskCalculator();
         bool[,] mask = r.Calculate(3, 1, new Vector2(1, -1));
 
         Assert.AreEqual(

@@ -183,7 +183,7 @@ public class Notes : MonoBehaviour
  * 3. Koordinaten an Stelle verschieben
  * 4. ApplyMask macht dann was für alle Koordinaten
  * 
- * 08.07.2022
+ * 07.07.2022
  * -> es entstehen Löcher, siehe Grid.keynote
  * - es braucht also mehr Schritte
  * -> ApplyToCanvas macht dann:
@@ -215,4 +215,14 @@ public class Notes : MonoBehaviour
  *   - Irgendwer setzt zwischendurch die Normale auf 0,0
  *   - Nein, ganz am Anfang ist sie 0,0 und dann bleibt sie bei 0,0 und natürlich ist dann Normal nie PreviousNormal ....
  *   - Hätte man einen Test gehabt, wär das vermutlich schon aufgefallen
+ *   
+ * 08.07.2022
+ * Integrationstests (Rakel) vs Unittests (BasicMaskApplicator, ...)
+ * - Integrationstests:
+ *   + es ist egal, wie sich die Komponenten verändern, nur das Ergebnis wird geprüft
+ *   - Bei Veränderung der Komponenten muss die Zusammensetzung des Rakels in den Tests angepasst werden
+ *   - Man müsste für alle Variationen von Komponenten Tests haben
+ * - Unittests
+ *   + Komponenten lassen sich gut entwickeln
+ *   - Bei Veränderungen der Komponenten (Rakelzusammensetzung) ist nicht unbedingt garantiert, dass noch alles funktioniert
  */

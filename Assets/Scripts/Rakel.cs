@@ -10,16 +10,16 @@ public class Rakel
     private int Width;
     private Vector2 Normal;
     private bool RecalculateMask;
-    private BasicRectangleCalculator RectangleCalculator;
-    private bool[,] LatestMask;
+    private BasicMaskCalculator MaskCalculator;
+    private bool[,] LatestBasicMask;
 
-    private Vector2Int Position;
+    protected Vector2Int Position;
     private bool ReapplyMask;
-    private MaskApplicator MaskApplicator;
+    private BasicMaskApplicator MaskApplicator;
 
-    public Rakel(BasicRectangleCalculator rectangleCalculator, MaskApplicator maskApplicator)
+    public Rakel(BasicMaskCalculator rectangleCalculator, BasicMaskApplicator maskApplicator)
     {
-        RectangleCalculator = rectangleCalculator;
+        MaskCalculator = rectangleCalculator;
         MaskApplicator = maskApplicator;
     }
 
@@ -62,7 +62,7 @@ public class Rakel
 
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            LatestMask = RectangleCalculator.Calculate(Length, Width, Normal);
+            CalculateMask();
             //UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
         }
 
@@ -71,8 +71,18 @@ public class Rakel
             ReapplyMask = false;
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            MaskApplicator.Apply(LatestMask, Position, texture, Color);
+            ApplyMask(texture);
             //UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
         }
+    }
+
+    protected virtual void CalculateMask()
+    {
+        LatestBasicMask = MaskCalculator.Calculate(Length, Width, Normal);
+    }
+
+    protected virtual void ApplyMask(OilPaintTexture texture)
+    {
+        MaskApplicator.Apply(LatestBasicMask, Position, texture, Color);
     }
 }

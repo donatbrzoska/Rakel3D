@@ -8,7 +8,7 @@ public class TestRakel
 {
     private Rakel ConstructRakel()
     {
-        Rakel r = new Rakel(new BasicRectangleCalculator(), new MaskApplicator());
+        Rakel r = new Rakel(new BasicMaskCalculator(), new BasicMaskApplicator());
         return r;
     }
 
@@ -126,8 +126,8 @@ public class TestRakel
     public void Apply_RecalculateMask_UpdateLength()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        BasicRectangleCalculatorMock brc_mock = new BasicRectangleCalculatorMock();
-        Rakel r = new Rakel(brc_mock, new MaskApplicator());
+        BasicMaskCalculatorMock brc_mock = new BasicMaskCalculatorMock();
+        Rakel r = new Rakel(brc_mock, new BasicMaskApplicator());
         InitializeWithDefaults(r);
 
         // initial value set
@@ -152,8 +152,8 @@ public class TestRakel
     public void Apply_RecalculateMask_UpdateWidth()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        BasicRectangleCalculatorMock brc_mock = new BasicRectangleCalculatorMock();
-        Rakel r = new Rakel(brc_mock, new MaskApplicator());
+        BasicMaskCalculatorMock brc_mock = new BasicMaskCalculatorMock();
+        Rakel r = new Rakel(brc_mock, new BasicMaskApplicator());
         InitializeWithDefaults(r);
 
         // initial value set
@@ -178,8 +178,8 @@ public class TestRakel
     public void Apply_RecalculateMask_UpdateNormal()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        BasicRectangleCalculatorMock brc_mock = new BasicRectangleCalculatorMock();
-        Rakel r = new Rakel(brc_mock, new MaskApplicator());
+        BasicMaskCalculatorMock brc_mock = new BasicMaskCalculatorMock();
+        Rakel r = new Rakel(brc_mock, new BasicMaskApplicator());
         InitializeWithDefaults(r);
 
         // initial value set
@@ -204,8 +204,8 @@ public class TestRakel
     public void Apply_ReapplyMask_UpdateWidth()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        MaskApplicatorMock ma_mock = new MaskApplicatorMock();
-        Rakel r = new Rakel(new BasicRectangleCalculator(), ma_mock);
+        BasicMaskApplicatorMock ma_mock = new BasicMaskApplicatorMock();
+        Rakel r = new Rakel(new BasicMaskCalculator(), ma_mock);
         InitializeWithDefaults(r);
 
         // initial value set
@@ -230,8 +230,8 @@ public class TestRakel
     public void Apply_ReapplyMask_UpdateLength()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        MaskApplicatorMock ma_mock = new MaskApplicatorMock();
-        Rakel r = new Rakel(new BasicRectangleCalculator(), ma_mock);
+        BasicMaskApplicatorMock ma_mock = new BasicMaskApplicatorMock();
+        Rakel r = new Rakel(new BasicMaskCalculator(), ma_mock);
         InitializeWithDefaults(r);
 
         // initial value set
@@ -256,8 +256,8 @@ public class TestRakel
     public void Apply_ReapplyMask_UpdateNormal()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        MaskApplicatorMock ma_mock = new MaskApplicatorMock();
-        Rakel r = new Rakel(new BasicRectangleCalculator(), ma_mock);
+        BasicMaskApplicatorMock ma_mock = new BasicMaskApplicatorMock();
+        Rakel r = new Rakel(new BasicMaskCalculator(), ma_mock);
         InitializeWithDefaults(r);
 
         // initial value set
@@ -282,8 +282,8 @@ public class TestRakel
     public void Apply_ReapplyMask_UpdatePosition()
     {
         OilPaintTexture t = new OilPaintTexture(3, 3);
-        MaskApplicatorMock ma_mock = new MaskApplicatorMock();
-        Rakel r = new Rakel(new BasicRectangleCalculator(), ma_mock);
+        BasicMaskApplicatorMock ma_mock = new BasicMaskApplicatorMock();
+        Rakel r = new Rakel(new BasicMaskCalculator(), ma_mock);
         InitializeWithDefaults(r);
 
         // initial value set
@@ -309,7 +309,7 @@ public class TestRakel
 
 }
 
-class BasicRectangleCalculatorMock : BasicRectangleCalculator
+class BasicMaskCalculatorMock : BasicMaskCalculator
 {
     public string Log { get; private set; }
     public override bool[,] Calculate(int height, int width, Vector2 normal)
@@ -319,7 +319,7 @@ class BasicRectangleCalculatorMock : BasicRectangleCalculator
     }
 }
 
-class MaskApplicatorMock : MaskApplicator
+class BasicMaskApplicatorMock : BasicMaskApplicator
 {
     public string Log { get; private set; }
     public override void Apply(bool[,] mask, Vector2Int maskPosition, OilPaintTexture texture, Color color)

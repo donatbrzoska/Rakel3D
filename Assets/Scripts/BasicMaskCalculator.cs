@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicRectangleCalculator
+public class BasicMaskCalculator
 {
-    public BasicRectangleCalculator() { }
+    public BasicMaskCalculator() { }
 
     /*
      * Returns a mask as an array which can be layed onto a coordinate system as it is
