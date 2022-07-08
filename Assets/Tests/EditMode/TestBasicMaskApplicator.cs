@@ -4,22 +4,6 @@ using UnityEngine;
 
 public class TestBasicMaskApplicator
 {
-
-    private Rakel ConstructRakel()
-    {
-        Rakel r = new Rakel(new BasicMaskCalculator(), new BasicMaskApplicator());
-        return r;
-    }
-
-    private void InitializeWithDefaults(Rakel r)
-    {
-        r.UpdateLength(1);
-        r.UpdateWidth(1);
-        r.UpdateColor(new Color(0, 0.4f, 0.8f));
-        r.UpdatePosition(new Vector2Int(1, 1));
-        r.UpdateNormal(Vector2Int.right);
-    }
-
     [Test]
     public void Apply_Point()
     {

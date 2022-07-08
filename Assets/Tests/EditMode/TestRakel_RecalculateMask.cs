@@ -23,7 +23,7 @@ public class TestRakel_RecalculateMask
     {
         texture = new OilPaintTexture(3, 3);
         brc_mock = new BasicMaskCalculatorMock();
-        rakel = new Rakel(brc_mock, new BasicMaskApplicator());
+        rakel = new BasicRakel(brc_mock, new BasicMaskApplicator()); // this could be any concrete Rakel
         rakel.UpdateLength(1);
         rakel.UpdateWidth(1);
         rakel.UpdateColor(new Color(0, 0.4f, 0.8f));

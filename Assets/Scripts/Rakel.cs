@@ -2,26 +2,17 @@
 using System.Diagnostics;
 using UnityEngine;
 
-public class Rakel
+public abstract class Rakel
 {
-    private Color Color;
+    protected Color Color;
 
-    private int Length;
-    private int Width;
-    private Vector2 Normal;
-    private bool RecalculateMask;
-    private BasicMaskCalculator MaskCalculator;
-    private bool[,] LatestBasicMask;
+    protected int Length;
+    protected int Width;
+    protected Vector2 Normal;
+    protected bool RecalculateMask;
 
     protected Vector2Int Position;
-    private bool ReapplyMask;
-    private BasicMaskApplicator MaskApplicator;
-
-    public Rakel(BasicMaskCalculator rectangleCalculator, BasicMaskApplicator maskApplicator)
-    {
-        MaskCalculator = rectangleCalculator;
-        MaskApplicator = maskApplicator;
-    }
+    protected bool ReapplyMask;
 
     public void UpdateLength(int length)
     {
@@ -38,18 +29,18 @@ public class Rakel
 
     public void UpdateColor(Color color)
     {
-        this.Color = color;
+        Color = color;
     }
 
     public void UpdateNormal(Vector2 normal)
     {
-        this.Normal = normal;
+        Normal = normal;
         RecalculateMask = true;
     }
 
     public void UpdatePosition(Vector2Int position)
     {
-        this.Position = position;
+        Position = position;
         ReapplyMask = true;
     }
 
@@ -76,13 +67,7 @@ public class Rakel
         }
     }
 
-    protected virtual void CalculateMask()
-    {
-        LatestBasicMask = MaskCalculator.Calculate(Length, Width, Normal);
-    }
+    protected abstract void CalculateMask();
 
-    protected virtual void ApplyMask(OilPaintTexture texture)
-    {
-        MaskApplicator.Apply(LatestBasicMask, Position, texture, Color);
-    }
+    protected abstract void ApplyMask(OilPaintTexture texture);
 }
