@@ -246,4 +246,9 @@ public class Notes : MonoBehaviour
  *   -> Was ist effizienter: Vergleiche für x-Anfang und x-Ende oder viele new() Aufrufe für die Vektoren?
  * - FacedUp Case funktioniert nicht
  *   - angle ausgeben, Koordinaten ausgeben
+ *   
+ * 09.07.2022
+ * Test After hat Nachteile
+ * - Test richtet sich evtl. nur nach dem was man implementiert hat, nicht nach dem was man möchte
+ *   (Reapply, Recalculate Mask Beispiel)
  */

@@ -50,6 +50,11 @@ public class TestRakel_RecalculateMask
         // nothing changed -> no recalculate
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
+
+        // make fake change -> no recalculate
+        rakel.UpdateLength(2);
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
     }
 
     [Test]
@@ -71,6 +76,11 @@ public class TestRakel_RecalculateMask
         // nothing changed -> no recalculate
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
+
+        // make fake change -> no recalculate
+        rakel.UpdateWidth(2);
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
     }
 
     [Test]
@@ -90,6 +100,11 @@ public class TestRakel_RecalculateMask
         Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
 
         // nothing changed -> no recalculate
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
+
+        // make fake change -> recalculate
+        rakel.UpdateNormal(Vector2.left);
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Calculate Calculate ", brc_mock.Log);
     }

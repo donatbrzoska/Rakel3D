@@ -16,27 +16,39 @@ public abstract class Rakel
 
     public void UpdateLength(int length)
     {
-        // TODO always keep uneven so there is a center to rotate around
-        Length = length;
-        RecalculateMask = true;
+        if (length != Length)
+        {
+            // TODO always keep uneven so there is a center to rotate around
+            Length = length;
+            RecalculateMask = true;
+        }
     }
 
     public void UpdateWidth(int width)
     {
-        Width = width;
-        RecalculateMask = true;
+        if (width != Width)
+        {
+            Width = width;
+            RecalculateMask = true;
+        }
     }
 
     public void UpdateNormal(Vector2 normal)
     {
-        Normal = normal;
-        RecalculateMask = true;
+        if (!normal.Equals(Normal))
+        {
+            Normal = normal;
+            RecalculateMask = true;
+        }
     }
 
     public void UpdatePosition(Vector2Int position)
     {
-        Position = position;
-        ReapplyMask = true;
+        if (!position.Equals(Position))
+        {
+            Position = position;
+            ReapplyMask = true;
+        }
     }
 
     public void UpdateColor(Color color)

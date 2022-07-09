@@ -41,12 +41,17 @@ public class TestRakel_ReapplyMask
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply ", ma_mock.Log);
 
-        // make change -> recalculate
+        // make change -> reapply
         rakel.UpdateWidth(2);
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
 
         // nothing changed -> no reapply
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Apply Apply ", ma_mock.Log);
+
+        // make fake change -> no recalculate
+        rakel.UpdateWidth(2);
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
     }
@@ -62,12 +67,17 @@ public class TestRakel_ReapplyMask
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply ", ma_mock.Log);
 
-        // make change -> recalculate
+        // make change -> reapply
         rakel.UpdateLength(2);
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
 
         // nothing changed -> no reapply
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Apply Apply ", ma_mock.Log);
+
+        // make fake change -> no reapply
+        rakel.UpdateLength(2);
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
     }
@@ -83,12 +93,17 @@ public class TestRakel_ReapplyMask
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply ", ma_mock.Log);
 
-        // make change -> recalculate
+        // make change -> reapply
         rakel.UpdateNormal(new Vector2(0, 0));
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
 
         // nothing changed -> no reapply
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Apply Apply ", ma_mock.Log);
+
+        // make fake change -> no reapply
+        rakel.UpdateNormal(new Vector2(0, 0));
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
     }
@@ -104,12 +119,17 @@ public class TestRakel_ReapplyMask
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply ", ma_mock.Log);
 
-        // make change -> recalculate
+        // make change -> reapply
         rakel.UpdatePosition(new Vector2Int(0, 0));
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
 
         // nothing changed -> no reapply
+        rakel.ApplyToCanvas(texture);
+        Assert.AreEqual("Apply Apply ", ma_mock.Log);
+
+        // make fake change -> no reapply
+        rakel.UpdatePosition(new Vector2Int(0, 0));
         rakel.ApplyToCanvas(texture);
         Assert.AreEqual("Apply Apply ", ma_mock.Log);
     }
