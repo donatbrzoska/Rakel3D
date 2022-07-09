@@ -22,7 +22,16 @@ public class Notes : MonoBehaviour
  * - Rakel-Ausrichtung und Größe
  *   + "Preview"
  * - Farben
- * - Resolution
+ * - Clear-Button
+ * 
+ * Generell was zu den Modi überlegen
+ * - Nur übers Bild ziehen
+ * - Farbe auf den Rakel auftragen
+ *   + Menge
+ *   
+ * Rakel-Neigung
+ * - aktuell ist die Neigung im Prinzip 0°, der Rakel liegt also immer flach auf der Leiwand auf
+ * - Maske muss dann entsprechend von RakelPosition wegverschoben werden
  * 
  * Farbmenge über BumpMap / NormalMap
  * 
@@ -31,16 +40,10 @@ public class Notes : MonoBehaviour
  *   - Form wie Maske im initial State
  * - Mapping von Maskenkoordinaten auf Farbschichten in ApplyMask
  * 
- * Maske optimieren
- * - größere Rakel ziemlich langsam
- * 
  * Haken am Rand beim Ziehen
  * - Berechnungen optimieren -> bringt nicht wirklich was, wahrscheinlich wird Update() einfach gar nicht oft genug aufgerufen
  * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
  *   - wird Anwendung weniger flüssig machen
- * 
- * Tests
- * - OptimizedRakel
  * 
  * Bugs
  * - RakelWidth 0 macht trotzdem eine Linie
