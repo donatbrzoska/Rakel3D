@@ -71,6 +71,7 @@ public class Notes : MonoBehaviour
  * CMD + CTRL + LEFT/RIGHT: Springe zu vorheriger/nächster Curserposition
  * 
  * ALT + Mouse: Spaltenweise Mutliline-Markierung
+ * CTRL + ALT + Mouse: Multicurser
  */
 
 
@@ -86,6 +87,9 @@ public class Notes : MonoBehaviour
  * Vector3 kann man nicht mit == vergleichen ... (auch wenn es nicht nullable ist)
  * 
  * Copy and Paste, Controller benutzt falschen Setter und tut damit natürlich was anderes als erwartet
+ * 
+ * Falsche API vermutet
+ * - Vector2.Angle liefert immer den kleinsten Winkel und geht damit von 0-180, nicht von 0-360
  */
 
 
@@ -225,4 +229,21 @@ public class Notes : MonoBehaviour
  * - Unittests
  *   + Komponenten lassen sich gut entwickeln
  *   - Bei Veränderungen der Komponenten (Rakelzusammensetzung) ist nicht unbedingt garantiert, dass noch alles funktioniert
+ *   
+ * Möglichkeiten für neues Mask-Interface:
+ * - Array mit Zeilen aus Start + Ende
+ *   + wenig Speicherbedarf + noch weiter optimierbar, so dass nur noch Zahlen verwendet werden im Array
+ *   + Fill Operation fällt weg
+ *   - Bresenham hierdrauf wird interessant (hoffentlich überhaupt effizient implementierbar)
+ * - Liste aus allen Koordinaten
+ *   + relativ einfach implementierbar
+ *   - Fill Operation
+ *   - mehr Speicherbedarf
+ *   
+ *   
+ * aufgehört bei:
+ * - evtl. wär Liste aus Koordinaten doch besser gewesen?
+ *   -> Was ist effizienter: Vergleiche für x-Anfang und x-Ende oder viele new() Aufrufe für die Vektoren?
+ * - FacedUp Case funktioniert nicht
+ *   - angle ausgeben, Koordinaten ausgeben
  */

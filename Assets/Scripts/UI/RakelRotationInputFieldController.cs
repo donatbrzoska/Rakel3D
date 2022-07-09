@@ -10,7 +10,7 @@ public class RakelRotationInputFieldController : InputFieldController
 {
     public void Start()
     {
-        InputField.text = "" + Vector2.Angle(Vector2.right, OilPaintEngine.RakelNormal);
+        InputField.text = "" + MathUtil.Angle360(Vector2.right, OilPaintEngine.RakelNormal);
     }
 
     override public void OnValueChanged(string arg0)

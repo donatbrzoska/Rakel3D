@@ -6,8 +6,8 @@ public abstract class Rakel
 {
     protected Color Color;
 
-    protected int Length;
-    protected int Width;
+    public int Length { get; private set; }
+    public int Width { get; private set; }
     protected Vector2 Normal;
     protected bool RecalculateMask;
 

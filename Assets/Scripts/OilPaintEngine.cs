@@ -19,8 +19,8 @@ public class OilPaintEngine : MonoBehaviour
     public Rakel Rakel { get; private set; }
     public Vector2 RakelNormal { get; private set; } = new Vector2(1, 0);
     public Color RakelColor { get; private set; } = new Color(0.3f, 0, 0.7f);
-    public float RakelLength { get; private set; } = 2.5f; // world space
-    public float RakelWidth { get; private set; } = 1f; // world space
+    public float RakelLength { get; private set; } = 4f; // world space
+    public float RakelWidth { get; private set; } = 2f; // world space
 
     void Awake()
     {
@@ -36,7 +36,8 @@ public class OilPaintEngine : MonoBehaviour
         CreateTexture();
 
         //Rakel = new Rakel();
-        Rakel = new BasicRakel(new BasicMaskCalculator(), new BasicMaskApplicator());
+        //Rakel = new BasicRakel(new BasicMaskCalculator(), new BasicMaskApplicator());
+        Rakel = new OptimizedRakel(new OptimizedMaskCalculator(), new OptimizedMaskApplicator());
         InitializeRakel();
     }
 
@@ -52,6 +53,7 @@ public class OilPaintEngine : MonoBehaviour
     {
         Rakel.UpdateLength(WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution));
         Rakel.UpdateWidth(WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution));
+        Debug.Log("Rakel is " + Rakel.Length + "x" + Rakel.Width + " = " + Rakel.Length * Rakel.Width);
         Rakel.UpdateNormal(RakelNormal);
         Rakel.UpdateColor(RakelColor);
     }

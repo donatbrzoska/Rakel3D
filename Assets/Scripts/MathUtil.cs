@@ -28,4 +28,21 @@ public class MathUtil
             Mathf.RoundToInt(vec.y * c - vec.x * s));
         return result;
     }
+
+    // increasing clockwise
+    public static float Angle360(Vector2 from, Vector2 to)
+    {
+        float angle = Vector2.SignedAngle(from, to);
+
+        if (angle <= 0) // SignedAngle delivers negative values for the first 180° clockwise
+        {
+            angle = -angle;
+        }
+        else // .. and positive values for the first 180° counter clockwise
+        {
+            angle = 360 - angle;
+        }
+
+        return angle;
+    }
 }

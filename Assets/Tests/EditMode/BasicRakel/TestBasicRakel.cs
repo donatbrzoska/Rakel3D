@@ -33,5 +33,4 @@ public class TestBasicRakel
 
     // TODO wrong usage (Apply before set values)
     // TODO don't pickup canvas color (currently white)
-
 }

@@ -44,6 +44,25 @@ public class LogUtil
         Debug.Log(result);
     }
 
+    public static void Log(int[,] arr, string descr = "")
+    {
+        if (descr != "")
+        {
+            Debug.Log(descr);
+        }
+
+        string result = "";
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                result += arr[i, j] + " ";
+            }
+            result += "\n";
+        }
+        Debug.Log(result);
+    }
+
     public static void Log(Color[] colors, int rows = 1, string descr = "")
     {
 

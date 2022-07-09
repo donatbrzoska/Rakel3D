@@ -2,7 +2,7 @@
 
 public class BasicRakel: Rakel
 {
-    private bool[,] LatestBasicMask;
+    private bool[,] LatestMask;
     private BasicMaskCalculator MaskCalculator;
     private BasicMaskApplicator MaskApplicator;
 
@@ -14,11 +14,11 @@ public class BasicRakel: Rakel
 
     protected override void CalculateMask()
     {
-        LatestBasicMask = MaskCalculator.Calculate(Length, Width, Normal);
+        LatestMask = MaskCalculator.Calculate(Length, Width, Normal);
     }
 
     protected override void ApplyMask(OilPaintTexture texture)
     {
-        MaskApplicator.Apply(LatestBasicMask, Position, texture, Color);
+        MaskApplicator.Apply(LatestMask, Position, texture, Color);
     }
 }
