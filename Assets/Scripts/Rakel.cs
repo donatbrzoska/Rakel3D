@@ -56,26 +56,29 @@ public abstract class Rakel
         Color = color;
     }
 
-    public void ApplyToCanvas(OilPaintTexture texture)
+    public void ApplyToCanvas(OilPaintTexture texture, bool logTime = false)
     {
         if (RecalculateMask)
         {
             RecalculateMask = false; // reset
             ReapplyMask = true;
 
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             CalculateMask();
-            //UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
+            if (logTime)
+                UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
         }
 
         if (ReapplyMask)
         {
             ReapplyMask = false;
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             ApplyMask(texture);
-            //UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
+            if (logTime)
+                UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
         }
     }
 

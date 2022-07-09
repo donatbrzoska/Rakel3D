@@ -66,7 +66,7 @@ public class OilPaintEngine : MonoBehaviour
         {
             Vector2Int preciseBrushPosition = ToCanvasTextureSpacePoint(worldSpaceHit);
             Rakel.UpdatePosition(preciseBrushPosition);
-            Rakel.ApplyToCanvas(Texture);
+            Rakel.ApplyToCanvas(Texture, false);
         }
     }
 
