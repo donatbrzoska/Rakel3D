@@ -52,7 +52,6 @@ public class Notes : MonoBehaviour
  * - Wertebereiche bei InputFields nicht definierbar
  *
  * Code Quality:
- * - Wieso wird der Rakel am Anfang 3x erstellt?
  * - OilPaintEngine aufräumen
  * - RakelNormal -> Angle
  * - Tests für Rakel im initial state
