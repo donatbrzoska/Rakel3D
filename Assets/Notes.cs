@@ -531,4 +531,9 @@ public class Notes : MonoBehaviour
  * - Bug: Bei mehreren Klicks auf entfernten Flächen wird beim vierten Mal die Farbe halbiert
  * - PickupReservoir: Add
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
+ * - Rakel ApplyToCanvas splitten und in UpdateNormal und UpdatePosition schieben?
+ *   - Funktionen evtl. umbenennen
+ *   - Es wird nie ein sinnvolles UpdatePosition ohne anschließendes Apply geben
+ *   - Idee kam eigentlich, weil ich mich gefragt hab, wieso man dem Applicator Mask sowie MaskPosition und MaskNormal übergibt
+ *     -> evtl. könnte man die beiden extra Attribute ja auch einfach in der Mask speichern
  */

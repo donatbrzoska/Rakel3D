@@ -26,7 +26,7 @@ public class MaskApplicator: IMaskApplicator
 
         // 1. Transfer paint from Canvas to Rakel: Looping through PickupMap
         // -> color comes from: reservoir coordinate rotation to mask coordinate
-        // TODO Only pickup color if in mask range
+        // TODO Only pickup color if in mask range (rotated reservoir coordinate is out of mask range)
         // - find a case where coord_texture would be out of mask range
         // - then return special value and don't Pickup paint
         // -> maybe this can be ignored because the out of range cases are only one pixel off and there will be canvas OOB checks
