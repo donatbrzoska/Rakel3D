@@ -69,17 +69,17 @@ public class OilPaintEngine : MonoBehaviour
         Vector3 worldSpaceHit = InputUtil.GetMouseHit(Camera, CanvasColliderID);
         if (!worldSpaceHit.Equals(Vector3.negativeInfinity))
         {
-            Vector2Int preciseBrushPosition = ToCanvasTextureSpacePoint(worldSpaceHit);
+            Vector2Int preciseBrushPosition = WorldSpaceCoordinateToTextureSpaceCoordinate(worldSpaceHit);
             Rakel.UpdatePosition(preciseBrushPosition);
             Rakel.ApplyToCanvas(OilPaintSurface, true);
         }
     }
 
-    Vector2Int ToCanvasTextureSpacePoint(Vector3 worldSpacePoint)
+    Vector2Int WorldSpaceCoordinateToTextureSpaceCoordinate(Vector3 worldSpaceCoordinate)
     {
         // "move" canvas to positive coordinates only, so further calculations are simplified
-        float absX = worldSpacePoint.x + CanvasWidth / 2; // TODO what about odd numbers?
-        float absY = worldSpacePoint.z + CanvasHeight / 2; // TODO what about odd numbers?
+        float absX = worldSpaceCoordinate.x + CanvasWidth / 2; // TODO what about odd numbers?
+        float absY = worldSpaceCoordinate.z + CanvasHeight / 2; // TODO what about odd numbers?
 
         // for the space conversion, a ratio between the two sizes is needed
         float xMultiplier = TextureWidth / CanvasWidth; // Calculate: How much wider is the texture than the world space?
