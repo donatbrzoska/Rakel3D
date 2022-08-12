@@ -8,7 +8,7 @@ public struct Mask
     public int y_eq_0_index; // -> At which index is y == 0? | Whats the value of y at index 0?
 }
 
-public class MaskCalculator
+public class MaskCalculator : IMaskCalculator
 {
     public MaskCalculator()
     {
@@ -25,7 +25,7 @@ public class MaskCalculator
      *   ##
      *    |
      */
-    public virtual Mask Calculate(int height, int width, Vector2 normal)
+    public Mask Calculate(int height, int width, Vector2 normal)
     {
         // always ensure a precise center
         if (height % 2 == 0)

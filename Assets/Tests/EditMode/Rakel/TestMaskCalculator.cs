@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestMaskCalculator
 {
-    MaskCalculator o;
+    IMaskCalculator o;
 
     [SetUp]
     public void Init()

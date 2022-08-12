@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TestMaskApplicator_CoordinateMapping
 {
-    MaskCalculator mc;
-    MaskApplicator ma;
+    IMaskCalculator mc;
+    IMaskApplicator ma;
 
     [SetUp]
     public void Init()

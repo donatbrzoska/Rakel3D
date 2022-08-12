@@ -2,10 +2,9 @@
 using NUnit.Framework;
 using UnityEngine;
 
-class MaskCalculatorMock : MaskCalculator
+class MaskCalculatorMock : LogMock, IMaskCalculator
 {
-    public string Log { get; private set; }
-    public override Mask Calculate(int height, int width, Vector2 normal)
+    public Mask Calculate(int height, int width, Vector2 normal)
     {
         Log += "Calculate ";
         return new Mask();

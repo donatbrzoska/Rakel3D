@@ -13,12 +13,12 @@ public class Rakel
     protected bool ReapplyMask;
 
     private Mask LatestMask;
-    private MaskCalculator MaskCalculator;
-    private MaskApplicator MaskApplicator;
+    private IMaskCalculator MaskCalculator;
+    private IMaskApplicator MaskApplicator;
 
     private RakelPaintReservoir PaintReservoir;
 
-    public Rakel(int length, int width, MaskCalculator maskCalculator, MaskApplicator maskApplicator)
+    public Rakel(int length, int width, IMaskCalculator maskCalculator, IMaskApplicator maskApplicator)
     {
         Length = length;
         Width = width;

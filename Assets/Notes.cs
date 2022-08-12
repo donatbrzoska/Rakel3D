@@ -54,10 +54,6 @@ public class Notes : MonoBehaviour
  * Code Quality:
  * - OilPaintEngine aufräumen
  * - RakelNormal -> Angle
- * - "Log" Attribut in Superclass "Mock" schieben?
- * - Interfaces für gemockte Typen, statt Vererbung
- *   - virtual Keyword nur für die Tests ...
- *   - und dann muss man sich auch nicht mehr mit den Superkonstruktoren herumschlagen
  * - Tests für Rakel im initial state
      - TODO wrong usage (Apply before set values)
  * - Tests für Mocks

@@ -14,17 +14,15 @@ public class TestOilPaintSurface_Apply
 
         o.Apply();
 
-        Assert.AreEqual(1, ft_mock.ApplyCounter);
+        Assert.AreEqual("Apply ", ft_mock.Log);
     }
 }
 
-class FastTexture2DMock : IFastTexture2D
+class FastTexture2DMock : LogMock, IFastTexture2D
 {
-    public int ApplyCounter { get; private set; }
-
     public void Apply()
     {
-        ApplyCounter++;
+        Log += "Apply ";
     }
 
     /*

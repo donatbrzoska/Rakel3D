@@ -9,13 +9,13 @@ using UnityEngine;
  * - direct access to texture color array
  * - parallelization
  */
-public class MaskApplicator
+public class MaskApplicator: IMaskApplicator
 {
     public MaskApplicator()
     {
     }
 
-    public virtual void Apply(
+    public void Apply(
         Mask mask,
         Vector2Int maskPosition,
         Vector2 maskNormal,
