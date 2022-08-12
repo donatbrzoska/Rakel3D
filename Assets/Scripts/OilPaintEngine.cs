@@ -37,10 +37,7 @@ public class OilPaintEngine : MonoBehaviour
         CanvasHeight = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;
 
         CreateTexture();
-
-        //Rakel = new Rakel();
-        //Rakel = new BasicRakel(new BasicMaskCalculator(), new BasicMaskApplicator());
-        InitializeRakel();
+        CreateRakel();
     }
 
     void CreateTexture()
@@ -53,7 +50,7 @@ public class OilPaintEngine : MonoBehaviour
         OilPaintSurface = new OilPaintSurface(Texture);
     }
 
-    void InitializeRakel()
+    void CreateRakel()
     {
         int length = WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution);
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);
@@ -105,13 +102,13 @@ public class OilPaintEngine : MonoBehaviour
     public void UpdateRakelLength(float worldSpaceLength)
     {
         RakelLength = worldSpaceLength;
-        InitializeRakel();
+        CreateRakel();
     }
 
     public void UpdateRakelWidth(float worldSpaceWidth)
     {
         RakelWidth = worldSpaceWidth;
-        InitializeRakel();
+        CreateRakel();
     }
 
     public void UpdateRakelNormal(Vector2 normal)
@@ -131,6 +128,6 @@ public class OilPaintEngine : MonoBehaviour
     {
         TextureResolution = pixelsPerWorldSpaceUnit;
         CreateTexture();
-        InitializeRakel(); // Rakel is dependent on TextureResolution
+        CreateRakel(); // Rakel is dependent on TextureResolution
     }
 }
