@@ -1,0 +1,80 @@
+﻿using System;
+using UnityEngine;
+
+public class RakelPaintReservoir
+{
+    public int Height { get; private set; }
+    public int Width { get; private set; }
+    private PickupPaintReservoir PickupReservoir;
+    private ApplicationPaintReservoir ApplicationReservoir;
+
+    public RakelPaintReservoir(int height, int width)
+    {
+        Height = height;
+        Width = width;
+
+        PickupReservoir = new PickupPaintReservoir(height, width);
+        ApplicationReservoir = new ApplicationPaintReservoir(height, width);
+    }
+
+    public virtual void Fill(Color color, int volume)
+    {
+        for (int i = 0; i < Height; i++)
+        {
+            for (int j = 0; j < Width; j++)
+            {
+                ApplicationReservoir.Set(j, i, color, volume);
+            }
+        }
+    }
+
+    public virtual void Pickup(int x, int y, Color color, int volume)
+    {
+        if (!color.Equals(Colors.NO_PAINT_COLOR))
+        {
+            PickupReservoir.Add(x, y, color, volume);
+        }
+    }
+
+    public virtual Color Emit(int x, int y)
+    {
+        bool in_range = x >= 0
+                        && x < Width
+                        && y >= 0
+                        && y < Height;
+        if (in_range)
+        {
+            Color ar_col = ApplicationReservoir.Emit(x, y);
+            bool ar_filled = !ar_col.Equals(Colors.NO_PAINT_COLOR);
+
+            Color pr_col = PickupReservoir.Emit(x, y);
+            bool pr_filled = !pr_col.Equals(Colors.NO_PAINT_COLOR);
+
+            if (ar_filled && pr_filled)
+            {
+                return new Color(
+                    (ar_col.r + pr_col.r) / 2,
+                    (ar_col.g + pr_col.g) / 2,
+                    (ar_col.b + pr_col.b) / 2,
+                    (ar_col.a + pr_col.a) / 2
+                );
+            }
+            else if (ar_filled)
+            {
+                return ar_col;
+            }
+            else if (pr_filled)
+            {
+                return pr_col;
+            }
+            else // could be removed if this was the default case for the entire function (if nothing else hits beforehand)
+            {
+                return Colors.NO_PAINT_COLOR;
+            }
+        }
+        else
+        {
+            return Colors.NO_PAINT_COLOR;
+        }
+    }
+}

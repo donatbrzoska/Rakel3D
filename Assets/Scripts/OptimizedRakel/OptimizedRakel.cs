@@ -7,10 +7,15 @@ public class OptimizedRakel: Rakel
     private OptimizedMaskCalculator MaskCalculator;
     private OptimizedMaskApplicator MaskApplicator;
 
-    public OptimizedRakel(OptimizedMaskCalculator rectangleCalculator, OptimizedMaskApplicator maskApplicator)
+    private RakelPaintReservoir PaintReservoir;
+
+    public OptimizedRakel(int length, int width, OptimizedMaskCalculator maskCalculator, OptimizedMaskApplicator maskApplicator)
     {
-        MaskCalculator = rectangleCalculator;
+        Length = length;
+        Width = width;
+        MaskCalculator = maskCalculator;
         MaskApplicator = maskApplicator;
+        PaintReservoir = new RakelPaintReservoir(Length, Width);
     }
 
     protected override void CalculateMask()
@@ -18,8 +23,13 @@ public class OptimizedRakel: Rakel
         LatestMask = MaskCalculator.Calculate(Length, Width, Normal);
     }
 
-    protected override void ApplyMask(OilPaintTexture texture)
+    protected override void ApplyMask(IOilPaintSurface oilPaintSurface)
     {
-        MaskApplicator.Apply(LatestMask, Position, texture, Color);
+        MaskApplicator.Apply(LatestMask, Position, Normal, oilPaintSurface, PaintReservoir);
+    }
+
+    public void UpdatePaint(Color color, int volume)
+    {
+        PaintReservoir.Fill(color, volume);
     }
 }

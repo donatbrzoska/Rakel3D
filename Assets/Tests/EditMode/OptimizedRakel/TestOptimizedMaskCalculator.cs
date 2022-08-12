@@ -24,7 +24,7 @@ public class TestOptimizedMaskCalculator
                 { 0, 0 }},
             mask.coordinates);
 
-        Assert.AreEqual(1, mask.y0_index);
+        Assert.AreEqual(1, mask.y_eq_0_index);
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class TestOptimizedMaskCalculator
                 { -1, 0 }},
             mask.coordinates);
 
-        Assert.AreEqual(1, mask.y0_index);
+        Assert.AreEqual(1, mask.y_eq_0_index);
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class TestOptimizedMaskCalculator
                 { -2, /*-1, */ 0 }},
             mask.coordinates);
 
-        Assert.AreEqual(2, mask.y0_index);
+        Assert.AreEqual(2, mask.y_eq_0_index);
     }
 
     [Test]
@@ -69,7 +69,7 @@ public class TestOptimizedMaskCalculator
                 { -1, /*0, */ 1 }},
             mask.coordinates);
 
-        Assert.AreEqual(0, mask.y0_index);
+        Assert.AreEqual(0, mask.y_eq_0_index);
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class TestOptimizedMaskCalculator
                 { -1, /*0, */ 1 }},
             mask.coordinates);
 
-        Assert.AreEqual(1, mask.y0_index);
+        Assert.AreEqual(1, mask.y_eq_0_index);
     }
 
     [Test]
@@ -91,15 +91,13 @@ public class TestOptimizedMaskCalculator
     {
         OptimizedMask mask = o.Calculate(3, 2, Vector2.up);
 
-        LogUtil.Log(mask.coordinates);
-
         Assert.AreEqual(
             new int[2, 2] {
                 { -1, /*0, */ 1 },
                 { -1, /*0, */ 1 }},
             mask.coordinates);
 
-        Assert.AreEqual(0, mask.y0_index);
+        Assert.AreEqual(0, mask.y_eq_0_index);
     }
 
     [Test]
@@ -114,7 +112,7 @@ public class TestOptimizedMaskCalculator
                 { -1, -1 }},
             mask.coordinates);
 
-        Assert.AreEqual(1, mask.y0_index);
+        Assert.AreEqual(1, mask.y_eq_0_index);
     }
 
     [Test]
@@ -129,7 +127,7 @@ public class TestOptimizedMaskCalculator
                                       { 1, 1 }},
             mask.coordinates);
 
-        Assert.AreEqual(1, mask.y0_index);
+        Assert.AreEqual(1, mask.y_eq_0_index);
     }
 
     [Test]
@@ -144,6 +142,6 @@ public class TestOptimizedMaskCalculator
                 { -1, -1 }},
             mask.coordinates);
 
-        Assert.AreEqual(1, mask.y0_index);
+        Assert.AreEqual(1, mask.y_eq_0_index);
     }
 }

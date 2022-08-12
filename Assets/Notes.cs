@@ -18,6 +18,8 @@ public class Notes : MonoBehaviour
 }
 
 /* TODO
+ * Mischung mit Hintergrundfarbe des Canvas?
+ * 
  * GUI
  * - Rakel-Ausrichtung und Größe
  *   + "Preview"
@@ -49,6 +51,23 @@ public class Notes : MonoBehaviour
  * - RakelWidth 0 macht trotzdem eine Linie
  * - Wertebereiche bei InputFields nicht definierbar
  *
+ * Code Quality:
+ * - MaskApplicator PositionMapping:
+ *   - TODO out of bounds GetPaint?
+ *   - TODO unlucky cases
+ * - OilPaintEngine aufräumen
+ * - MaskCalculator: DrawLines -> DrawRectangle
+ * - OptimizedRakel -> Rakel
+ * - Ordner: Rakel
+ * - Ordner: Canvas/Surface
+ * - RakelNormal -> Angle
+ * - "Log" Attribut in Superclass "Mock" schieben?
+ * - Interfaces für gemockte Typen, statt Vererbung
+ *   - virtual Keyword nur für die Tests ...
+ *   - und dann muss man sich auch nicht mehr mit den Superkonstruktoren herumschlagen
+ * - Tests für Mocks
+ * - Tests für Apply-Calls
+ * - Tests für Masks mit z.B. 70° Rotation
  */
 
 
@@ -97,6 +116,23 @@ public class Notes : MonoBehaviour
 
 
 
+/* IC Dokumentation
+ * 
+ * Arrange, Act, Assert
+ * 
+ * Erfahrungen mit TDD -> erlebte Situationen
+ * - Interface vs Vererbung für Mocks
+ * 
+ * Test-Szenarien
+ * - Cache + Test-First-Situation ...
+ * - 
+ * 
+ * Rolle von Unit vs. Integrationstests
+ * -> Integrationstests prüfen nur Aufrufe, decken also nicht alle Szenarien ab, die mit Unit-Tests behandelt werden
+ */
+
+
+
 /* Log
  * 
  * - Input:
@@ -121,11 +157,13 @@ public class Notes : MonoBehaviour
  *        -> die sollte man ja theoretisch nicht wirklich testen
  *           bzw. kann man ja auch nicht, weil sie eigentlich private sind
  * 
+ * 
  * 14.06.2022
  * - Baut man ein Objekt als komplettes Model oder macht man alle nötigen Objekte
  *   aus denen das bestehen würden nach außen zum Controller sichtbar?
  *   
  * - Es ist extrem schwer, sich vorher ein Interface nach außen zu überlegen
+ * 
  * 
  * 16.06.2022
  * // TODO return list of coordinates instead of 2D array
@@ -137,6 +175,7 @@ public class Notes : MonoBehaviour
  * - Static Helper Methods -> Testability, Hilfe beim Implementieren / Debuggen
  * 
  * Listen von Koordinaten vergleichen: Reihenfolge der Koordinaten relevant .......
+ * 
  * 
  * 23.06.2022
  * Arrays als Speicher für Daten in Koordinatensystemen benutzen
@@ -157,8 +196,10 @@ public class Notes : MonoBehaviour
  * - Rechteck funktioniert
  * - Rotation kommt als nächstes
  * 
+ * 
  * 26.06.2022
  * Arrays aus Farben vergleichen ist anstrengend ...
+ * 
  * 
  * 30.06.2022
  * - Stand der Dinge
@@ -168,8 +209,10 @@ public class Notes : MonoBehaviour
  *      - Maske nur anwenden, wenn die Position sich geändert hat
  *      - notfalls andere Repräsentation wählen, damit Anwendung der Maske effizienter wird
  *      
+ *      
  * 01.07.2022
  * - 
+ * 
  * 
  * 04.07.2022
  * - Maske optimieren, so dass das Ergebnis eine Sparse-Repräsentation ist wodurch das Apply um ein vielfaches schneller stattfinden kann
@@ -183,12 +226,14 @@ public class Notes : MonoBehaviour
  * - evtl. is es auch sinnvoller zuerst den bidirektionalen Farbaustausch zu implementieren, damit man dann weiß
  *   in welcher Form die Maske vorliegen soll
  *   
+ *   
  * 05.07.2022
  * - Neue Implementierung für die Maske
  * 1. Koordinaten der Maske im InitialState berechnen
  * 2. Koordinaten um 0,0 rotieren
  * 3. Koordinaten an Stelle verschieben
  * 4. ApplyMask macht dann was für alle Koordinaten
+ * 
  * 
  * 07.07.2022
  * -> es entstehen Löcher, siehe Grid.keynote
@@ -215,14 +260,15 @@ public class Notes : MonoBehaviour
  *   - Effiziente Speichernutzung (nur Anfangs- und Endkoordinaten)
  *   - Einmalige Speicherallokation (Array, keine Vektoren)
  *   - Einsparung von Rechenschritten (nur Anfangs- und Endkoordinaten bedeutet, dass das Fill auf später verschoben werden kann, um es direkt mit einem weiteren Schritt zu verbinden)
- *   
+ * 
  * aufgehört bei:
  * - Zeit für Berechnung und Anwendung der Maske messen
  * - Es scheint irgendeinen Bug zu geben, weil die Maske stets neu berechnet wird
  *   - Irgendwer setzt zwischendurch die Normale auf 0,0
  *   - Nein, ganz am Anfang ist sie 0,0 und dann bleibt sie bei 0,0 und natürlich ist dann Normal nie PreviousNormal ....
  *   - Hätte man einen Test gehabt, wär das vermutlich schon aufgefallen
- *   
+ *
+ *
  * 08.07.2022
  * Integrationstests (Rakel) vs Unittests (BasicMaskApplicator, ...)
  * - Integrationstests:
@@ -250,8 +296,252 @@ public class Notes : MonoBehaviour
  * - FacedUp Case funktioniert nicht
  *   - angle ausgeben, Koordinaten ausgeben
  *   
+ *   
  * 09.07.2022
- * Test After hat Nachteile
+ * OptimizedRakel erstmal fertig, buchstäblich 100x schneller
+ * 
+ * Test-After hat Nachteile
  * - Test richtet sich evtl. nur nach dem was man implementiert hat, nicht nach dem was man möchte
  *   (Reapply, Recalculate Mask Beispiel)
+ *   
+ * Brainstorming zu Farbaustausch:
+ * - zwei Reservoirs auf dem Rakel -> Color[,] für die Farbe + int[,] für die Menge
+ *   - PickupReservoir
+ *   - ApplicationReservoir
+ * - zunächst nur eine Farbschicht auf dem Canvas
+ *   - langfristig:
+ *     - Schichten: Farben
+ *     - Schichent: Farbmengen
+ *     - Schicht: NormalMap
+ *     - alles in ein Color[] Array zwischenspeichern und am Ende jeweils übertragen
+ *       - könnte Performanceprobleme geben
+ *       - evtl. nur modifizierte Bereiche übertragen
+ * - Farbreservoir alle -> Ausfaden muss modelliert werden
+ *   - HSV? RGB?
+ *     - bei RGB immer auf alle Farbkanäle noch was drauf addieren könnte funktionieren
+ * - Wie war das noch mal mit der Farbmischung beim Auftrag?
+ *   - TODO
+ * 
+ * - Design
+ *   - FarbReservoirs im Rakel gespeichert
+ *   - Applicator
+ *      - bekommt ColorExchanger
+ *        - ColorExchanger
+ *           - bekommt Reservoirs
+ *           - macht Mapping von Texturkoordinaten auf Reservoirs
+ *           - macht Farbaustausch
+ *     ODER
+ *     - bekommt Reservoir
+ *       - mit Interface
+ *          - PickupFromPixel
+ *          - ApplicateToPixel
+ *       - hat ColorExchanger
+ * 
+ * 
+ * ??.07.2022
+ * Es wär eigentlich gut, wenn MaskApplicator nur erstmal die Mask auf Texture anwendet mit paintReservoir
+ * der eigentliche Farbaustausch sollte woanders stattfinden, damit
+ * - MaskApplicator testbar bleibt
+ * - die ganze Farbaustausch-Logik nicht in den MaskApplicator Tests für jedes Szenario redundant getestet wird
+ * >> PaintTransferManager/Operator
+ *    - FromPickupMapToCanvas() -> Loop 2
+ *    - FromCanvasToPickupMap() -> Loop 1
+ * >> oder das ist die Aufgabe von PaintReservoir
+ *    - Color Emit(res_x, res_y)
+ *    - vod Pickup(res_x, res_y, canvas_color)
+ *
+ * MaskToReservoirMapper und ReservoirToMaskMapper werden auch benötigt
+ * - p_x, p_y MapCanvasToPickupMap(c_x, c_y, mask_position, rakel_rotation)
+ * - c_x, c_y MapPickupMapToCanvas(p_x, p_y, mask_position, rakel_rotation)
+ * -> Mapping in MaskApplicator oder in PaintReservoir?
+ *   - sollte PaintReservoir irgendwas über eine Maske wissen? Vermutlich nicht
+ *
+ * Tests:
+ * - PaintReservoir
+ *   - Pickup
+ *   - Emit
+ * - MaskApplicator
+ *   - Pickup und Emit müssen auf den richtigen Koordinaten aufgerufen werden
+ *   -> ?? Evtl. doch noch extra Abstraktion einführen?
+ *     -> Hat Funktion DoPoint() und das macht dann das Mapping + Pickup + Emit?
+ *     -> Das Problem mit DoPoint ist, dass es zwei Arten von DoPoint geben muss!!
+ *     -> Zwischenlayer für beide Arten von DoPoint?
+ *       -> hätte den Vorteil, dass das Testing für MaskApplicator nicht komplexer wird als es jetzt ist
+ *       -> Andererseits gibt es dann für den Mechanismus als ganzes keinen Test mehr, ein Redesign wäre somit stets ein Risiko
+ *     -> viele Unit Tests, trotzdem ein Integration Test mit vertretbarem Aufwand?
+ *       -> Allerdings wird die Logik unter MaskApplicator vermutlich noch seeehr häufig angepasst werden
+ *         -> Die Wartung dieser Integrationtests wäre einfach nur anstrengend
+ *
+ * - Mapper
+ *   - ..
+ *   - ..
+ *
+ * Eine Frage bleibt noch: Wer setzt die Farben in die Textur, und wer holt sie von dort?
+ * Applicator oder Reservoir?
+ * 
+ * 
+ * 27.07.2022
+ * Überlegtes Design nicht super sinnvoll
+ * - Die Koordinatentransformationen sollte evtl. der MaskApplicator machen, weil er sowieso die MaskPosition kennt
+ *   - Außerdem hört es sich nicht sinnvoll an, dass das Reservoir eine Maske und ihre Position, sowie Rotation kennt
+ * 
+ * Tests für neue Version vom MaskApplicator schreiben (nun mit Farb-Reservoirs) sehr anstrengend
+ * -> Was soll hier tatsächlich getestet werden? Nur genau das, was der MaskApplicator tut
+ * -> Aber das ist teils schwer in Isolation zu testen, weil das Ergebnis nur mit den echten Komponenten rauskommt
+ *   -> Ansonsten könnte ich ja auch einfach in den ColorMixerMock schreiben, dass er die vom Test gewünschte Farbe zurückgibt
+ *   -> Oder ich mocke halt alle Komponenten und prüfe die Parameter für die Aufrufe genauer
+ *     -> Dann ist die Frage ob es nicht einfacher ist, gleich alles durchzurechnen
+ * -> Das muss ich dann ja aber für alle TestCases machen, oder aber nur für den einzelnen Pixel und bei den anderen überlege ich mir noch was einfacheres
+ *   -> aber was ist einfach genug und dennoch sinnvoll zu testen?
+ *   
+ * String Log für Mocks für Unit Tests
+ * - Vorteile:
+ *   - Reihenfolge und Anzahl der Calls kann genau geprüft werden
+ * - Nachteil:
+ *   - Reihenfolge muss genau bestimmt werden! Dadurch leidet bei Arrays die Lesbarkeit der Tests
+ *   
+ * Next Steps:
+ * - DONE PaintReservoir implementieren + testen
+ * - OilPaintTexture erweitern + testen
+ * - PaintTransfer Integration Tests implementieren
+ * - TestRakel anpassen / löschen / kopieren?
+ * - Kommentare aufräumen
+ * 
+ * 
+ * 28.07.2022
+ * OilPaintTexture erweitern + testen
+ * - Abstraktion hinzufügen:
+ *   - OilPaintSurface mit Interface
+ *     - AddPaint
+ *     - GetPaint
+ *   - hat einen Member CustomTexture2D mit Interface
+ *     - SetPixelFast
+ *     - GetPixelFast
+ *     - Apply
+ *   - später wird das ganze sowieso noch erweitert, um mehrere Farbschichten zu simulieren
+ *     - es wird dann also ein Zwischenarray geben, auf Basis dessen eine CustomTexture2D errechnet/modifiziert/geupdated wird
+ *     - die Farbschichten könnten auch ein Member von OilPaintSurface sein
+ *     - CustomTexture2D wird eine Abhängigkeit von OilPaintSurface sein, da das Texture2D-Objekt einmal als Textur für das material definiert wird
+ *   - Oder einfach alles in OilPaintTexture machen? Welchen Vorteil hätte ein extra Objekt nur für SetPixelFast, GetPixelFast und Apply?
+ *   - Aufgaben:
+ *      - Farbmischung
+ *      - Speicherung von Farbschichten
+ *        + Übertragung in renderbare single-layered Farbschicht
+ *      - Farbinitialisierung auf weiß
+ *      - Apply Passthrough
+ *      
+ *      - SetPixelFast, GetPixelFast -> OOB Prüfung, Indizes ausrechnen
+ *   -> OOB Prüfung wäre einfacher zu testen
+ *     - wenn man das von außen durch OilPaintSurface wöllte, müsste man was tun?
+ *     - AddPaint und GetPaint auf ungültigen Koordinaten aufrufen aber dann müsste man auch
+ *       wieder genau wissen was man für die entsprechenden Aufrufe in Texture2D erwarten muss,
+ *       d.h. für die Tests der OOB Prüfung muss man Implementierungsdetails in der Farbmischung kennen
+ *       
+ *   - Sollte OilPaintSurface ein Texture2D Objekt bekommen oder es selbst erstellen?
+ *       
+ * Testing:
+ * - Was spricht dagegen einen Mock vom echten Objekt erben zu lassen? Evtl. ist
+ *   es dann erforderlich auch die Konstruktorparameter des echten Objekts entgegenzunehmen
+ *   - Wenn man aber ein Interface benutzt, dann kann man das neue Objekt nicht um öffentliche Methoden
+ *     erweitern, da das Interface diese in C# offenbar erfordern würde !!?? Nvm, habe nur den Typen falsch hingeschrieben ... (OilPaintSurface statt OilPaintSurfaceMock)
+ * - Probleme mit Interfaces für Mocks:
+ *   - Genutzte Attribute mit Getter/Setter der Klasse werden unbenutzbar
+ *   -> stimmt nicht, einfach den Getter im Interface definieren und beides noch mal in der Klasse mit gewünschten Rechten hinschreiben
+ *   - Teilweise muss Verhalten gestubbed werden, z.B. für Getter, weil das Object Under Test diese bei der Initialisierung nutzt
+ *   -> evtl. ist das mit der Initialisierung im Konstruktor auch einfach schlecht gelöst
+ * 
+ * Next Steps:
+ * - DONE OilPaintTexture erweitern + testen
+ *   - GetPixelFast Tests
+ *   - OilPaintSurface Tests
+ * - DONE Shared Mocks in extra Ordner schieben
+ * - PaintTransfer Integration Tests implementieren
+ * - TestRakel anpassen / löschen / kopieren?
+ * - Rakel: SetColor -> FillColor
+ * - Kommentare aufräumen
+ * - Volume Implementierung
+ * - Canvas Snapshot Buffer
+ * 
+ * 
+ * 29.07.2022
+ * Next Steps:
+ * - ==DONE Neue Komponenten für PaintTransfer edge cases
+ * - PaintTransfer Integration Tests implementieren
+ * - TestRakel anpassen
+ * - Rakel: SetColor -> FillColor
+ * - Kommentare aufräumen
+ * - Volume Implementierung
+ * - Canvas Snapshot Buffer
+ * 
+ * Testing:
+ * - Mocking erlaubt zwar das isolierte Testen einer Komponente
+ * - Wird diese jedoch erweitert, müssen die Mocks wieder angepasst werden
+ * - Die Komponente allerdings nicht isoliert zu testen (sondern quasi Integrationstests zu machen),
+ *   bedeutet wiederum auch ein ständiges Anpassen der Tests solange die Komponente erweitert wird
+ *   -> denn das Endergebnis verändert sich damit ja ständig
+ * 
+ * 
+ * 10.08.2022
+ * - Testing:
+ *   - Test first hilft dabei zu merken, was die bestehenden Komponenten evtl. sogar schon können
+ *      - OOB GetPaint ist z.B. schon erledigt, weil FastTexture2D bei OOB bereits NO_PAINT_COLOR zurückgibt
+ * 
+ * Next Steps:
+ * - Volumen Implementierung für Farbreservoir
+ *   - UI für Rakel Farbauffüllung
+ *      - Predefined Colors
+ *      - Colorpicker später
+ *   - Rakel: UpdateColor löschen
+ *   - Rakel: Fill Reservoir implementieren
+ *   - PickupReservoir: Add / Set?
+ *      - Add macht mehr Sinn, weil evtl. manchmal auch nur Farbe aufgenommen und keine abgegeben wird
+ *      - Aber Add macht nur dann Sinn, wenn mehrere Farbschichten unterstützt werden ...
+ *        (sonst wird ja bei jedem neuen Add die Farbe überschrieben)
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
+ * - TestRakel anpassen
+ * - ? PaintTransfer TestClass löschen
+ * - Kommentare aufräumen
+ * - OptimizedRakel -> Rakel
+ * - Alle Rakelkomponenten in einen Ordner packen
+ * - Anpressdruck beim über die Leinwand ziehen
+ * - Canvas Snapshot Buffer
+ * - Farbe ausfaden lassen wenn nur noch wenig Volume
+ * - mehrere verschiedene Farbschichten auf den Rakel auftragen können
+ * 
+ * Aufgehört bei:
+ * - Testing:
+ *   - Integrationstests sind wichtig
+ *     - Rakel: UpdateLength und UpdateWidth sollten auch das Reservoir neu anlegen ...
+ *     
+ * Sollte man Length und Width überhaupt updaten könnnen? Evtl. sollte eher ein neuer Rakel erstellt werden
+ * -> Problem hiermit ist aber, dass es evtl. beim Benutzen anstrengend ist, weil man immer beachten muss,
+ *    dass nach Length und Width Update noch mal Farbe aufgetragen werden muss
+ * -> Wenn man das Reservoir behalten möchte, wird dies aber insbesondere bei schon verwendetem Rakel schwer
+ *    nachvollziehbar, wo welche Farbe hinübertragen wurde
+ * 
+ * 
+ * 12.08.2022
+ * Probleme sind:
+ * - Es kommt zu einer schnellen Verdünnung der Farbe, evtl. geht irgendwo welche verloren
+ * - Ein leerer Rakel sollte auch Farbe über die Leinwand ziehen können
+ * - Aufgenommene Farbe wird noch im selben Pixel wieder abgegeben
+ *   -> Reihenfolge ändern bringt nichts, denn dann würde die abgegebene Farbe noch im selben Pixel wiederaufgenommen
+ *   -> Canvas Snapshot Buffer
+ *     - Umsetzung bei "rotierender Pickupmap"?
+ *       - O wird nach jedem Imprint geupdated
+ *         - jedoch nur für alle gerade geänderten Pixel, die nicht unter der neuen Maske liegen
+ *     - Alternative Idee: Während Stroke haben alle veränderten Pixel eine "TTL" und erst nach deren Ablauf kann wieder Farbe abgegeben werden
+ * 
+ * Next Steps:
+ * - Canvas Snapshot Buffer
+ * - Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - Bug: Bei mehreren Klicks auf entfernten Flächen wird beim vierten Mal die Farbe halbiert
+ * - PickupReservoir: Add
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
+ * - Kommentare aufräumen
+ * - OptimizedRakel -> Rakel
+ * - Anpressdruck beim über die Leinwand ziehen
+ * - Farbe ausfaden lassen wenn nur noch wenig Volume
+ * - mehrere verschiedene Farbschichten auf den Rakel auftragen können
+ * - Colorpicker (https://www.youtube.com/watch?v=Ng3P_1nc8YE)
  */

@@ -4,6 +4,25 @@ using UnityEngine;
 
 public class AssertUtil
 {
+    public static void AssertColorsAreEqual(Color[,] expected, Color[,] actual)
+    {
+        Assert.AreEqual(expected.GetLength(0), actual.GetLength(0));
+        Assert.AreEqual(expected.GetLength(1), actual.GetLength(1));
+
+        for (int i = 0; i < expected.GetLength(0); i++)
+        {
+            for (int j = 0; j < expected.GetLength(1); j++)
+            {
+                if (!ColorsAreEqual(expected[i,j], actual[i,j]))
+                {
+                    // TODO this is hacky but works, just NOTE that the given error message
+                    //      might be misleading and you have to print your arrays for a better view
+                    Assert.AreEqual(expected, actual);
+                }
+            }
+        }
+    }
+
     public static void AssertColorsAreEqual(Color[] expected, Color[] actual)
     {
         Assert.AreEqual(expected.GetLength(0), actual.GetLength(0));

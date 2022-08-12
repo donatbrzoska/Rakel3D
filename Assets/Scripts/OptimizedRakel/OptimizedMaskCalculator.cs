@@ -5,7 +5,7 @@ using UnityEngine;
 public struct OptimizedMask
 {
     public int[,] coordinates;
-    public int y0_index;
+    public int y_eq_0_index; // -> At which index is y == 0? | Whats the value of y at index 0?
 }
 
 public class OptimizedMaskCalculator: MaskCalculator
@@ -38,7 +38,7 @@ public class OptimizedMaskCalculator: MaskCalculator
         int n_rows = y_max - y_min + 1;
         OptimizedMask mask = new OptimizedMask();
         mask.coordinates = new int[n_rows, 2];
-        mask.y0_index = y_max; // because the highest y is stored first
+        mask.y_eq_0_index = y_max; // because the highest y is stored first
 
         // initialize, so both coordinates are ensured to get set
         for (int i = 0; i < mask.coordinates.GetLength(0); i++)
@@ -83,7 +83,7 @@ public class OptimizedMaskCalculator: MaskCalculator
         int numerator = longest >> 1;
         for (int i = 0; i <= longest; i++)
         {
-            int y1_arr = target.y0_index - y1; // higher y -> lower index
+            int y1_arr = target.y_eq_0_index - y1; // higher y -> lower index
 
             // always possibly write to both positions, so when the first set is done, we can be sure, that both values are definitely set
             if (x1 < target.coordinates[y1_arr, 0])
