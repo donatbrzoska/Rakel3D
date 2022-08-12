@@ -47,8 +47,7 @@ public class MaskCalculator
             mask.coordinates[i, 1] = int.MinValue;
         }
 
-        DrawLines(rectangleVertices, mask);
-        //FillRectangle(mask);
+        DrawRectangle(rectangleVertices, mask);
 
         return mask;
     }
@@ -79,7 +78,7 @@ public class MaskCalculator
         };
     }
 
-    private void DrawLines(List<Vector2Int> vs, Mask target)
+    private void DrawRectangle(List<Vector2Int> vs, Mask target)
     {
         DrawLine(vs[0].x, vs[0].y, vs[1].x, vs[1].y, target);
         DrawLine(vs[1].x, vs[1].y, vs[2].x, vs[2].y, target);

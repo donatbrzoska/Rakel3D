@@ -55,7 +55,6 @@ public class Notes : MonoBehaviour
  * - MaskApplicator PositionMapping:
  *   - TODO unlucky cases
  * - OilPaintEngine aufräumen
- * - MaskCalculator: DrawLines -> DrawRectangle
  * - TestMaskApplicator_CoordinateMapping -> Müll löschen
  * - RakelNormal -> Angle
  * - "Log" Attribut in Superclass "Mock" schieben?
