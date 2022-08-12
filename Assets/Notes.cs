@@ -52,18 +52,19 @@ public class Notes : MonoBehaviour
  * - Wertebereiche bei InputFields nicht definierbar
  *
  * Code Quality:
- * - MaskApplicator PositionMapping:
- *   - TODO unlucky cases
  * - OilPaintEngine aufräumen
- * - TestMaskApplicator_CoordinateMapping -> Müll löschen
  * - RakelNormal -> Angle
  * - "Log" Attribut in Superclass "Mock" schieben?
  * - Interfaces für gemockte Typen, statt Vererbung
  *   - virtual Keyword nur für die Tests ...
  *   - und dann muss man sich auch nicht mehr mit den Superkonstruktoren herumschlagen
+ * - Tests für Rakel im initial state
+     - TODO wrong usage (Apply before set values)
  * - Tests für Mocks
  * - Tests für Apply-Calls
  * - Tests für Masks mit z.B. 70° Rotation
+ * - Tests für MaskApplicator CoordinateMapping:
+ *   - TODO unlucky cases
  */
 
 
@@ -534,7 +535,6 @@ public class Notes : MonoBehaviour
  * - Bug: Bei mehreren Klicks auf entfernten Flächen wird beim vierten Mal die Farbe halbiert
  * - PickupReservoir: Add
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
- * - Kommentare aufräumen
  * - Anpressdruck beim über die Leinwand ziehen
  * - Farbe ausfaden lassen wenn nur noch wenig Volume
  * - mehrere verschiedene Farbschichten auf den Rakel auftragen können

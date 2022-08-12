@@ -75,6 +75,4 @@ public class TestRakel
             colors
         );
     }
-
-    // TODO wrong usage (Apply before set values)
 }
