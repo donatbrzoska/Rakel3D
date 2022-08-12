@@ -18,13 +18,18 @@ public class Notes : MonoBehaviour
 }
 
 /* TODO
+ * Features
+ * - Anpressdruck beim über die Leinwand ziehen
+ * - Farbe ausfaden lassen wenn nur noch wenig Volume
+ * - mehrere verschiedene Farbschichten auf den Rakel auftragen können
+ *
  * Mischung mit Hintergrundfarbe des Canvas?
  * 
  * GUI
- * - Rakel-Ausrichtung und Größe
- *   + "Preview"
- * - Farben
- * - Clear-Button
+ * - Preview für Rakel-Ausrichtung und Größe
+ * - Colorpicker (https://www.youtube.com/watch?v=Ng3P_1nc8YE)
+ * - Clear-Rakel Paint Button
+ * - Clear-Canvas Button
  * 
  * Generell was zu den Modi überlegen
  * - Nur übers Bild ziehen
@@ -37,11 +42,6 @@ public class Notes : MonoBehaviour
  * 
  * Farbmenge über BumpMap / NormalMap
  * 
- * Bidirektionaler Farbaustausch
- * - Farbschichten auf Rakel
- *   - Form wie Maske im initial State
- * - Mapping von Maskenkoordinaten auf Farbschichten in ApplyMask
- * 
  * Haken am Rand beim Ziehen
  * - Berechnungen optimieren -> bringt nicht wirklich was, wahrscheinlich wird Update() einfach gar nicht oft genug aufgerufen
  * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
@@ -52,6 +52,7 @@ public class Notes : MonoBehaviour
  * - Wertebereiche bei InputFields nicht definierbar
  *
  * Code Quality:
+ * - Wieso wird der Rakel am Anfang 3x erstellt?
  * - OilPaintEngine aufräumen
  * - RakelNormal -> Angle
  * - Tests für Rakel im initial state
@@ -527,12 +528,8 @@ public class Notes : MonoBehaviour
  * 
  * Next Steps:
  * - Canvas Snapshot Buffer
- * - Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
  * - Bug: Bei mehreren Klicks auf entfernten Flächen wird beim vierten Mal die Farbe halbiert
  * - PickupReservoir: Add
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
- * - Anpressdruck beim über die Leinwand ziehen
- * - Farbe ausfaden lassen wenn nur noch wenig Volume
- * - mehrere verschiedene Farbschichten auf den Rakel auftragen können
- * - Colorpicker (https://www.youtube.com/watch?v=Ng3P_1nc8YE)
  */
