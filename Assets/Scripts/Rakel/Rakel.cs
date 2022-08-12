@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using UnityEngine;
 
-public abstract class Rakel
+public class Rakel
 {
     public int Length { get; protected set; }
     public int Width { get; protected set; }
@@ -11,6 +11,21 @@ public abstract class Rakel
 
     protected Vector2Int Position;
     protected bool ReapplyMask;
+
+    private Mask LatestMask;
+    private MaskCalculator MaskCalculator;
+    private MaskApplicator MaskApplicator;
+
+    private RakelPaintReservoir PaintReservoir;
+
+    public Rakel(int length, int width, MaskCalculator maskCalculator, MaskApplicator maskApplicator)
+    {
+        Length = length;
+        Width = width;
+        MaskCalculator = maskCalculator;
+        MaskApplicator = maskApplicator;
+        PaintReservoir = new RakelPaintReservoir(Length, Width);
+    }
 
     public void UpdateNormal(Vector2 normal)
     {
@@ -30,6 +45,11 @@ public abstract class Rakel
         }
     }
 
+    public void UpdatePaint(Color color, int volume)
+    {
+        PaintReservoir.Fill(color, volume);
+    }
+
     public void ApplyToCanvas(IOilPaintSurface oilPaintSurface, bool logTime = false)
     {
         if (RecalculateMask)
@@ -39,7 +59,7 @@ public abstract class Rakel
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            CalculateMask();
+            LatestMask = MaskCalculator.Calculate(Length, Width, Normal);
             if (logTime)
                 UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
         }
@@ -50,13 +70,9 @@ public abstract class Rakel
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            ApplyMask(oilPaintSurface);
+            MaskApplicator.Apply(LatestMask, Position, Normal, oilPaintSurface, PaintReservoir);
             if (logTime)
                 UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
         }
     }
-
-    protected abstract void CalculateMask();
-
-    protected abstract void ApplyMask(IOilPaintSurface oilPaintSurface);
 }

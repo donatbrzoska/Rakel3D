@@ -53,13 +53,10 @@ public class Notes : MonoBehaviour
  *
  * Code Quality:
  * - MaskApplicator PositionMapping:
- *   - TODO out of bounds GetPaint?
  *   - TODO unlucky cases
  * - OilPaintEngine aufräumen
  * - MaskCalculator: DrawLines -> DrawRectangle
- * - OptimizedRakel -> Rakel
- * - Ordner: Rakel
- * - Ordner: Canvas/Surface
+ * - TestMaskApplicator_CoordinateMapping -> Müll löschen
  * - RakelNormal -> Angle
  * - "Log" Attribut in Superclass "Mock" schieben?
  * - Interfaces für gemockte Typen, statt Vererbung
@@ -539,7 +536,6 @@ public class Notes : MonoBehaviour
  * - PickupReservoir: Add
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
  * - Kommentare aufräumen
- * - OptimizedRakel -> Rakel
  * - Anpressdruck beim über die Leinwand ziehen
  * - Farbe ausfaden lassen wenn nur noch wenig Volume
  * - mehrere verschiedene Farbschichten auf den Rakel auftragen können

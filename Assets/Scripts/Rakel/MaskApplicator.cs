@@ -9,14 +9,14 @@ using UnityEngine;
  * - direct access to texture color array
  * - parallelization
  */
-public class OptimizedMaskApplicator
+public class MaskApplicator
 {
-    public OptimizedMaskApplicator()
+    public MaskApplicator()
     {
     }
 
     public virtual void Apply(
-        OptimizedMask mask,
+        Mask mask,
         Vector2Int maskPosition,
         Vector2 maskNormal,
         IOilPaintSurface oilPaintSurface,

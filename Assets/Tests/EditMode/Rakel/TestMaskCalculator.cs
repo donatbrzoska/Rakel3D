@@ -2,20 +2,20 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class TestOptimizedMaskCalculator
+public class TestMaskCalculator
 {
-    OptimizedMaskCalculator o;
+    MaskCalculator o;
 
     [SetUp]
     public void Init()
     {
-        o = new OptimizedMaskCalculator();
+        o = new MaskCalculator();
     }
 
     [Test]
     public void InitialState_Line()
     {
-        OptimizedMask mask = o.Calculate(3, 1, Vector2.right);
+        Mask mask = o.Calculate(3, 1, Vector2.right);
 
         Assert.AreEqual(
             new int[3, 2] {
@@ -30,7 +30,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void InitialState_Lines()
     {
-        OptimizedMask mask = o.Calculate(3, 2, Vector2.right);
+        Mask mask = o.Calculate(3, 2, Vector2.right);
 
         Assert.AreEqual(
             new int[3, 2] {
@@ -45,7 +45,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void InitialState_Rectangle()
     {
-        OptimizedMask mask = o.Calculate(5, 3, Vector2.right);
+        Mask mask = o.Calculate(5, 3, Vector2.right);
 
         Assert.AreEqual(
             new int[5, 2] {
@@ -62,7 +62,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void Rotated90_Line()
     {
-        OptimizedMask mask = o.Calculate(3, 1, Vector2.down);
+        Mask mask = o.Calculate(3, 1, Vector2.down);
 
         Assert.AreEqual(
             new int[1, 2] {
@@ -75,7 +75,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void Rotated90_Lines_FacedDown_EvenRowsCase1()
     {
-        OptimizedMask mask = o.Calculate(3, 2, Vector2.down);
+        Mask mask = o.Calculate(3, 2, Vector2.down);
 
         Assert.AreEqual(
             new int[2, 2] {
@@ -89,7 +89,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void Rotated90_Lines_FacedUp_EvenRowsCase2()
     {
-        OptimizedMask mask = o.Calculate(3, 2, Vector2.up);
+        Mask mask = o.Calculate(3, 2, Vector2.up);
 
         Assert.AreEqual(
             new int[2, 2] {
@@ -103,7 +103,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void Rotated45_Line()
     {
-        OptimizedMask mask = o.Calculate(3, 1, new Vector2(1, -1));
+        Mask mask = o.Calculate(3, 1, new Vector2(1, -1));
 
         Assert.AreEqual(
             new int[3, 2] {
@@ -118,7 +118,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void Rotated135_Line()
     {
-        OptimizedMask mask = o.Calculate(3, 1, new Vector2(-1, -1));
+        Mask mask = o.Calculate(3, 1, new Vector2(-1, -1));
 
         Assert.AreEqual(
             new int[3, 2] {
@@ -133,7 +133,7 @@ public class TestOptimizedMaskCalculator
     [Test]
     public void Rotated225_Line()
     {
-        OptimizedMask mask = o.Calculate(3, 1, new Vector2(-1, 1));
+        Mask mask = o.Calculate(3, 1, new Vector2(-1, 1));
 
         Assert.AreEqual(
             new int[3, 2] {

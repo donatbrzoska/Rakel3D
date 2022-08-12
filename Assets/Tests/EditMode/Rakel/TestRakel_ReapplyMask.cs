@@ -5,15 +5,15 @@ using UnityEngine;
 public class TestRakel_ReapplyMask
 {
     OilPaintSurface oilPaintSurface_null;
-    OptimizedRakel rakel;
-    OptimizedMaskApplicatorMock ma_mock;
+    Rakel rakel;
+    MaskApplicatorMock ma_mock;
 
     [SetUp]
     public void Init()
     {
         oilPaintSurface_null = null; // real object is not needed, since MaskApplicator is mocked hence not working on it
-        ma_mock = new OptimizedMaskApplicatorMock();
-        rakel = new OptimizedRakel(1, 1, new OptimizedMaskCalculator(), ma_mock);
+        ma_mock = new MaskApplicatorMock();
+        rakel = new Rakel(1, 1, new MaskCalculator(), ma_mock);
         rakel.UpdatePaint(new Color(0, 0.4f, 0.8f), 1);
         rakel.UpdatePosition(new Vector2Int(1, 1));
         rakel.UpdateNormal(Vector2Int.right);

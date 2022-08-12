@@ -3,16 +3,16 @@ using NUnit.Framework;
 using UnityEngine;
 
 // Paint Transfer is tested in TestOptimizedRakel
-public class TestOptimizedMaskApplicator_CoordinateMapping
+public class TestMaskApplicator_CoordinateMapping
 {
-    OptimizedMaskCalculator mc;
-    OptimizedMaskApplicator ma;
+    MaskCalculator mc;
+    MaskApplicator ma;
 
     [SetUp]
     public void Init()
     {
-        mc = new OptimizedMaskCalculator();
-        ma = new OptimizedMaskApplicator();
+        mc = new MaskCalculator();
+        ma = new MaskApplicator();
     }
 
     // TODO out of bounds GetPaint?
@@ -24,7 +24,7 @@ public class TestOptimizedMaskApplicator_CoordinateMapping
         int rakelLength = 1;
         int rakelWidth = 1;
         Vector2 maskNormal = Vector2.down;
-        OptimizedMask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
+        Mask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
         Vector2Int maskPosition = new Vector2Int(1, 1);
         OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 3);
         PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);
@@ -83,7 +83,7 @@ public class TestOptimizedMaskApplicator_CoordinateMapping
         int rakelLength = 3;
         int rakelWidth = 2;
         Vector2 maskNormal = Vector2.right;
-        OptimizedMask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
+        Mask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
         Vector2Int maskPosition = new Vector2Int(2, 1);
         OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 3);
         PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);
@@ -146,7 +146,7 @@ public class TestOptimizedMaskApplicator_CoordinateMapping
         int rakelLength = 3;
         int rakelWidth = 2;
         Vector2 maskNormal = Vector2.down;
-        OptimizedMask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
+        Mask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
         Vector2Int maskPosition = new Vector2Int(1, 4);
         OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 6);
         PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);

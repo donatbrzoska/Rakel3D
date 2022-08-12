@@ -2,14 +2,14 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class TestOptimizedRakel
+public class TestRakel
 {
     [Test]
     public void ApplyToCanvas_Point()
     {
         FastTexture2D texture = new FastTexture2D(3, 3);
         OilPaintSurface oilPaintSurface = new OilPaintSurface(texture);
-        OptimizedRakel rakel = new OptimizedRakel(1, 1, new OptimizedMaskCalculator(), new OptimizedMaskApplicator());
+        Rakel rakel = new Rakel(1, 1, new MaskCalculator(), new MaskApplicator());
         rakel.UpdatePaint(new Color(0, 0.4f, 0.8f), 2);
         rakel.UpdatePosition(new Vector2Int(1, 1));
         rakel.UpdateNormal(Vector2Int.right);
@@ -50,7 +50,7 @@ public class TestOptimizedRakel
         FastTexture2D texture = new FastTexture2D(3, 3);
         OilPaintSurface oilPaintSurface = new OilPaintSurface(texture);
         oilPaintSurface.AddPaint(1, 1, new Color(0, 0.4f, 0.8f));
-        OptimizedRakel rakel = new OptimizedRakel(1, 1, new OptimizedMaskCalculator(), new OptimizedMaskApplicator());
+        Rakel rakel = new Rakel(1, 1, new MaskCalculator(), new MaskApplicator());
         rakel.UpdateNormal(Vector2Int.right);
 
         // pickup

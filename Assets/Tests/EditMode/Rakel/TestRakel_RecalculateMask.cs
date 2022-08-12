@@ -2,28 +2,28 @@
 using NUnit.Framework;
 using UnityEngine;
 
-class OptimizedMaskCalculatorMock : OptimizedMaskCalculator
+class MaskCalculatorMock : MaskCalculator
 {
     public string Log { get; private set; }
-    public override OptimizedMask Calculate(int height, int width, Vector2 normal)
+    public override Mask Calculate(int height, int width, Vector2 normal)
     {
         Log += "Calculate ";
-        return new OptimizedMask();
+        return new Mask();
     }
 }
 
 public class TestRakel_RecalculateMask
 {
     OilPaintSurface oilPaintSurface_null;
-    OptimizedRakel rakel;
-    OptimizedMaskCalculatorMock brc_mock;
+    Rakel rakel;
+    MaskCalculatorMock brc_mock;
 
     [SetUp]
     public void Init()
     {
         oilPaintSurface_null = null; // real object is not needed, since MaskApplicator is mocked hence not working on it
-        brc_mock = new OptimizedMaskCalculatorMock();
-        rakel = new OptimizedRakel(1, 1, brc_mock, new OptimizedMaskApplicatorMock());
+        brc_mock = new MaskCalculatorMock();
+        rakel = new Rakel(1, 1, brc_mock, new MaskApplicatorMock());
         rakel.UpdatePaint(new Color(0, 0.4f, 0.8f), 1);
         rakel.UpdatePosition(new Vector2Int(1, 1));
         rakel.UpdateNormal(Vector2Int.right);
