@@ -122,6 +122,10 @@ public class Notes : MonoBehaviour
  * 
  * Rolle von Unit vs. Integrationstests
  * -> Integrationstests prüfen nur Aufrufe, decken also nicht alle Szenarien ab, die mit Unit-Tests behandelt werden
+ * 
+ * Viel weniger Debugging
+ * Man weiß einfach der Code macht
+ * Robustheit gegenüber Änderungen
  */
 
 
@@ -536,4 +540,119 @@ public class Notes : MonoBehaviour
  *   - Es wird nie ein sinnvolles UpdatePosition ohne anschließendes Apply geben
  *   - Idee kam eigentlich, weil ich mich gefragt hab, wieso man dem Applicator Mask sowie MaskPosition und MaskNormal übergibt
  *     -> evtl. könnte man die beiden extra Attribute ja auch einfach in der Mask speichern
+ *     
+ * Canvas Snapshot Buffer:
+ * - "Before the first imprint of a stroke, Ω is initialized to be identical to the current canvas map."
+ *   -> Damit ist nicht vor jedem Strich hakt, am besten immer schon nach dem letzten Strich machen
+ * - "Then, before every subsequent imprint, Ω is updated to contain the latest version of the canvas map except for the region covered by the pickup map at the current brush position"
+ *   -> Für die Performance ist hierbei wichtig, immer nur die Änderungen zu übertragen
+ *     - Übertragen werden müssen also die folgenden Pixel: Vorherig modifizierte Pixel MINUS Demnächst modifizierte Pixel
+ * - "By using Ω as the input canvas map to our paint pickup update algorithm instead of the canvas itself, we avoid the tight feedback loop during the bidirectional paint transfer"
+ *   -> GetPaint muss dann immer auf dem Canvas Snapshot Buffer gemacht werden
+ *   - Farben für AddPaint und Rendering kommen immer noch direkt aus dem Surface
+ * - Schritte im Mask Applicator:
+ *   - Farbmitnahme aus Snapshot Buffer
+ *   - Farbauftrag wie bisher
+ *     - modifizierte Koordinaten (MK_1) speichern
+ *   - Koordinaten MK_0 \ MK_1 in Snapshot-Buffer übertragen
+ *     - das kann evtl. direkt in der nächsten Iteration erfolgen (immer direkt vor der Farbmitnahme aus dem Snapshot-Buffer)
+ *       - dabei muss aber beachtet werden, dass nach der letzten Iteration alles übrige noch übertragn wird
+ * 13.08.0222
+ * - Design:
+ *   - Alles in OilPaintSurface API versteckt
+ *     - GetPaint nimmt immer aus dem Snapshot-Buffer
+ *     - Neue Funktion: ImprintDone
+ *       - überträgt alles was dazu gekommen ist MINUS eine Liste von Koordinaten in den Snapshot Buffer
+ *   ODER
+ *   - Handling komplett im MaskApplicator
+ *     - SnapshotBuffer.GetPaint statt OilPaintSurface.GetPaint
+ *       - SnapshotBuffer sollte OilPaintSurface-Referenz haben
+ *         - um die GetPaint Aufrufe weiterzuleiten
+ *         - aber nur, wenn an der Stelle im SnapshotBuffer überhaupt Farbe ist
+ *       - TODO
+ *         
+ * Ablauf derzeit:
+ * - oilPaintSurface.GetPaint
+ * - paintReservoir.Pickup
+ * - paintReservoir.Emit
+ * - oilPaintSurface.AddPaint
+ * 
+ * - Snapshot Buffer verändert Schmierverhalten, derzeit gibt es aber gar kein Schmierverhalten
+ *   -> evtl. das erstmal implementieren?
+ *   - Es muss geregelt werden, dass die aufgenommene Farbe nicht im selben Pixel wieder abgegeben wird
+ *     - Idee: kann eine Variation des SnapshotBuffers das evtl. auch leisten?
+ *     - Keine Idee: Reihenfolge ändern:
+ *       - Zuerst Farbe nitmehmen und dann abgeben: (derzeit)
+ *         - Mitgenommene Farbe wird immer sofort wieder abgegeben
+ *       - Zuerst Farbe abgeben und dann mitnehmen
+ *         - Abgegebene Farbe wird immer sofort wieder mitgenommen
+ *     - Idee: Neuer State in OilPaintSurface
+ *       - StartImprint()
+ *         - kopiert sich einmal das derzeitige Farbarray, damit dann bei den folgenden GetPaint-Aufrufen nicht die neue Farbe wieder mitgenommen wird
+ *       - GetPaint nimmt dann immer die Farbe aus dem kopiertem Farbarray
+ *         - Trotzdem muss irgendwie geregelt werden, dass die Farbe auf dem echten Array auch weniger wird
+ *     - Idee: Alles über verzögerte Farbweiterleitung im MaskApplicator regeln
+ *       - Problematik ist ja, dass aufgenommene Farbe nicht direkt wieder abgegeben werden soll
+ *       - Also machen wir
+ *         - oilPaintSurface.GetPaint -> Ergebnisse speichern
+ *         - paintReservoir.Emit
+ *         - oilPaintSurface.AddPaint
+ *         - paintReservoir.Pickup aus gespeicherten Ergebnissen
+ *           - für die Effizienz kann das auch immer vor den ersten Schritt geschoben werden, mit den Ergebnissen aus der letzten Iteration
+ *           - dabei nicht vergessen: nach der letzten Iteration muss trotzdem Pickup gemacht werden
+ *         -> verzögerte Farbaufnahme von der Leinwand
+ *       - Oder andersherum:
+ *         - paintReservoir.Emit -> Ergebnisse speichern
+ *         - oilPaintSurface.GetPaint
+ *         - paintReservoir.Pickup
+ *         - oilPaintSurface.AddPaint aus gespeicherten Ergebnissen
+ *         -> verzögerter Farbauftrag auf Leinwand
+ *         
+ *       - ließe sich dieses Konzept auch in einem speziellen SnapshotBuffer umsetzen?
+ *         - Was macht der SnapshotBuffer überhaupt genau?
+ *           - Die Farbe kommt aus einer Kopie der Leinwand
+ *           -> quasi verzögerter Farbauftrag, denn das was jetzt aufgetragen wird, kann erst später wieder mitgenommen werden
+ *         - Aber wie ist das geregelt, damit keine Farbe verloren geht/erzeugt wird?
+ *           - Wenn die Farbe aus dem SnapshotBuffer aufgenommen wird, dann muss sie irgendwann auch von der Leinwand abgetragen werden
+ *              - Und das muss dann auch genau die Farbe mit genau der Menge sein, wie soll das gehen?
+ *              - Ablauf wäre:
+ *                - Farbe aus SnapshotBuffer nehmen
+ *                  - Aber wann wird diese Farbe von der Leinwand abgetragen?
+ *                    - Angenommen sofort
+ *                      welche Probleme träten auf?
+ *                      - Man müsste die Farbe im SnapshotBuffer aus der Leinwandfarbe extrahieren,
+ *                        denn diese hat sich durch vorheriges Auftragen vermutlich schon geändert
+ *                      - Aber das wird zu jedem Zeitpunkt ein Problem sein, weil sich ja SnapshotBuffer und Canvas
+ *                        von Natur aus immer unterscheiden
+ *                    - Angenommen die Farbe wird bei jedem SnapshotBuffer Update bereits abgetragen
+ *                      welche Probleme träten auf?
+ *                      - Wie viel Farbe wird denn abgetragen? Das hinge später auch ja vom Anpressdruck ab
+ *                      - Alle mitgenommene Farbe muss ja dann auch nach dem Imprint wieder aufgetragen werden
+ *                        - Mischung mit aufgetragener Farbe???
+ *                - Farbe in PickupMap packen
+ *                - Farbe aus Reservoir nehmen
+ *                - Farbe auf Canvas auftragen
+ *                - SnapshotBuffer updaten
+ *           - Alternative Implementierung?
+ *             - SnapshotBuffer nur um zu tracken, an welchen Stellen es Unterschiede zwischen Leinwand und SnapshotBuffer gibt
+ *               - Farbmitnahme nur dort, wo es TODO
+ *     - Könnte die verzögerte Farbweiterleitung das Konzept des SnapshotBuffers nachbilden?
+ *       - Verzögerung um k Schritte
+ *       - Welche Art der Verzögerung eignet sich besser?
+ *         - Farbaufnahme von der Leinwand - Probleme?
+ *           - Wohin mit der übrigen Farbe nach Abschluss der letzten Iteration?
+ *             - komplett ins Reservoir packen
+ *             - in Queue behalten und erst mit nächstem Stroke ins Reservoir wandern lassen
+ *         - Farbauftrag auf die Leinwand - Probleme?
+ *           - Wohin mit der übrigen Farbe nach Abschluss der letzten Iteration?
+ *             - komplett auf die Leinwand auftragen
+ *             - in Queue behalten und erst mit nächstem Stroke auftragen
+ *       - die Frage ist dann natürlich wie groß k sein sollte aber das ganze ist sehr 
+ *         einfach implementierbar und evtl. wirksam
+ *     - Umsetzung:
+ *       - PickupPaintReservoir wird vollkommen eigener Typ
+ *       - Basisdatenstruktur wird eine Queue
+ *         - die wird am Anfang gefüllt mit k leeren Farbwerten
+ *         
+ *           
  */

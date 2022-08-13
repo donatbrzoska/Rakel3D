@@ -39,6 +39,7 @@ public class MaskApplicator: IMaskApplicator
         // TODO There will be pixels on the canvas from which no paint is picked up (applies per rakel position)
         //      And also pixels on the canvas from which paint is picked up twice!
         // -> interpolate volume somehow?
+        //   - generates new paint though...
         // -> always pickup paint from canvas pixels around also?
         // -> maybe there is no problem because of the motion though, maybe this is good even
 
@@ -73,6 +74,7 @@ public class MaskApplicator: IMaskApplicator
         // TODO There will be pixels on the reservoir from which no paint is emitted (applies per rakel orientation/rotation)
         //      And also pixels on the reservoir from which paint is emitted twice!
         // -> interpolate volume somehow?
+        //    - generates new paint though ...
         // -> always emit paint to from reservoir pixels around also?
         // -> Reservoir Equalizer -> Paint flowing towards the negative gradient of volume
 
