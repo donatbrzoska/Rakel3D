@@ -21,9 +21,9 @@ public class OilPaintEngine : MonoBehaviour
     public Rakel Rakel { get; private set; }
     public Vector2 RakelNormal { get; private set; } = new Vector2(1, 0);
     public float RakelLength { get; private set; } = 4f; // world space
-    public float RakelWidth { get; private set; } = 2f; // world space
+    public float RakelWidth { get; private set; } = 0.3f; // world space
     public Color RakelPaintColor { get; private set; } = new Color(0.3f, 0, 0.7f); // TODO this will be overriden anyways
-    public int RakelPaintVolume { get; private set; } = 100;
+    public int RakelPaintVolume { get; private set; } = 40;
 
     void Awake()
     {
@@ -54,7 +54,7 @@ public class OilPaintEngine : MonoBehaviour
     {
         int length = WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution);
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);
-        Rakel = new Rakel(length, width, new MaskCalculator(), new MaskApplicator());
+        Rakel = new Rakel(length, width, 10, new MaskCalculator(), new MaskApplicator());
         Debug.Log("Rakel is " + Rakel.Length + "x" + Rakel.Width + " = " + Rakel.Length * Rakel.Width);
         Rakel.UpdateNormal(RakelNormal);
         Rakel.UpdatePaint(RakelPaintColor, RakelPaintVolume);
@@ -68,7 +68,7 @@ public class OilPaintEngine : MonoBehaviour
         {
             Vector2Int preciseBrushPosition = WorldSpaceCoordinateToTextureSpaceCoordinate(worldSpaceHit);
             Rakel.UpdatePosition(preciseBrushPosition);
-            Rakel.ApplyToCanvas(OilPaintSurface, true);
+            Rakel.ApplyToCanvas(OilPaintSurface, false);
         }
     }
 

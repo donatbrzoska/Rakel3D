@@ -246,25 +246,36 @@ class OilPaintSurfaceMock : IOilPaintSurface
     }
 }
 
-class PaintReservoirMock : RakelPaintReservoir
+class PaintReservoirMock : IRakelPaintReservoir
 {
     public int[,] PickupLog { get; private set; }
     public int[,] EmitLog { get; private set; }
 
-    public PaintReservoirMock(int height, int width) : base(height, width)
+    public int Height { get;  private set; }
+    public int Width { get; private set; }
+
+    public PaintReservoirMock(int height, int width)
     {
         PickupLog = new int[height, width];
         EmitLog = new int[height, width];
+
+        Width = width;
+        Height = height;
     }
 
-    public override void Pickup(int x, int y, Color color, int volume)
+    public void Pickup(int x, int y, Color color, int volume)
     {
         PickupLog[y, x] += 1;
     }
 
-    public override Color Emit(int x, int y)
+    public Color Emit(int x, int y)
     {
         EmitLog[y, x] += 1;
         return new Color(0, 0, 0);
+    }
+
+    public void Fill(Color color, int volume)
+    {
+        throw new NotImplementedException();
     }
 }

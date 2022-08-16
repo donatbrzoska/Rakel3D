@@ -18,13 +18,13 @@ public class Rakel
 
     private RakelPaintReservoir PaintReservoir;
 
-    public Rakel(int length, int width, IMaskCalculator maskCalculator, IMaskApplicator maskApplicator)
+    public Rakel(int length, int width, int pickupDelay, IMaskCalculator maskCalculator, IMaskApplicator maskApplicator)
     {
         Length = length;
         Width = width;
         MaskCalculator = maskCalculator;
         MaskApplicator = maskApplicator;
-        PaintReservoir = new RakelPaintReservoir(Length, Width);
+        PaintReservoir = new RakelPaintReservoir(Length, Width, pickupDelay);
     }
 
     public void UpdateNormal(Vector2 normal)

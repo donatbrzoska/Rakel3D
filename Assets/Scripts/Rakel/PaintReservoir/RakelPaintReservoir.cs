@@ -1,23 +1,24 @@
 ﻿using System;
 using UnityEngine;
 
-public class RakelPaintReservoir
+public class RakelPaintReservoir : IRakelPaintReservoir
 {
     public int Height { get; private set; }
     public int Width { get; private set; }
+
     private PickupPaintReservoir PickupReservoir;
     private ApplicationPaintReservoir ApplicationReservoir;
 
-    public RakelPaintReservoir(int height, int width)
+    public RakelPaintReservoir(int height, int width, int pickupDelay)
     {
         Height = height;
         Width = width;
 
-        PickupReservoir = new PickupPaintReservoir(height, width);
+        PickupReservoir = new PickupPaintReservoir(height, width, pickupDelay);
         ApplicationReservoir = new ApplicationPaintReservoir(height, width);
     }
 
-    public virtual void Fill(Color color, int volume)
+    public void Fill(Color color, int volume)
     {
         for (int i = 0; i < Height; i++)
         {
@@ -28,15 +29,12 @@ public class RakelPaintReservoir
         }
     }
 
-    public virtual void Pickup(int x, int y, Color color, int volume)
+    public void Pickup(int x, int y, Color color, int volume)
     {
-        if (!color.Equals(Colors.NO_PAINT_COLOR))
-        {
-            PickupReservoir.Add(x, y, color, volume);
-        }
+        PickupReservoir.Add(x, y, color, volume);
     }
 
-    public virtual Color Emit(int x, int y)
+    public Color Emit(int x, int y)
     {
         bool in_range = x >= 0
                         && x < Width

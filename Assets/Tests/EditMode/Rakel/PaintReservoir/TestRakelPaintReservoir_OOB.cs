@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class TestRakelPaintReservoir_OOB
 {
+    RakelPaintReservoir paintReservoir;
+
+    [SetUp]
+    public void Init()
+    {
+        paintReservoir = new RakelPaintReservoir(2, 2, 0);
+    }
+
     [Test]
     public void Emit_OOB_Upper()
     {
-        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(2, 2);
-
         Color emitted = paintReservoir.Emit(0, 2);
 
         AssertUtil.AssertColorsAreEqual(
@@ -20,8 +26,6 @@ public class TestRakelPaintReservoir_OOB
     [Test]
     public void Emit_OOB_Lower()
     {
-        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(2, 2);
-
         Color emitted = paintReservoir.Emit(0, -1);
 
         AssertUtil.AssertColorsAreEqual(
@@ -33,8 +37,6 @@ public class TestRakelPaintReservoir_OOB
     [Test]
     public void Emit_OOB_Left()
     {
-        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(2, 2);
-
         Color emitted = paintReservoir.Emit(-1, 0);
 
         AssertUtil.AssertColorsAreEqual(
@@ -46,8 +48,6 @@ public class TestRakelPaintReservoir_OOB
     [Test]
     public void Emit_OOB_Right()
     {
-        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(2, 2);
-
         Color emitted = paintReservoir.Emit(2, 0);
 
         AssertUtil.AssertColorsAreEqual(

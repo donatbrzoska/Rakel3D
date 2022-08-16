@@ -13,7 +13,7 @@ public class TestRakel_ReapplyMask
     {
         oilPaintSurface_null = null; // real object is not needed, since MaskApplicator is mocked hence not working on it
         ma_mock = new MaskApplicatorMock();
-        rakel = new Rakel(1, 1, new MaskCalculator(), ma_mock);
+        rakel = new Rakel(1, 1, 0, new MaskCalculator(), ma_mock);
         rakel.UpdatePaint(new Color(0, 0.4f, 0.8f), 1);
         rakel.UpdatePosition(new Vector2Int(1, 1));
         rakel.UpdateNormal(Vector2Int.right);

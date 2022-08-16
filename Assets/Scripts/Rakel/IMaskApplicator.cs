@@ -8,5 +8,5 @@ public interface IMaskApplicator
         Vector2Int maskPosition,
         Vector2 maskNormal,
         IOilPaintSurface oilPaintSurface,
-        RakelPaintReservoir paintReservoir);
+        IRakelPaintReservoir paintReservoir);
 }

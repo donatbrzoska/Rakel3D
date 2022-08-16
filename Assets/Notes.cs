@@ -654,5 +654,124 @@ public class Notes : MonoBehaviour
  *       - Basisdatenstruktur wird eine Queue
  *         - die wird am Anfang gefüllt mit k leeren Farbwerten
  *         
- *           
+ * - Aufgehört bei:
+ *   - das mit dem Delay funktioniert erstmal aber die Ergebnisse sind so naja
+ *     - Evtl. noch was besseres als Array aus Queues überlegen
+ *     - irgendwas funktioniert auch mit dem Pickup Mechanismus noch nicht ganz
+ *       -> wenn ich einmal in Farbe klicke und danach mehrmals wonadershin, dann wird die Farbe nicht emitted
+ *       -> gerade war das so, jetzt bekomm ich's aber nicht direkt reproduziert
+ *       -> dennoch wird die Farbe vom Canvas manchmal nicht direkt mitgenommen/gelöscht
+ *       -> Oder sie wird aus irgendeinem Grund doch wieder sofort aufgetragen
+ *       -> aber es scheint so, als wenn die Farbe irgendwie nur einmal mitgenommen wird
+ *         -> aber ist ja klar:
+ *           - nach dem ersten mal ist die Queue ja wieder nur eins lang und damit wird die
+ *             Farbe tatsächlich wieder sofort aufgetragen
+ *       -> "Fixed-Size Queue" die jede Farbe durchlaufen muss, bis sie im Reservoir landet
+ *          (welches dann evtl. einfach mehrschichtig sein sollte)
+ *          -> alte Klassenhierarchie wieder herstellen ....
+ * 14.08.2022
+ * Wie soll das Pickup-Modell funktionieren?
+ * - Farbreservoir mit Schichten?
+ *   - Stack oder Queue für die Schichten?
+ *   - Wie viele Schichten sind erlaubt?
+ *     - Unbegrenzt wäre einfach
+ *       - aber unrealistischer
+ *       - andererseits ist die Frage, wie viele Farbschichten sich überhaupt ansammeln können,
+ *         denn es wird ja in jedem Schritt auch wieder Farbe abgegeben
+ *     - Begrenzt würde bedeuten, dass man dann bei kompletter Befüllung auch keine Farbe mehr in
+ *       die Pickup-Pipeline packen darf
+ *     - Kommt es überhaupt zur Schichtenbildung?
+ *       - Jedes Mal wenn Farbe eingequeued wird, wird ja auch wieder die verfügbare Schicht abgegeben
+ *       - Schichtenbildung also nur durch den Delay
+ * - einzelne Farbschicht
+ *   - gleiches Problem wie mit begrenzter Anzahl Schichten
+ * 
+ * Pickup-Modell Umsetzung
+ * - 3D Array
+ *   - für jedes Pixel ein Array mit k Elementen
+ *   - Farbe muss immer alle Positionen durchlaufen um wieder abgegeben zu werden
+ *     - Quasi Queue mit fixed Length
+ *   - Emit nimmt immer von ganz vorn
+ *   - Pickup verursacht Weiterrutschen
+ *     
+ *   - Randfall: Rakel nicht vollständig auf dem Bild TODO
+ *     - Farbe darf in diesen Fällen im Reservoir nicht weiterrutschen
+ *     - Es muss dann für das PaintReservoir evtl. doch einen Unterschied zwischen NO_PAINT_COLOR und OOB geben
+ *       - das eine für keine Farbe auf dem Canvas -> Weiterrutschen sinnvoll
+ *       - das andere für keine Farbe weil OOB -> Weiterrutschen darf nicht passieren, denn es wurde ja keine Farbe emitted
+ *       - ODER Mask-Applicator ruft erst gar nicht Pickup auf, aber dann muss auch hier noch extra herausgefunden werden,
+ *              ob das gerade OOB ist
+ * - Snapshot Buffer wird auch nur bedingt simuliert bei k Schritten, denn es erfolgt ja eine
+ *   kontinuierliche Absorption
+ *   -> nur keine sofortige Wiederabgabe
+ * Testing
+ * - FarbDelay im PickupReservoir in extra Komponente auslagern?
+ *   - Tests werden sonst zu komplex I think ...
+ * 15.08.2022
+ *   - DelayBuffer, hat PickupReservoir?
+ *     - oder DelayedPickupReservoir -> macht das die Tests einfacher though?
+ *     - oder BufferLogik in RakelPaintReservoir?
+ * - Das mit den Tests ist hier sowieso so eine Sache, weil aktuell ja nur die gesamte Komponente RakelPaintReservoir getestet wird
+ *
+ * Wie überhaupt Delay implementieren?
+ * - Aktuell:
+ *   - Queue:
+ *     NO_PAINT_COLOR
+ *     pickup
+ *     FARBE1 NO_PAINT_COLOR
+ *     emit
+ *     FARBE1
+ *     pickup FARBE2
+ *     FARBE2 FARBE1
+ *     emit
+ *     FARBE2
+ *   ODER Specialcase:
+ *     NO_PAINT_COLOR
+ *     pickup FARBE1
+ *     FARBE1 NO_PAINT_COLOR
+ *     emit
+ *     FARBE1
+ *     pickup NO_PAINT_COLOR
+ *     FARBE1
+ *     Queue leer
+ *     _
+ *   ->> ReservoirQueue wird bei leeren Farben nicht befüllt
+ *   - Warum nehmen wir leere Farben noch einmal nicht auf?
+ *     -> bisher würde das ja einfach die Farbe überschreiben
+ *     -> und es macht auch keinen Sinn eine leere Farbe in eine Queue zu packen (leere Schicht macht keinen Sinn)
+ *       -> außer eben um einen Delay zu verursachen
+ *       
+ * Hätten wir das gefixt, nun ist der Effekt
+ * - dass sich die Farbe bei Delay 1 auf dem Rakel entlangkopiert
+ *   -> da sehen wir also, wieso das mit dem Snapshot-Buffer Sinn macht
+ * - Das wäre evtl. durch einen größeren Delay noch regelbar aber auch unrealistisch ist, dass
+ *   die Farbe manchmal flächig vollständig vom Rakel absorbiert/mitgenommen wird
+ * - Ein zu großer PickupDelay führt auch dazu, dass nach "Strich"-Ende erstmal eine Weile
+ *   keine Farbe mehr abgegeben wird, aber plötzlich dann doch wieder
+ * - Pixel werden ja beim Anwenden auch übersprungen, was vermutlich zu unschönen
+ *   Streifen führt
+ * - ein Snapshot-Buffer wird nicht wirklich implementiert, denn die Farbe wird ja
+ *   trotzdem die ganze Zeit mitgenommen
+ * 
+ *   
+ *   
+ * 16.08.2022
+ * Canvas Snapshot Buffer übehaupt sinnvoll?
+ * -> im Endeffekt sorgt er dafür, dass nur "alte" Farbe mitgenommen wird, alles was sich unter dem Beginn
+ *    der Impression befindet, wird aber liegengelassen
+ * -> nee stimmt nicht, denn nur die neu aufgetragenene Farbe wird ja nicht in den SnapshotBuffer übetragen
+ * - es wär wirklich interessant, wie man den SnapshotBuffer wirklich implementieren könnte
+ * 
+ * Next Steps:
+ * - Pixel für Pixel über Canvas ziehen
+ * - Canvas Snapshot Buffer
+ * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - PickupReservoir: Farbschichten?
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - Rakel ApplyToCanvas splitten und in UpdateNormal und UpdatePosition schieben?
+ *   - Funktionen evtl. umbenennen
+ *   - Es wird nie ein sinnvolles UpdatePosition ohne anschließendes Apply geben
+ *   - Idee kam eigentlich, weil ich mich gefragt hab, wieso man dem Applicator Mask sowie MaskPosition und MaskNormal übergibt
+ *     -> evtl. könnte man die beiden extra Attribute ja auch einfach in der Mask speichern
  */

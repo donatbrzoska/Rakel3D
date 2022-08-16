@@ -20,7 +20,7 @@ public class MaskApplicator: IMaskApplicator
         Vector2Int maskPosition,
         Vector2 maskNormal,
         IOilPaintSurface oilPaintSurface,
-        RakelPaintReservoir paintReservoir)
+        IRakelPaintReservoir paintReservoir)
     {
         float maskAngle = MathUtil.Angle360(Vector2Int.right, maskNormal);
 
