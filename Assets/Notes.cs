@@ -844,4 +844,6 @@ public class Notes : MonoBehaviour
  * Nach Umbau:
  * - PaintReservoir in Rakel injecten
  * - IComponent -> ComponentInterface
+ *   -> nee doch nicht, sieht im Code nicht gut aus und außerdem ist die Sortierung in der
+ *      Datei-Anzeige immer noch nicht perfekt, weil RakelA vor RakelInterface kommt ...
  */

@@ -18,6 +18,8 @@ public class OilPaintEngine : MonoBehaviour
 
     private IOilPaintSurface OilPaintSurface;
 
+    private IRakelPaintReservoir RakelPaintReservoir;
+
     public IRakel Rakel { get; private set; }
     public Vector2 RakelNormal { get; private set; } = new Vector2(1, 0);
     public float RakelLength { get; private set; } = 4f; // world space
@@ -39,6 +41,7 @@ public class OilPaintEngine : MonoBehaviour
         CanvasHeight = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;
 
         CreateTexture();
+        CreateRakelPaintReservoir();
         CreateRakel();
         CreateRakelDrawer();
     }
@@ -53,14 +56,22 @@ public class OilPaintEngine : MonoBehaviour
         OilPaintSurface = new OilPaintSurface(Texture);
     }
 
+    void CreateRakelPaintReservoir()
+    {
+        RakelPaintReservoir = new RakelPaintReservoir(
+            WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution),
+            WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution),
+            10);
+        RakelPaintReservoir.Fill(RakelPaintColor, RakelPaintVolume);
+    }
+
     void CreateRakel()
     {
         int length = WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution);
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);
-        Rakel = new Rakel(length, width, 10, OilPaintSurface, new MaskCalculator(), new MaskApplicator());
+        Rakel = new Rakel(length, width, RakelPaintReservoir, OilPaintSurface, new MaskCalculator(), new MaskApplicator());
         Debug.Log("Rakel is " + Rakel.Length + "x" + Rakel.Width + " = " + Rakel.Length * Rakel.Width);
         Rakel.UpdateNormal(RakelNormal);
-        Rakel.UpdatePaint(RakelPaintColor, RakelPaintVolume);
     }
 
     void CreateRakelDrawer()
@@ -135,7 +146,7 @@ public class OilPaintEngine : MonoBehaviour
         RakelPaintColor = color;
         RakelPaintVolume = volume;
 
-        Rakel.UpdatePaint(color, volume);
+        RakelPaintReservoir.Fill(color, volume);
     }
 
     public void UpdateTextureResolution(int pixelsPerWorldSpaceUnit)

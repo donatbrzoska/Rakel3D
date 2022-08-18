@@ -14,28 +14,22 @@ public class Rakel : IRakel
     private IMaskApplicator MaskApplicator;
 
     private IOilPaintSurface OilPaintSurface;
-    private RakelPaintReservoir PaintReservoir;
+    private IRakelPaintReservoir PaintReservoir;
 
     public Rakel(
         int length,
         int width,
-        int pickupDelay,
+        IRakelPaintReservoir paintReservoir,
         IOilPaintSurface oilPaintSurface,
         IMaskCalculator maskCalculator,
         IMaskApplicator maskApplicator)
     {
         Length = length;
         Width = width;
+        PaintReservoir = paintReservoir;
         OilPaintSurface = oilPaintSurface;
         MaskCalculator = maskCalculator;
         MaskApplicator = maskApplicator;
-
-        PaintReservoir = new RakelPaintReservoir(Length, Width, pickupDelay);
-    }
-
-    public void UpdatePaint(Color color, int volume)
-    {
-        PaintReservoir.Fill(color, volume);
     }
 
     public void UpdateNormal(Vector2 normal, bool logMaskCalcTime = false)

@@ -6,6 +6,7 @@ public class TestRakelPaintPickup
 {
     FastTexture2D texture;
     OilPaintSurface oilPaintSurface;
+    RakelPaintReservoir rakelPaintReservoir;
     Rakel rakel;
 
     [SetUp]
@@ -13,7 +14,8 @@ public class TestRakelPaintPickup
     {
         texture = new FastTexture2D(3, 3);
         oilPaintSurface = new OilPaintSurface(texture);
-        rakel = new Rakel(1, 1, 1, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
+        rakelPaintReservoir = new RakelPaintReservoir(1, 1, 1);
+        rakel = new Rakel(1, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
         rakel.UpdateNormal(Vector2Int.right);
     }
 

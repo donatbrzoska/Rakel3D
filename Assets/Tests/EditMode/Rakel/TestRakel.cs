@@ -15,6 +15,7 @@ public class TestRakel
 {
     FastTexture2D texture;
     OilPaintSurface oilPaintSurface;
+    RakelPaintReservoir rakelPaintReservoir;
     Rakel rakel;
 
     [SetUp]
@@ -22,7 +23,8 @@ public class TestRakel
     {
         texture = new FastTexture2D(3, 3);
         oilPaintSurface = new OilPaintSurface(texture);
-        rakel = new Rakel(1, 1, 0, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
+        rakelPaintReservoir = new RakelPaintReservoir(1, 1, 0);
+        rakel = new Rakel(1, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
         rakel.UpdateNormal(Vector2Int.right);
     }
 
@@ -30,7 +32,7 @@ public class TestRakel
     [Test]
     public void PointRakel_Point()
     {
-        rakel.UpdatePaint(new Color(0, 0.4f, 0.8f), 1);
+        rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
         rakel.ApplyAt(new Vector2Int(1, 1));
 
         Color[] colors = texture.Texture.GetPixels();
@@ -49,7 +51,7 @@ public class TestRakel
     public void ApplyAt_AppliesMask()
     {
         MaskApplicatorMock ma_mock = new MaskApplicatorMock();
-        Rakel rakel = new Rakel(1, 1, 0, null, null, ma_mock);
+        Rakel rakel = new Rakel(1, 1, null, null, null, ma_mock);
         rakel.ApplyAt(new Vector2Int(0, 0));
 
         Assert.AreEqual(
@@ -62,7 +64,7 @@ public class TestRakel
     public void UpdateNormal_RecalculatesMask()
     {
         MaskCalculatorMock mc_mock = new MaskCalculatorMock();
-        Rakel rakel = new Rakel(1, 1, 0, null, mc_mock, null);
+        Rakel rakel = new Rakel(1, 1, null, null, mc_mock, null);
         rakel.UpdateNormal(Vector2Int.right);
 
         Assert.AreEqual(
@@ -75,7 +77,7 @@ public class TestRakel
     public void UpdateNormal_RecalculatesMask_OnlyUponRealUpdate()
     {
         MaskCalculatorMock mc_mock = new MaskCalculatorMock();
-        Rakel rakel = new Rakel(1, 1, 0, null, mc_mock, null);
+        Rakel rakel = new Rakel(1, 1, null, null, mc_mock, null);
         rakel.UpdateNormal(Vector2Int.right);
         rakel.UpdateNormal(Vector2Int.right);
 
