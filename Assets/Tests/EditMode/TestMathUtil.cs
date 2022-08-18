@@ -5,6 +5,15 @@ using UnityEngine;
 public class TestMathUtil
 {
     [Test]
+    public void RotateAroundOrigin_90()
+    {
+        AssertUtil.Vector2sEqual(
+            Vector2.down,
+            MathUtil.RotateAroundOrigin(Vector2.right, 90)
+        );
+    }
+
+    [Test]
     public void Angle360_0()
     {
         Vector2 from = Vector2.right;

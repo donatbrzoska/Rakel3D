@@ -101,7 +101,13 @@ public class Notes : MonoBehaviour
  *
  * Vector3 kann man nicht mit == vergleichen ... (auch wenn es nicht nullable ist)
  * 
- * Copy and Paste, Controller benutzt falschen Setter und tut damit natürlich was anderes als erwartet
+ * Copy and Paste
+ * - Controller benutzt falschen Setter und tut damit natürlich was anderes als erwartet
+ * 
+ * Copy and Paste
+ * - TestCase mit Bug kopiert
+ * - Bug nur in einem TestCase gefixt
+ * - Aber immer nur den anderen TestCase mit "Run Selected" ausgeführt und richtig hart gewundert ...
  * 
  * Falsche API vermutet
  * - Vector2.Angle liefert immer den kleinsten Winkel und geht damit von 0-180, nicht von 0-360
@@ -767,11 +773,75 @@ public class Notes : MonoBehaviour
  * - Canvas Snapshot Buffer
  * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
  * - PickupReservoir: Farbschichten?
- * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
  *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
  * - Rakel ApplyToCanvas splitten und in UpdateNormal und UpdatePosition schieben?
  *   - Funktionen evtl. umbenennen
  *   - Es wird nie ein sinnvolles UpdatePosition ohne anschließendes Apply geben
  *   - Idee kam eigentlich, weil ich mich gefragt hab, wieso man dem Applicator Mask sowie MaskPosition und MaskNormal übergibt
  *     -> evtl. könnte man die beiden extra Attribute ja auch einfach in der Mask speichern
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ *     
+ * Ideen zum Canvas Snapshot Buffer
+ * - Verzögerung andersherum, also ins OilPaintSurface hinein
+ *   - Problem: Wie lang wählt man den Buffer?
+ * - Paint hat die Eigenschaft "pickupable" und die wird immer erst auf true gesetzt, wenn die Maske sich
+ *   vom Pixel wegbewegt hat
+ *   -> so könnte man den CSB exakt nachbilden (?)
+ *   - Problem: Können dann untere Farbschichten trotzdem mitgenommen werden?
+ *   - Wie ist das überhaupt? Werden die Farben beim Auftragen auch mit den Farben auf dem Surface gemischt?
+ * - Ist halt die Frage, wie schlimm es ist, dass eben aufgetragene Farbe auch wieder mitgenommen werden kann
+ *   Wenn das kein Problem ist, wäre Variante 1 vermutlich leichter zu implementieren
+ *   
+ * 
+ * 17.08.2022
+ * Pixel für Pixel über Canvas ziehen:
+ * - Neue Benutzung des Rakels:
+ *   - StartStroke
+ *   - UpdatePosition/UpdateNormal <- Apply
+ *   - UpdatePosition/UpdateNormal <- Interpolieren, Apply for All
+ *   - ...
+ *   - EndStroke <- Last Position kann gelöscht werden (oder das macht man beim nächsten StartStroke)
+ * - NewStroke vs MoveTo and LineTo
+ * - zu schnelle Bewegung hakt dann doch, aber das wird wohl ohne GPU nur schwer vermeidbar sein
+ * - Extra Layer nur für Position / Normal Interpolierung?
+ *   - Rakel schaut dann nur, wann eine Maske neu berechnet werden muss
+ *   - RakelInputInterpolator hat Rakel?
+ *     - NewStroke()
+ *     - Update(position, normal)
+ *   - Rakel:
+ *     - UpdateNormal(normal)
+ *     - ApplyAt(position)
+ *   -> erstmal schauen wie die Tests aussehen, wenn wir keine extra Komponente haben
+ *     - das mit der Normale ist halt schon "interessant" zu testen, wenn wir einen vollen Integrationstest machen
+ *       - sehr schwer isoliert von Pickup/Emit Logik zu testen
+ *   -> eine extra Komponente wäre sinnvoll, aber wie machen wir das mit dem Design?
+ *     - Rakel wird ja direkt aus OilPaintEngine benutzt für z.B. UpdatePaint
+ *     - jetzt eine neue Komponente zu schaffen, die dann nur für die Kommunikation mit Rakel für UpdatePosition, ...
+ *       zuständig ist, scheint merkwürdig
+ *       -> aber vielleicht trotzdem viable?
+ *     - Rakel könnte einen Interpolator haben und den dann benutzen
+ *       - Interface zum Interpolator? NewStroke() call durchreichen wär jetzt nicht so schön
+ * 
+ * Testing:
+ * - Asserting direct public side effects vs calls on a mock [Rakel UpdateNormal]
+ * -> direct public side effect
+ *    - wäre umfassender, denn man muss dann genau wissen wie sich die Textur verändert
+ *    - außerdem teilweise schwer zu implementieren, da man das Ergebnis ausrechnen müsste
+ *      was sich dann evtl. wieder ständig ändert -> schwer zu warten
+ *    - dafür ist der Test robuster gegenüber Implementierungsdetails, wie z.B. dass es
+ *      überhaupt einen MaskCalculator gibt
+ * -> calls on a mock
+ *    - Test ist kurz und leicht zu verstehen
+ *    - nicht so robust gegenüber Änderungen des Designs
+ *    
+ * 18.08.2022
+ * Also neue Komponente: RakelDrawer
+ * 
+ * Dann können wir aber auch gleich überlegen, ob wir FillPaint nicht auch auf dem Reservoir direkt machen
+ * (dann müssten wir das aber auch injecten)
+ * 
+ * Nach Umbau:
+ * - PaintReservoir in Rakel injecten
+ * - IComponent -> ComponentInterface
  */

@@ -55,6 +55,11 @@ public class AssertUtil
         return equal;
     }
 
+    public static void Vector2sEqual(Vector2 a, Vector2 b)
+    {
+        Assert.IsTrue(FloatsEqual(a.x, b.x) && FloatsEqual(a.y, b.y));
+    }
+
     private static bool FloatsEqual(float a, float b, float precision = 0.001f)
     {
         return Mathf.Abs(a - b) < precision;

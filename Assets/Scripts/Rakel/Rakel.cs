@@ -1,48 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-public class Rakel
+public class Rakel : IRakel
 {
-    public int Length { get; protected set; }
-    public int Width { get; protected set; }
-    protected Vector2 Normal;
-    protected bool RecalculateMask;
-
-    protected Vector2Int Position;
-    protected bool ReapplyMask;
+    public int Length { get; private set; }
+    public int Width { get; private set; }
+    private Vector2 Normal;
 
     private Mask LatestMask;
     private IMaskCalculator MaskCalculator;
     private IMaskApplicator MaskApplicator;
 
+    private IOilPaintSurface OilPaintSurface;
     private RakelPaintReservoir PaintReservoir;
 
-    public Rakel(int length, int width, int pickupDelay, IMaskCalculator maskCalculator, IMaskApplicator maskApplicator)
+    public Rakel(
+        int length,
+        int width,
+        int pickupDelay,
+        IOilPaintSurface oilPaintSurface,
+        IMaskCalculator maskCalculator,
+        IMaskApplicator maskApplicator)
     {
         Length = length;
         Width = width;
+        OilPaintSurface = oilPaintSurface;
         MaskCalculator = maskCalculator;
         MaskApplicator = maskApplicator;
+
         PaintReservoir = new RakelPaintReservoir(Length, Width, pickupDelay);
-    }
-
-    public void UpdateNormal(Vector2 normal)
-    {
-        if (!normal.Equals(Normal))
-        {
-            Normal = normal;
-            RecalculateMask = true;
-        }
-    }
-
-    public void UpdatePosition(Vector2Int position)
-    {
-        if (!position.Equals(Position))
-        {
-            Position = position;
-            ReapplyMask = true;
-        }
     }
 
     public void UpdatePaint(Color color, int volume)
@@ -50,29 +38,30 @@ public class Rakel
         PaintReservoir.Fill(color, volume);
     }
 
-    public void ApplyToCanvas(IOilPaintSurface oilPaintSurface, bool logTime = false)
+    public void UpdateNormal(Vector2 normal, bool logMaskCalcTime = false)
     {
-        if (RecalculateMask)
+        if (!normal.Equals(Normal))
         {
-            RecalculateMask = false; // reset
-            ReapplyMask = true;
+            Normal = normal;
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
+
             LatestMask = MaskCalculator.Calculate(Length, Width, Normal);
-            if (logTime)
+
+            if (logMaskCalcTime)
                 UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
         }
+    }
 
-        if (ReapplyMask)
-        {
-            ReapplyMask = false;
+    public void ApplyAt(Vector2Int position, bool logMaskApplyTime = false)
+    {
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            MaskApplicator.Apply(LatestMask, Position, Normal, oilPaintSurface, PaintReservoir);
-            if (logTime)
-                UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
-        }
+        MaskApplicator.Apply(LatestMask, position, Normal, OilPaintSurface, PaintReservoir);
+
+        if (logMaskApplyTime)
+            UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");
     }
 }

@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class LogUtil
 {
-    private LogUtil(){}
+    private LogUtil(){ }
 
     public static void Log(List<Vector2Int> vs, string descr = "")
     {
-        if (descr != "") {
+        if (descr != "")
+        {
             Debug.Log(descr);
         }
 
         foreach (Vector2Int v in vs)
+        {
+            Debug.Log(v);
+        }
+    }
+
+    public static void Log(List<Vector2> vs, string descr = "")
+    {
+        if (descr != "")
+        {
+            Debug.Log(descr);
+        }
+
+        foreach (Vector2 v in vs)
         {
             Debug.Log(v);
         }
