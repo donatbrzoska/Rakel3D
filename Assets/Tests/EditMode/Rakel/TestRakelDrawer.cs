@@ -112,7 +112,6 @@ public class TestRakelDrawer
         RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
         RakelDrawer.AddNode(new Vector2Int(0, 1), Vector2.down);
 
-        LogUtil.Log(RakelMock.NormalLog);
         Assert.AreEqual(
             new List<Vector2>
             {
