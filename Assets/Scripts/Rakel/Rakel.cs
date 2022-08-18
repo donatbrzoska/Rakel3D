@@ -7,7 +7,7 @@ public class Rakel : IRakel
 {
     public int Length { get; private set; }
     public int Width { get; private set; }
-    private Vector2 Normal;
+    private Vector2 PreviousNormal;
 
     private Mask LatestMask;
     private IMaskCalculator MaskCalculator;
@@ -34,17 +34,17 @@ public class Rakel : IRakel
 
     public void UpdateNormal(Vector2 normal, bool logMaskCalcTime = false)
     {
-        if (!normal.Equals(Normal))
+        if (!normal.Equals(PreviousNormal))
         {
-            Normal = normal;
-
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            LatestMask = MaskCalculator.Calculate(Length, Width, Normal);
+            LatestMask = MaskCalculator.Calculate(Length, Width, PreviousNormal);
 
             if (logMaskCalcTime)
                 UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
+
+            PreviousNormal = normal;
         }
     }
 
@@ -53,7 +53,7 @@ public class Rakel : IRakel
         Stopwatch sw = new Stopwatch();
         sw.Start();
 
-        MaskApplicator.Apply(LatestMask, position, Normal, OilPaintSurface, PaintReservoir);
+        MaskApplicator.Apply(LatestMask, position, OilPaintSurface, PaintReservoir);
 
         if (logMaskApplyTime)
             UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");

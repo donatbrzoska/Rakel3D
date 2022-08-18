@@ -25,7 +25,7 @@ public class TestMaskApplicator_CoordinateMapping
         OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 3);
         PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);
 
-        ma.Apply(mask, maskPosition, maskNormal, oilPaintSurface_mock, paintReservoir_mock);
+        ma.Apply(mask, maskPosition, oilPaintSurface_mock, paintReservoir_mock);
 
         // Pickup Paint Loop
         Assert.AreEqual(
@@ -84,7 +84,7 @@ public class TestMaskApplicator_CoordinateMapping
         OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 3);
         PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);
 
-        ma.Apply(mask, maskPosition, maskNormal, oilPaintSurface_mock, paintReservoir_mock);
+        ma.Apply(mask, maskPosition, oilPaintSurface_mock, paintReservoir_mock);
 
         // Pickup Paint Loop
         Assert.AreEqual(
@@ -147,7 +147,7 @@ public class TestMaskApplicator_CoordinateMapping
         OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 6);
         PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);
 
-        ma.Apply(mask, maskPosition, maskNormal, oilPaintSurface_mock, paintReservoir_mock);
+        ma.Apply(mask, maskPosition, oilPaintSurface_mock, paintReservoir_mock);
 
         // Pickup Paint Loop
         Assert.AreEqual(

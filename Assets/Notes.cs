@@ -846,4 +846,20 @@ public class Notes : MonoBehaviour
  * - IComponent -> ComponentInterface
  *   -> nee doch nicht, sieht im Code nicht gut aus und außerdem ist die Sortierung in der
  *      Datei-Anzeige immer noch nicht perfekt, weil RakelA vor RakelInterface kommt ...
+ *      
+ * - Rakel ApplyToCanvas splitten und in UpdateNormal und UpdatePosition schieben?
+ *   - Funktionen evtl. umbenennen
+ *   - Es wird nie ein sinnvolles UpdatePosition ohne anschließendes Apply geben
+ *   - Idee kam eigentlich, weil ich mich gefragt hab, wieso man dem Applicator Mask sowie MaskPosition und MaskNormal übergibt
+ *     -> evtl. könnte man die beiden extra Attribute ja auch einfach in der Mask speichern
+ *     -> Rakel muss sowieso Normal speichern, weil er herausfinden muss, ob für die Normale schon mal eine Mask
+ *        ausgerechnet wurde
+ * 
+ * Next Steps:
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - PickupReservoir: Farbschichten?
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
  */

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public struct Mask
 {
+    public Vector2 normal;
     public int[,] coordinates;
     public int y_eq_0_index; // -> At which index is y == 0? | Whats the value of y at index 0?
 }
@@ -37,6 +38,7 @@ public class MaskCalculator : IMaskCalculator
         int y_min = Mathf.Min(Mathf.Min(Mathf.Min(rectangleVertices[0].y, rectangleVertices[1].y), rectangleVertices[2].y), rectangleVertices[3].y);
         int n_rows = y_max - y_min + 1;
         Mask mask = new Mask();
+        mask.normal = normal;
         mask.coordinates = new int[n_rows, 2];
         mask.y_eq_0_index = y_max; // because the highest y is stored first
 

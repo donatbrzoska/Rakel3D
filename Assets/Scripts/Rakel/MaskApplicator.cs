@@ -18,11 +18,10 @@ public class MaskApplicator: IMaskApplicator
     public void Apply(
         Mask mask,
         Vector2Int maskPosition,
-        Vector2 maskNormal,
         IOilPaintSurface oilPaintSurface,
         IRakelPaintReservoir paintReservoir)
     {
-        float maskAngle = MathUtil.Angle360(Vector2Int.right, maskNormal);
+        float maskAngle = MathUtil.Angle360(Vector2Int.right, mask.normal);
 
         // 1. Transfer paint from Canvas to Rakel: Looping through PickupMap
         // -> color comes from: reservoir coordinate rotation to mask coordinate
