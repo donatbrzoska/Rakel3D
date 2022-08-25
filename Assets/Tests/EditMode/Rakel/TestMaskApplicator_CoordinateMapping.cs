@@ -73,6 +73,71 @@ public class TestMaskApplicator_CoordinateMapping
         );
     }
 
+    // This was added, because somehow a case with a similar line does not work in TestRakel
+    // (This test did not identify a bug, so maybe there is not much value in it)
+    [Test]
+    public void Apply_Line()
+    {
+        int rakelLength = 3;
+        int rakelWidth = 1;
+        Vector2 maskNormal = Vector2.right;
+        Mask mask = mc.Calculate(rakelLength, rakelWidth, maskNormal);
+        Vector2Int maskPosition = new Vector2Int(1, 1);
+        OilPaintSurfaceMock oilPaintSurface_mock = new OilPaintSurfaceMock(3, 3);
+        PaintReservoirMock paintReservoir_mock = new PaintReservoirMock(rakelLength, rakelWidth);
+
+        ma.Apply(mask, maskPosition, oilPaintSurface_mock, paintReservoir_mock);
+
+        // Pickup Paint Loop
+        Assert.AreEqual(
+            new int[,]
+            {
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+            },
+            oilPaintSurface_mock.GetPaintLog
+        );
+        Assert.AreEqual(
+            new int[,]
+            {
+                { 1 },
+                { 1 },
+                { 1 }
+            },
+            paintReservoir_mock.PickupLog
+        );
+
+        // Emit Paint Loop
+        Assert.AreEqual(
+            new int[,]
+            {
+                { 1 },
+                { 1 },
+                { 1 }
+            },
+            paintReservoir_mock.EmitLog
+        );
+        Assert.AreEqual(
+            new int[,]
+            {
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+            },
+            oilPaintSurface_mock.AddPaintLog
+        );
+        Assert.AreEqual(
+            new int[,]
+            {
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+            },
+            oilPaintSurface_mock.IsInBoundsLog
+        );
+    }
+
     [Test]
     public void Apply_Rectangle()
     {

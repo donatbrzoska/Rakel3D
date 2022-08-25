@@ -39,7 +39,7 @@ public class Rakel : IRakel
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            LatestMask = MaskCalculator.Calculate(Length, Width, PreviousNormal);
+            LatestMask = MaskCalculator.Calculate(Length, Width, normal);
 
             if (logMaskCalcTime)
                 UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");

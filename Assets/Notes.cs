@@ -111,6 +111,8 @@ public class Notes : MonoBehaviour
  * 
  * Falsche API vermutet
  * - Vector2.Angle liefert immer den kleinsten Winkel und geht damit von 0-180, nicht von 0-360
+ * 
+ * Altes PaintReservoir (1x1) aus dem Init()-Block in neuen Rakel injected, der ist aber größer (3x1) ...
  */
 
 
@@ -858,8 +860,95 @@ public class Notes : MonoBehaviour
  * Next Steps:
  * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
  * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
- * - PickupReservoir: Farbschichten?
+ * - PickupReservoir: Farbschichten? oder Farbmischung + Volumen
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
  *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
  * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * 
+ * Farbmodell:
+ * - Canvas:
+ *   - Farbschichten, Volumen wird durch mehrere Schichten derselben Farbe erreicht
+ *   - Farbmischung bei Auftrag?
+ *     - Eventuell nicht nötig
+ *       - Farbmischung passiert schon bei Pickup und Application
+ *       - Alpha-Blending in den oberen Farbschichten
+ *   - Wetness
+ * - PaintReservoir:
+ *   - PickupReservoir: Mischung der Farben + Volumenangabe
+ *   - ApplicationReservoir: Farbe + Volumen
+ * - Verhindern von zu schnellem bidirektionalem Farbaustausch:
+ *   - Delay in OilPaintSurface implementieren
+ *     -> vermutlich besser implementierbar, siehe 16.08.2022 -> Ideen zum Canvas Snapshot Buffer
+ * - Rendering
+ *   - obere Schicht bekommt Alpha?
+ *   - Normalmap aus Volumen bilden
+ *   
+ * 
+ * 19.08.2022
+ * Next Steps:
+ * - Winklige Rakel:
+ *   - Reservoir ist bestimmt eher leer
+ *   - aber trotzdem müsste auf dem Canvas eine gefüllte Fläche erscheinen (mindestens das erste Mal)
+ * - UI Normal wird immer erst später geupdated
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - PickupReservoir: Farbschichten? oder Farbmischung + Volumen
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * Testing:
+ * - Rakel.UpdateNormal macht einen Call auf den MaskCalculator was ich getestet habe
+ * - nicht getestet habe ich aber, ob dann auch die neue Normale verwendet wird um die Maske zu berechnen
+ * -> test direct public side effects ist hier evtl. doch sinnvoller?
+ * -> test direct public side effects aber nicht im vollständigen Sinn mit Ergebnis auf OilPaintSurface
+ *    sondern nur auf welchen Pixeln hier Apply angewandt wird
+ * -> oder man testet halt auch noch, welche Normal verwendet wurde im MaskCalculator Call
+ * -> oder man macht einen Spy MaskApplicator, der die Normale aus der Maske herausfindet
+ * 
+ * ca. 850 Zeilen Code
+ * ca. 1650 Zeilen Testcode
+ * 
+ * Next Steps:
+ * - Winklige Rakel:
+ *   - Reservoir ist bestimmt eher leer
+ *   - aber trotzdem müsste auf dem Canvas eine gefüllte Fläche erscheinen (mindestens das erste Mal)
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - PickupReservoir: Farbschichten? oder Farbmischung + Volumen
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * - Bug bei schrägem Rakel:
+ * 
+ *   System.Threading.Tasks.Parallel.For (System.Int32 fromInclusive, System.Int32 toExclusive, System.Action`2[T1,T2] body) (at <e38a6d3ee47c43eb9b2e49c63fc0aa48>:0)
+ *   MaskApplicator.Apply (Mask mask, UnityEngine.Vector2Int maskPosition, IOilPaintSurface oilPaintSurface, IRakelPaintReservoir paintReservoir) (at Assets/Scripts/Rakel/MaskApplicator.cs:80)
+ *   Rakel.ApplyAt (UnityEngine.Vector2Int position, System.Boolean logMaskApplyTime) (at Assets/Scripts/Rakel/Rakel.cs:56)
+ *   RakelDrawer.AddNode (UnityEngine.Vector2Int position, UnityEngine.Vector2 normal, System.Boolean logTime) (at Assets/Scripts/Rakel/RakelDrawer.cs:75)
+ *   OilPaintEngine.Update () (at Assets/Scripts/OilPaintEngine.cs:94)
+ *   
+ *   InvalidOperationException: Queue empty.
+ *   System.Collections.Generic.Queue`1[T].Dequeue () (at <e38a6d3ee47c43eb9b2e49c63fc0aa48>:0)
+ *   PickupPaintReservoir.Emit (System.Int32 x, System.Int32 y) (at Assets/Scripts/Rakel/PaintReservoir/PickupPaintReservoir.cs:38)
+ *   RakelPaintReservoir.Emit (System.Int32 x, System.Int32 y) (at Assets/Scripts/Rakel/PaintReservoir/RakelPaintReservoir.cs:48)
+ *   MaskApplicator+<>c__DisplayClass1_0.<Apply>b__1 (System.Int32 i, System.Threading.Tasks.ParallelLoopState state) (at Assets/Scripts/Rakel/MaskApplicator.cs:98)
+ * - Bug: nach Rotation geht das FarbReservoir irgendwie schneller leer als vorher, auch wenn man wieder zurückrotiert
+ *   - generell ist dann nach Zurückrotation auch ewig Farbe im Rakel ...
+ * 
+ * 
+ * 24.08.2022
+ * Idee für Mapping-Probleme: Vielleicht gar nicht versuchen ein volles Mapping zu erreichen.
+ *                            Dann gibt es halt Unregelmäßigkeiten, ist vielleicht gar nicht schlimm.
+ *                            
+ * Fließende Übergänge bei unterschiedlich viel Farbe -> erfordert Alpha-Blending oder ähnliches
+ * 
+ * Bug:
+ * - neue Rakelmaße füllen den Rakel wieder mit Farbe
+ * - Woher kommen die Streifen?
+ *   -> vermutlich werden die EMPTY_COLOR Farben in der Pickup Queue mit der Application Farbe vermischt
+ *   -> kann aber eigentlich nicht sein, evtl. ist es auch der Pickup-Mechanismus der die Farbe ja immer noch sofort mitnehmen kann
+ *   
+ * Clear Rakel Button
  */

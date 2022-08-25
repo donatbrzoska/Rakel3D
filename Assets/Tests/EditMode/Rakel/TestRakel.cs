@@ -28,7 +28,7 @@ public class TestRakel
         rakel.UpdateNormal(Vector2Int.right);
     }
 
-    // this is an integration test and should be moved maybe later though
+    // This is an integration test and should be moved maybe later though
     [Test]
     public void PointRakel_Point()
     {
@@ -47,6 +47,7 @@ public class TestRakel
         );
     }
 
+    // HACK This test case overrides the rakel setup from Init()
     [Test]
     public void ApplyAt_AppliesMask()
     {
@@ -60,33 +61,74 @@ public class TestRakel
         );
     }
 
+    // This only brings problems, when trying to test for Apply calls only and not injecting a mask calculator.
+    // Rakel is never actually used in this way anyways
+    //// This is an integration test and should be moved maybe later though.
+    //// Testing the actual result of another ApplyAt is necessary to make sure,
+    //// the new mask is based on the new normal and also stored
+    //// HACK This test case overrides the paint reservoir and rakel setup from Init()
+    //[Test]
+    //public void DefaultNormal()
+    //{
+    //    rakelPaintReservoir = new RakelPaintReservoir(3, 1, 0);
+    //    rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
+    //    rakel = new Rakel(3, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
+    //    rakel.ApplyAt(new Vector2Int(1, 1));
+
+    //    Color[] colors = texture.Texture.GetPixels();
+    //    AssertUtil.AssertColorsAreEqual(
+    //        new Color[]
+    //        {
+    //            Colors.CANVAS_COLOR, new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
+    //            Colors.CANVAS_COLOR, new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
+    //            Colors.CANVAS_COLOR, new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
+    //        },
+    //        colors
+    //    );
+    //}
+
+    // This is an integration test and should be moved maybe later though.
+    // Testing the actual result of another ApplyAt is necessary to make sure,
+    // the new mask is based on the new normal and also stored
+    // HACK This test case overrides the paint reservoir and rakel setup from Init()
     [Test]
     public void UpdateNormal_RecalculatesMask()
     {
-        MaskCalculatorMock mc_mock = new MaskCalculatorMock();
-        Rakel rakel = new Rakel(1, 1, null, null, mc_mock, null);
-        rakel.UpdateNormal(Vector2Int.right);
+        rakelPaintReservoir = new RakelPaintReservoir(3, 1, 0);
+        rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
+        rakel = new Rakel(3, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
+        rakel.UpdateNormal(Vector2.left); // make sure that not only the first update is considered
+        rakel.UpdateNormal(Vector2.down);
+        rakel.ApplyAt(new Vector2Int(1, 1));
 
-        Assert.AreEqual(
-            "Calculate ",
-            mc_mock.Log
+        Color[] colors = texture.Texture.GetPixels();
+        LogUtil.Log(colors, 3);
+        AssertUtil.AssertColorsAreEqual(
+            new Color[]
+            {
+                Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,
+                new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f),
+                Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,
+            },
+            colors
         );
     }
 
+    // HACK This test case overrides the rakel setup from Init()
     [Test]
     public void UpdateNormal_RecalculatesMask_OnlyUponRealUpdate()
     {
         MaskCalculatorMock mc_mock = new MaskCalculatorMock();
         Rakel rakel = new Rakel(1, 1, null, null, mc_mock, null);
-        rakel.UpdateNormal(Vector2Int.right);
-        rakel.UpdateNormal(Vector2Int.right);
+        rakel.UpdateNormal(Vector2.right);
+        rakel.UpdateNormal(Vector2.right);
 
         Assert.AreEqual(
             "Calculate ",
             mc_mock.Log
         );
 
-        rakel.UpdateNormal(Vector2Int.left);
+        rakel.UpdateNormal(Vector2.down);
 
         Assert.AreEqual(
             "Calculate Calculate ",
