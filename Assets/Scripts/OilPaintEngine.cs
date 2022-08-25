@@ -62,7 +62,6 @@ public class OilPaintEngine : MonoBehaviour
             WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution),
             WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution),
             10);
-        RakelPaintReservoir.Fill(RakelPaintColor, RakelPaintVolume);
     }
 
     void CreateRakel()
@@ -125,6 +124,7 @@ public class OilPaintEngine : MonoBehaviour
     public void UpdateRakelLength(float worldSpaceLength)
     {
         RakelLength = worldSpaceLength;
+        CreateRakelPaintReservoir();
         CreateRakel();
         CreateRakelDrawer();
     }
@@ -132,6 +132,7 @@ public class OilPaintEngine : MonoBehaviour
     public void UpdateRakelWidth(float worldSpaceWidth)
     {
         RakelWidth = worldSpaceWidth;
+        CreateRakelPaintReservoir();
         CreateRakel();
         CreateRakelDrawer();
     }
