@@ -15,8 +15,20 @@ public class RakelPaintApplyButtonController : MonoBehaviour
 
     Dictionary<string, Color> ColorMapper = new Dictionary<string, Color>()
     {
+        { "Titan White", new Color(243/255.0f, 244/255.0f, 247/255.0f)}, // https://www.color-name.com/titanium-white.color
+        { "Ivory Black", new Color(35/255f, 31/255f, 32/255f)}, // https://www.color-name.com/ivory-black.color
+        { "Red", new Color(0.58f, 0.06f, 0f) },
+        { "Ultramarine Blue", new Color(33/255f, 66/255f, 171/255f)}, // https://www.color-name.com/ultramarine.color
+        { "Ultramarine Blue (RAL)", new Color(30/255f, 54/255f, 123/255f)}, // RAL
+        { "Lemon Yellow", new Color(254/255f, 242/255f, 80/255f)}, // https://www.color-name.com/lemon-yellow.color
+        { "Cadmium Yellow", new Color(255/255f, 246/255f, 0/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
+        { "Cadmium Orange", new Color(237/255f, 135/255f, 45/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
+        { "Cadmium Red", new Color(227/255f, 0/255f, 34/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
+        { "Cadmium Green", new Color(0/255f, 107/255f, 60/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
+        { "Cadmium Green Light", new Color(128/255f, 181/255f, 46/255f)}, // just taken from https://www.kremer-pigmente.com/en/shop/pigments/44500-cadmium-green-light.html
+
         { "Anthracite", new Color(0.25f, 0.25f, 0.25f) },
-        { "Red", new Color(0.8f, 0.08f, 0.03f) },
+        { "Red_", new Color(0.8f, 0.08f, 0.03f) },
         { "Dark Red", new Color(0.58f, 0.06f, 0f) },
         { "Green", new Color(0.02f, 0.57f, 0.04f) },
         { "Blue", new Color(0.12f, 0.49f, 0.93f) },
@@ -43,7 +55,7 @@ public class RakelPaintApplyButtonController : MonoBehaviour
 
     public void Start()
     {
-        ColorDropdown.SetValueWithoutNotify(0); // TODO retrieve from OilPaintEngine? Requires backwards mapping though ...
+        ColorDropdown.SetValueWithoutNotify(9); // TODO retrieve from OilPaintEngine? Requires backwards mapping though ...
         VolumeInputField.SetTextWithoutNotify("" + OilPaintEngine.RakelPaintVolume);
     }
 

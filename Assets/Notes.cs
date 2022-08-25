@@ -949,6 +949,6 @@ public class Notes : MonoBehaviour
  * - Woher kommen die Streifen?
  *   -> vermutlich werden die EMPTY_COLOR Farben in der Pickup Queue mit der Application Farbe vermischt
  *   -> kann aber eigentlich nicht sein, evtl. ist es auch der Pickup-Mechanismus der die Farbe ja immer noch sofort mitnehmen kann
- *   
- * Clear Rakel Button
+ * 
+ * Beim Verschmieren muss erstmal mehr Farbe mitgenommen als wieder abgegeben wird
  */
