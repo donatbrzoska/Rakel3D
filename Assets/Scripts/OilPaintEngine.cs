@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class OilPaintEngine : MonoBehaviour
 {
+    private const bool LOG_MASK_CALC_APPLY_TIME = false;
+
     private Camera Camera;
 
     private int CanvasColliderID;
@@ -70,7 +72,7 @@ public class OilPaintEngine : MonoBehaviour
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);
         Rakel = new Rakel(length, width, RakelPaintReservoir, OilPaintSurface, new MaskCalculator(), new MaskApplicator());
         Debug.Log("Rakel is " + Rakel.Length + "x" + Rakel.Width + " = " + Rakel.Length * Rakel.Width);
-        Rakel.UpdateNormal(RakelNormal);
+        Rakel.UpdateNormal(RakelNormal, LOG_MASK_CALC_APPLY_TIME);
     }
 
     void CreateRakelDrawer()
@@ -90,7 +92,7 @@ public class OilPaintEngine : MonoBehaviour
             {
                 RakelDrawer.NewStroke();
             }
-            RakelDrawer.AddNode(preciseBrushPosition, RakelNormal, false);
+            RakelDrawer.AddNode(preciseBrushPosition, RakelNormal, LOG_MASK_CALC_APPLY_TIME);
         }
     }
 

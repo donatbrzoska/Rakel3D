@@ -42,7 +42,11 @@ public class Rakel : IRakel
             LatestMask = MaskCalculator.Calculate(Length, Width, normal);
 
             if (logMaskCalcTime)
-                UnityEngine.Debug.Log("mask calc took " + sw.ElapsedMilliseconds + "ms");
+            {
+                double ns = 1000000000.0 * (double)sw.ElapsedTicks / Stopwatch.Frequency;
+                //UnityEngine.Debug.Log("mask calc took " + ns / 1000000.0 + "ms");
+                UnityEngine.Debug.Log("mask calc took " + ns / 1000.0 + "us");
+            }
 
             PreviousNormal = normal;
         }

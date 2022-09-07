@@ -35,8 +35,8 @@ public class RakelDrawer
             bool isFirstNodeOfStroke = PreviousRakelPosition.Equals(NO_POSITION) && PreviousRakelNormal.Equals(NO_NORMAL);
             if (isFirstNodeOfStroke)
             {
-                Rakel.UpdateNormal(normal);
-                Rakel.ApplyAt(position);
+                Rakel.UpdateNormal(normal, logTime);
+                Rakel.ApplyAt(position, logTime);
             }
             else
             {
@@ -71,8 +71,8 @@ public class RakelDrawer
                 // 3. do stroke
                 for (int i = 0; i < positions.Count; i++)
                 {
-                    Rakel.UpdateNormal(normals[i]);
-                    Rakel.ApplyAt(positions[i]);
+                    Rakel.UpdateNormal(normals[i], logTime);
+                    Rakel.ApplyAt(positions[i], logTime);
                 }
             }
 

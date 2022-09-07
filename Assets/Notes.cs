@@ -53,6 +53,7 @@ public class Notes : MonoBehaviour
  *
  * Code Quality:
  * - OilPaintEngine aufräumen
+ * - RakelReferenz aus OilPaintEngine entfernen
  * - RakelNormal -> Angle
  * - Tests für Rakel im initial state
      - TODO wrong usage (Apply before set values)
@@ -787,6 +788,8 @@ public class Notes : MonoBehaviour
  * Ideen zum Canvas Snapshot Buffer
  * - Verzögerung andersherum, also ins OilPaintSurface hinein
  *   - Problem: Wie lang wählt man den Buffer?
+ *   - 25.08. Problem: Ist das überhaupt effizient implementierbar?
+ *     - bei der anderen Lösung könnte man für jeden Pixel solange die Schichten durchgehen, bis man auf pickupable Paint trifft
  * - Paint hat die Eigenschaft "pickupable" und die wird immer erst auf true gesetzt, wenn die Maske sich
  *   vom Pixel wegbewegt hat
  *   -> so könnte man den CSB exakt nachbilden (?)
@@ -951,4 +954,7 @@ public class Notes : MonoBehaviour
  *   -> kann aber eigentlich nicht sein, evtl. ist es auch der Pickup-Mechanismus der die Farbe ja immer noch sofort mitnehmen kann
  * 
  * Beim Verschmieren muss erstmal mehr Farbe mitgenommen als wieder abgegeben wird
+ * - oder halt je nach Anpressdruck
+ * 
+ * Alle Farben im Reservoir zusammenmischen und Volumen addieren
  */
