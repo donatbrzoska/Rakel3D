@@ -33,6 +33,8 @@ class FastTexture2DMock : LogMock, IFastTexture2D
 
     public int Width => 0;
 
+    public Texture2D Texture => null;
+
     public Color GetPixelFast(int x, int y)
     {
         throw new System.NotImplementedException();

@@ -13,47 +13,12 @@ class MaskCalculatorMock : LogMock, IMaskCalculator
 
 public class TestRakel
 {
-    FastTexture2D texture;
-    OilPaintSurface oilPaintSurface;
-    RakelPaintReservoir rakelPaintReservoir;
-    Rakel rakel;
-
-    [SetUp]
-    public void Init()
-    {
-        texture = new FastTexture2D(3, 3);
-        oilPaintSurface = new OilPaintSurface(texture);
-        rakelPaintReservoir = new RakelPaintReservoir(1, 1, 0);
-        rakel = new Rakel(1, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
-        rakel.UpdateNormal(Vector2Int.right);
-    }
-
-    // This is an integration test and should be moved maybe later though
-    [Test]
-    public void PointRakel_Point()
-    {
-        rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
-        rakel.ApplyAt(new Vector2Int(1, 1));
-
-        Color[] colors = texture.Texture.GetPixels();
-        AssertUtil.AssertColorsAreEqual(
-            new Color[]
-            {
-                Colors.CANVAS_COLOR, Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,
-                Colors.CANVAS_COLOR, new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
-                Colors.CANVAS_COLOR, Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,
-            },
-            colors
-        );
-    }
-
-    // HACK This test case overrides the rakel setup from Init()
     [Test]
     public void ApplyAt_AppliesMask()
     {
         MaskApplicatorMock ma_mock = new MaskApplicatorMock();
-        Rakel rakel = new Rakel(1, 1, null, null, null, ma_mock);
-        rakel.ApplyAt(new Vector2Int(0, 0));
+        Rakel rakel = new Rakel(1, 1, null, null, ma_mock);
+        rakel.ApplyAt(null, new Vector2Int(0, 0));
 
         Assert.AreEqual(
             "Apply ",
@@ -90,16 +55,19 @@ public class TestRakel
     // This is an integration test and should be moved maybe later though.
     // Testing the actual result of another ApplyAt is necessary to make sure,
     // the new mask is based on the new normal and also stored
-    // HACK This test case overrides the paint reservoir and rakel setup from Init()
     [Test]
     public void UpdateNormal_RecalculatesMask()
     {
-        rakelPaintReservoir = new RakelPaintReservoir(3, 1, 0);
+        IFastTexture2D texture = new FastTexture2D(3, 3);
+        IOilPaintSurface oilPaintSurface = new OilPaintSurface(texture);
+
+        IRakelPaintReservoir rakelPaintReservoir = new RakelPaintReservoir(3, 1, 0);
         rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
-        rakel = new Rakel(3, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
+
+        IRakel rakel = new Rakel(3, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         rakel.UpdateNormal(Vector2.left); // make sure that not only the first update is considered
         rakel.UpdateNormal(Vector2.down);
-        rakel.ApplyAt(new Vector2Int(1, 1));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
 
         Color[] colors = texture.Texture.GetPixels();
         LogUtil.Log(colors, 3);
@@ -114,12 +82,11 @@ public class TestRakel
         );
     }
 
-    // HACK This test case overrides the rakel setup from Init()
     [Test]
     public void UpdateNormal_RecalculatesMask_OnlyUponRealUpdate()
     {
         MaskCalculatorMock mc_mock = new MaskCalculatorMock();
-        Rakel rakel = new Rakel(1, 1, null, null, mc_mock, null);
+        Rakel rakel = new Rakel(1, 1, null, mc_mock, null);
         rakel.UpdateNormal(Vector2.right);
         rakel.UpdateNormal(Vector2.right);
 

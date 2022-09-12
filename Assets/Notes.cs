@@ -53,6 +53,7 @@ public class Notes : MonoBehaviour
  *
  * Code Quality:
  * - OilPaintEngine aufräumen
+ * - OilPaintSurface Referenz aus Rakel entfernen und stattdessen übergeben
  * - RakelReferenz aus OilPaintEngine entfernen
  * - RakelNormal -> Angle
  * - Tests für Rakel im initial state
@@ -957,4 +958,8 @@ public class Notes : MonoBehaviour
  * - oder halt je nach Anpressdruck
  * 
  * Alle Farben im Reservoir zusammenmischen und Volumen addieren
+ * 
+ * 12.09.2022
+ * TODO
+ * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
  */

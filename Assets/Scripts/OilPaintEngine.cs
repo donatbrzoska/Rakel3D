@@ -19,10 +19,8 @@ public class OilPaintEngine : MonoBehaviour
     private int TextureHeight; // texture space
 
     private IOilPaintSurface OilPaintSurface;
-
     private IRakelPaintReservoir RakelPaintReservoir;
 
-    public IRakel Rakel { get; private set; }
     public Vector2 RakelNormal { get; private set; } = new Vector2(1, 0);
     public float RakelLength { get; private set; } = 4f; // world space
     public float RakelWidth { get; private set; } = 0.3f; // world space
@@ -42,13 +40,10 @@ public class OilPaintEngine : MonoBehaviour
         CanvasWidth = GameObject.Find("Canvas").GetComponent<Transform>().localScale.x * 10;
         CanvasHeight = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;
 
-        CreateTexture();
-        CreateRakelPaintReservoir();
-        CreateRakel();
-        CreateRakelDrawer();
+        CreateCanvasAndTools();
     }
 
-    void CreateTexture()
+    void CreateCanvasAndTools()
     {
         TextureWidth = WorldSpaceLengthToTextureSpaceLength(CanvasWidth, TextureResolution);
         TextureHeight = WorldSpaceLengthToTextureSpaceLength(CanvasHeight, TextureResolution);
@@ -56,27 +51,23 @@ public class OilPaintEngine : MonoBehaviour
         CanvasRenderer.material.SetTexture("_MainTex", Texture.Texture);
 
         OilPaintSurface = new OilPaintSurface(Texture);
+
+        CreateRakelDrawer();
     }
 
-    void CreateRakelPaintReservoir()
+    void CreateRakelDrawer()
     {
         RakelPaintReservoir = new RakelPaintReservoir(
             WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution),
             WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution),
             10);
-    }
 
-    void CreateRakel()
-    {
         int length = WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution);
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);
-        Rakel = new Rakel(length, width, RakelPaintReservoir, OilPaintSurface, new MaskCalculator(), new MaskApplicator());
+        IRakel Rakel = new Rakel(length, width, RakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         Debug.Log("Rakel is " + Rakel.Length + "x" + Rakel.Width + " = " + Rakel.Length * Rakel.Width);
         Rakel.UpdateNormal(RakelNormal, LOG_MASK_CALC_APPLY_TIME);
-    }
 
-    void CreateRakelDrawer()
-    {
         RakelDrawer = new RakelDrawer(Rakel);
     }
 
@@ -92,7 +83,7 @@ public class OilPaintEngine : MonoBehaviour
             {
                 RakelDrawer.NewStroke();
             }
-            RakelDrawer.AddNode(preciseBrushPosition, RakelNormal, LOG_MASK_CALC_APPLY_TIME);
+            RakelDrawer.AddNode(OilPaintSurface, preciseBrushPosition, RakelNormal, LOG_MASK_CALC_APPLY_TIME);
         }
     }
 
@@ -126,16 +117,12 @@ public class OilPaintEngine : MonoBehaviour
     public void UpdateRakelLength(float worldSpaceLength)
     {
         RakelLength = worldSpaceLength;
-        CreateRakelPaintReservoir();
-        CreateRakel();
         CreateRakelDrawer();
     }
 
     public void UpdateRakelWidth(float worldSpaceWidth)
     {
         RakelWidth = worldSpaceWidth;
-        CreateRakelPaintReservoir();
-        CreateRakel();
         CreateRakelDrawer();
     }
 
@@ -155,8 +142,6 @@ public class OilPaintEngine : MonoBehaviour
     public void UpdateTextureResolution(int pixelsPerWorldSpaceUnit)
     {
         TextureResolution = pixelsPerWorldSpaceUnit;
-        CreateTexture();
-        CreateRakel(); // Rakel is dependent on TextureResolution
-        CreateRakelDrawer();
+        CreateCanvasAndTools();
     }
 }

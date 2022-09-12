@@ -15,7 +15,7 @@ public class TestRakelPaintPickup
         texture = new FastTexture2D(3, 3);
         oilPaintSurface = new OilPaintSurface(texture);
         rakelPaintReservoir = new RakelPaintReservoir(1, 1, 1);
-        rakel = new Rakel(1, 1, rakelPaintReservoir, oilPaintSurface, new MaskCalculator(), new MaskApplicator());
+        rakel = new Rakel(1, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         rakel.UpdateNormal(Vector2Int.right);
     }
 
@@ -25,9 +25,9 @@ public class TestRakelPaintPickup
         oilPaintSurface.AddPaint(1, 1, new Color(0, 0.4f, 0.8f));
 
         // pickup
-        rakel.ApplyAt(new Vector2Int(1, 1));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
         // emit
-        rakel.ApplyAt(new Vector2Int(0, 0));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(0, 0));
 
         Color[] colors = texture.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(
@@ -46,9 +46,9 @@ public class TestRakelPaintPickup
         oilPaintSurface.AddPaint(1, 1, new Color(0, 0.8f, 0.8f));
 
         // pickup
-        rakel.ApplyAt(new Vector2Int(1, 1));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
         // emit
-        rakel.ApplyAt(new Vector2Int(0, 0));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(0, 0));
 
         colors = texture.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(
@@ -68,11 +68,11 @@ public class TestRakelPaintPickup
         oilPaintSurface.AddPaint(1, 1, new Color(0, 0.4f, 0.8f));
 
         // pickup
-        rakel.ApplyAt(new Vector2Int(1, 1));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
         // emit OOB should not emit picked up paint
-        rakel.ApplyAt(new Vector2Int(3, 3));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(3, 3));
         // emit in bounds should emit
-        rakel.ApplyAt(new Vector2Int(0, 0));
+        rakel.ApplyAt(oilPaintSurface, new Vector2Int(0, 0));
 
         Color[] colors = texture.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(

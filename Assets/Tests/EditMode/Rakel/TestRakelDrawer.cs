@@ -20,7 +20,7 @@ public class TestRakelDrawer
     public void PositionInterpolation_SpecialCase_OnePosition()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), DEFAULT_NORMAL);
 
         Assert.AreEqual(
             new List<Vector2Int>
@@ -35,8 +35,8 @@ public class TestRakelDrawer
     public void PositionInterpolation_ThreePositions()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), DEFAULT_NORMAL);
-        RakelDrawer.AddNode(new Vector2Int(2, 2), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(2, 2), DEFAULT_NORMAL);
 
         Assert.AreEqual(
             new List<Vector2Int>
@@ -53,12 +53,12 @@ public class TestRakelDrawer
     public void PositionInterpolation_MultiLine()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), DEFAULT_NORMAL);
-        RakelDrawer.AddNode(new Vector2Int(0, 1), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 1), DEFAULT_NORMAL);
 
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(2, 0), DEFAULT_NORMAL);
-        RakelDrawer.AddNode(new Vector2Int(2, 1), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(2, 0), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(2, 1), DEFAULT_NORMAL);
 
         Assert.AreEqual(
             new List<Vector2Int>
@@ -77,7 +77,7 @@ public class TestRakelDrawer
     public void NormalInterpolation_SpecialCase_OnePosition()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), DEFAULT_NORMAL);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), DEFAULT_NORMAL);
 
         Assert.AreEqual(
             new List<Vector2>
@@ -92,8 +92,8 @@ public class TestRakelDrawer
     public void NormalInterpolation_SpecialCase_OnePositionTwice_ShouldUpdateNormal()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.down);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.right);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.down);
 
         Assert.AreEqual(
             new List<Vector2>
@@ -109,8 +109,8 @@ public class TestRakelDrawer
     public void NormalInterpolation_SpecialCase_TwoPositions()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
-        RakelDrawer.AddNode(new Vector2Int(0, 1), Vector2.down);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.right);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 1), Vector2.down);
 
         Assert.AreEqual(
             new List<Vector2>
@@ -126,8 +126,8 @@ public class TestRakelDrawer
     public void NormalInterpolation_ThreePositions()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
-        RakelDrawer.AddNode(new Vector2Int(0, 2), Vector2.down);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.right);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 2), Vector2.down);
 
         Assert.AreEqual(
             new List<Vector2>
@@ -144,8 +144,8 @@ public class TestRakelDrawer
     public void MultiApply_SamePosition_DifferingNormals_ShouldReapply()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.down);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.right);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.down);
 
         Assert.AreEqual(
             new List<Vector2Int>
@@ -161,8 +161,8 @@ public class TestRakelDrawer
     public void MultiApply_SamePosition_SameNormal_ShouldNotReapply()
     {
         RakelDrawer.NewStroke();
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
-        RakelDrawer.AddNode(new Vector2Int(0, 0), Vector2.right);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.right);
+        RakelDrawer.AddNode(null, new Vector2Int(0, 0), Vector2.right);
 
         Assert.AreEqual(
             new List<Vector2Int>
@@ -190,7 +190,7 @@ class RakelMock : IRakel
         NormalLog.Add(normal);
     }
 
-    public void ApplyAt(Vector2Int position, bool logMaskApplyTime = false)
+    public void ApplyAt(IOilPaintSurface oilPaintSurface, Vector2Int position, bool logMaskApplyTime = false)
     {
         ApplyPositionLog.Add(position);
     }

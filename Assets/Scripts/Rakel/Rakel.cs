@@ -13,21 +13,18 @@ public class Rakel : IRakel
     private IMaskCalculator MaskCalculator;
     private IMaskApplicator MaskApplicator;
 
-    private IOilPaintSurface OilPaintSurface;
     private IRakelPaintReservoir PaintReservoir;
 
     public Rakel(
         int length,
         int width,
         IRakelPaintReservoir paintReservoir,
-        IOilPaintSurface oilPaintSurface,
         IMaskCalculator maskCalculator,
         IMaskApplicator maskApplicator)
     {
         Length = length;
         Width = width;
         PaintReservoir = paintReservoir;
-        OilPaintSurface = oilPaintSurface;
         MaskCalculator = maskCalculator;
         MaskApplicator = maskApplicator;
     }
@@ -52,12 +49,12 @@ public class Rakel : IRakel
         }
     }
 
-    public void ApplyAt(Vector2Int position, bool logMaskApplyTime = false)
+    public void ApplyAt(IOilPaintSurface oilPaintSurface, Vector2Int position, bool logMaskApplyTime = false)
     {
         Stopwatch sw = new Stopwatch();
         sw.Start();
 
-        MaskApplicator.Apply(LatestMask, position, OilPaintSurface, PaintReservoir);
+        MaskApplicator.Apply(LatestMask, position, oilPaintSurface, PaintReservoir);
 
         if (logMaskApplyTime)
             UnityEngine.Debug.Log("mask apply took " + sw.ElapsedMilliseconds + "ms");

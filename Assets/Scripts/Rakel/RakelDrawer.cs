@@ -24,7 +24,7 @@ public class RakelDrawer
         PreviousRakelPosition = NO_POSITION;
     }
 
-    public void AddNode(Vector2Int position, Vector2 normal, bool logTime = false)
+    public void AddNode(IOilPaintSurface oilPaintSurface, Vector2Int position, Vector2 normal, bool logTime = false)
     {
         Stopwatch sw = new Stopwatch();
         sw.Start();
@@ -36,7 +36,7 @@ public class RakelDrawer
             if (isFirstNodeOfStroke)
             {
                 Rakel.UpdateNormal(normal, logTime);
-                Rakel.ApplyAt(position, logTime);
+                Rakel.ApplyAt(oilPaintSurface, position, logTime);
             }
             else
             {
@@ -72,7 +72,7 @@ public class RakelDrawer
                 for (int i = 0; i < positions.Count; i++)
                 {
                     Rakel.UpdateNormal(normals[i], logTime);
-                    Rakel.ApplyAt(positions[i], logTime);
+                    Rakel.ApplyAt(oilPaintSurface, positions[i], logTime);
                 }
             }
 
