@@ -15,7 +15,7 @@ public class TestRakelDrawer_INT
     {
         texture = new FastTexture2D(3, 3);
         oilPaintSurface = new OilPaintSurface(texture);
-        rakelPaintReservoir = new RakelPaintReservoir(1, 1, 0);
+        rakelPaintReservoir = new RakelPaintReservoir(1, 1);
         rakel = new Rakel(1, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         rakelDrawer = new RakelDrawer(rakel);
     }

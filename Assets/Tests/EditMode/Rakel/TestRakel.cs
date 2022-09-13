@@ -61,7 +61,7 @@ public class TestRakel
         IFastTexture2D texture = new FastTexture2D(3, 3);
         IOilPaintSurface oilPaintSurface = new OilPaintSurface(texture);
 
-        IRakelPaintReservoir rakelPaintReservoir = new RakelPaintReservoir(3, 1, 0);
+        IRakelPaintReservoir rakelPaintReservoir = new RakelPaintReservoir(3, 1);
         rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
 
         IRakel rakel = new Rakel(3, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
@@ -70,7 +70,7 @@ public class TestRakel
         rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
 
         Color[] colors = texture.Texture.GetPixels();
-        LogUtil.Log(colors, 3);
+        //LogUtil.Log(colors, 3);
         AssertUtil.AssertColorsAreEqual(
             new Color[]
             {

@@ -4,38 +4,30 @@ using UnityEngine;
 
 public class PickupPaintReservoir
 {
-    private Queue<Color>[,] colors;
+    private int[,] volumes;
+    private Color[,] colors;
 
-    public PickupPaintReservoir(int height, int width, int pickupDelay)
+    public PickupPaintReservoir(int height, int width)
     {
-        colors = new Queue<Color>[height, width];
-
-        for (int i=0; i<colors.GetLength(0); i++)
-        {
-            for (int j = 0; j < colors.GetLength(1); j++)
-            {
-                colors[i, j] = new Queue<Color>();
-                for (int k = 0; k < pickupDelay; k++)
-                {
-                    colors[i, j].Enqueue(Colors.NO_PAINT_COLOR);
-                }
-            }
-        }
+        volumes = new int[height, width];
+        colors = new Color[height, width];
     }
 
     public void Add(int x, int y, Color color, int volume)
     {
-        for (int i = 0; i < volume; i++)
+        if (!color.Equals(Colors.NO_PAINT_COLOR))
         {
-            colors[y, x].Enqueue(color);
+            volumes[y, x] += volume;
+            colors[y, x] = color;
         }
     }
 
     public Color Emit(int x, int y)
     {
-        if (colors[y, x].Count > 0)
+        if (volumes[y, x] > 0)
         {
-            return colors[y, x].Dequeue();
+            volumes[y, x] -= 1;
+            return colors[y, x];
         }
         else
         {

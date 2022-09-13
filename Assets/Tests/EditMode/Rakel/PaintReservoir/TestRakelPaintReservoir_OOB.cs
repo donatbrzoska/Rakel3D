@@ -9,7 +9,7 @@ public class TestRakelPaintReservoir_OOB
     [SetUp]
     public void Init()
     {
-        paintReservoir = new RakelPaintReservoir(2, 2, 0);
+        paintReservoir = new RakelPaintReservoir(2, 2);
     }
 
     [Test]

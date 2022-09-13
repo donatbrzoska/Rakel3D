@@ -59,8 +59,7 @@ public class OilPaintEngine : MonoBehaviour
     {
         RakelPaintReservoir = new RakelPaintReservoir(
             WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution),
-            WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution),
-            10);
+            WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution));
 
         int length = WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution);
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);

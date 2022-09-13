@@ -9,12 +9,12 @@ public class RakelPaintReservoir : IRakelPaintReservoir
     private PickupPaintReservoir PickupReservoir;
     private ApplicationPaintReservoir ApplicationReservoir;
 
-    public RakelPaintReservoir(int height, int width, int pickupDelay)
+    public RakelPaintReservoir(int height, int width)
     {
         Height = height;
         Width = width;
 
-        PickupReservoir = new PickupPaintReservoir(height, width, pickupDelay);
+        PickupReservoir = new PickupPaintReservoir(height, width);
         ApplicationReservoir = new ApplicationPaintReservoir(height, width);
     }
 
