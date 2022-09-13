@@ -913,6 +913,7 @@ public class Notes : MonoBehaviour
  * 
  * ca. 850 Zeilen Code
  * ca. 1650 Zeilen Testcode
+ * davon ca. 260 Zeilen Testcode nur Array-Formatierung
  * 
  * Next Steps:
  * - Winklige Rakel:
