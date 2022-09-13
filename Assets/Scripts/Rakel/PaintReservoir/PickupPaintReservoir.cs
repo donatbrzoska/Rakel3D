@@ -17,8 +17,17 @@ public class PickupPaintReservoir
     {
         if (!color.Equals(Colors.NO_PAINT_COLOR))
         {
-            volumes[y, x] += volume;
-            colors[y, x] = color;
+            int newVolume = volumes[y, x] + volume;
+            double addedColorPart = volume / (double)newVolume;
+            double currentColorPart = volumes[y, x] / (double)newVolume;
+            Color newColor = new Color(
+                (float) (colors[y, x].r * currentColorPart + color.r * addedColorPart),
+                (float) (colors[y, x].g * currentColorPart + color.g * addedColorPart),
+                (float) (colors[y, x].b * currentColorPart + color.b * addedColorPart)
+            );
+
+            volumes[y, x] = newVolume;
+            colors[y, x] = newColor;
         }
     }
 

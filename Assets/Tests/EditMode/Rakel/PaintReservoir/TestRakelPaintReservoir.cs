@@ -128,10 +128,6 @@ public class TestRakelPaintReservoir
         );
     }
 
-    // TODO color mixing gin pickup reservoir
-    // TODO no negative volumes in pickup reservoir
-
-
     // This is about color mixing
     [Test]
     public void Emit_FilledApplicationReservoir_FilledPickupReservoir()
@@ -147,6 +143,28 @@ public class TestRakelPaintReservoir
                 { new Color(0.3f, 0.4f, 0.5f), new Color(0.2f, 0.3f, 0.4f) },
                 { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
                 { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
+            },
+            emitted
+        );
+    }
+
+
+    // This is about
+    // 1. color mixing in the pickup reservoir
+    [Test]
+    public void Pickup_EmptyApplicationReservoir_FilledPickupReservoir()
+    {
+        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(3, 2);
+        paintReservoir.Pickup(0, 0, new Color(0.2f, 0.2f, 0.2f), 1);
+
+        paintReservoir.Pickup(0, 0, new Color(0.8f, 0.8f, 0.8f), 2);
+
+        Color[,] emitted = EmitAll(paintReservoir);
+        AssertUtil.AssertColorsAreEqual(
+            new Color[,] {
+                { new Color(0.6f, 0.6f, 0.6f), Colors.NO_PAINT_COLOR },
+                { Colors.NO_PAINT_COLOR,       Colors.NO_PAINT_COLOR },
+                { Colors.NO_PAINT_COLOR,       Colors.NO_PAINT_COLOR },
             },
             emitted
         );
