@@ -67,6 +67,19 @@ public class Notes : MonoBehaviour
 
 
 
+/* Ideen
+ * 
+ * - Farbreservoir
+ *   - Als Stack (mehrfarbig)
+ *   - Als Array mit Volumenwerten (einfarbig)
+ * - Menge der übertragenen Farbe
+ *   - abhängig von Volumen
+ *   - abhängig von Abdrucksverzerrung
+ * 
+ */
+
+
+
 /* Koordinatensysteme 
  * 
  * Array-Koordinatensystem: Origin oben links und x,y vertauscht!!! (wie Rotation um 90° nach rechts)
@@ -963,4 +976,43 @@ public class Notes : MonoBehaviour
  * 12.09.2022
  * TODO
  * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
+ * 
+ * 13.09.2022
+ * Next Steps:
+ * - Winklige Rakel:
+ *   - Anteiliges Emit aus dem Reservoir implementieren
+ *   - irgendwie geht die Farbe beim Pickup verloren
+ *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
+ *     -> anteiliges Emit löst dieses Problem
+ * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
+ * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Bug: Durch die Farbmischung bei der Abgabe aus dem Reservoir geht immer die Hälfte der Farbe verloren
+ * - PickupReservoir: Farbschichten? oder Farbmischung + Volumen
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * 16.09.2022
+ * GPU-Beschleunigung?
+ * - https://docs.unity3d.com/ScriptReference/GraphicsBuffer.html
+ * - https://docs.unity3d.com/ScriptReference/ComputeShader.html
+ * - https://www.youtube.com/watch?v=dhVJE7g3hig
+ * 
+ * Millisekunden je Abdruck messen
+ * 
+ * 07.10.2022
+ * - Farbreservoir
+ *   - Als Stack (mehrfarbig)
+ *   - Als Array mit Volumenwerten (einfarbig)
+ * - Menge der übertragenen Farbe
+ *   - abhängig von Volumen
+ *   - abhängig von Abdrucksverzerrung
+ *   
+ * 24.10.2022
+ * ComputeShaders
+ * - https://www.youtube.com/watch?v=BrZ4pWwkpto
+ * - ComputeBuffers
+ * - HLSL
  */

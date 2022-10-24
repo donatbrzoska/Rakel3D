@@ -73,7 +73,6 @@ public class MaskApplicator: IMaskApplicator
             }
         }
 
-        // TODO simplify
         // 3. Add picked up paint to reservoir: Looping through PickupMap
         Parallel.For(0, paintReservoir.Height, (y_reservoir, state) =>
         {
@@ -83,7 +82,6 @@ public class MaskApplicator: IMaskApplicator
             }
         });
 
-        // TODO simplify?
         // 4. Add emitted paint to canvas: Looping through Mask
         int emitted_counter = 0;
         for (int i = 0; i < mask.coordinates.GetLength(0); i++) // no multithreading because of List<Color> 
