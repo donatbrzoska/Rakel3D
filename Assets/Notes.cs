@@ -23,7 +23,9 @@ public class Notes : MonoBehaviour
  * - Farbe ausfaden lassen wenn nur noch wenig Volume
  * - mehrere verschiedene Farbschichten auf den Rakel auftragen können
  *
- * Mischung mit Hintergrundfarbe des Canvas?
+ * Refinements
+ * - Antialiasing für Rakelabdruck?
+ * - Mischung mit Hintergrundfarbe des Canvas?
  * 
  * GUI
  * - Preview für Rakel-Ausrichtung und Größe
