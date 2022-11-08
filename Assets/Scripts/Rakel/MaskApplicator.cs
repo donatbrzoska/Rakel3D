@@ -49,8 +49,8 @@ public class MaskApplicator: IMaskApplicator
 
         // 2. Get paint from reservoir: Looping through Mask
         // TODO Volume through int[,] emittedVolumes ...
-        List<Color> emitted = new List<Color>();
-        for (int i = 0; i < mask.coordinates.GetLength(0); i++) // no multithreading because of List<Color>
+        // 4. Add emitted paint to canvas: ALSO Looping through Mask
+        Parallel.For(0, mask.coordinates.GetLength(0), (i, state) =>
         {
             int x_mask_start = mask.coordinates[i, 0];
             int x_mask_end = mask.coordinates[i, 1];
@@ -66,12 +66,13 @@ public class MaskApplicator: IMaskApplicator
                     Vector2Int coord_mask = new Vector2Int(x_mask, y_mask);
                     Vector2Int coord_mask_reservoir_aligned = MathUtil.RotateAroundOrigin(coord_mask, -maskAngle);
                     Vector2Int coord_reservoir = coord_mask_reservoir_aligned
-                                               + new Vector2Int(paintReservoir.Width - 1, paintReservoir.Height / 2); // TODO duplicate code
+                                            + new Vector2Int(paintReservoir.Width - 1, paintReservoir.Height / 2); // TODO duplicate code
 
-                    emitted.Add(paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y));
+                    Color emitted = paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y);
+                    oilPaintSurface.AddPaint(x_canvas, y_canvas, emitted);
                 }
             }
-        }
+        });
 
         // 3. Add picked up paint to reservoir: Looping through PickupMap
         Parallel.For(0, paintReservoir.Height, (y_reservoir, state) =>
@@ -81,26 +82,6 @@ public class MaskApplicator: IMaskApplicator
                 paintReservoir.Pickup(x_reservoir, y_reservoir, pickedUp[y_reservoir, x_reservoir], 1);
             }
         });
-
-        // 4. Add emitted paint to canvas: Looping through Mask
-        int emitted_counter = 0;
-        for (int i = 0; i < mask.coordinates.GetLength(0); i++) // no multithreading because of List<Color> 
-        {
-            int x_mask_start = mask.coordinates[i, 0];
-            int x_mask_end = mask.coordinates[i, 1];
-            int y_mask = mask.y_eq_0_index - i; // because mask.y0_index is also the first y coordinate
-
-            for (int x_mask = x_mask_start; x_mask <= x_mask_end; x_mask++)
-            {
-                int x_canvas = x_mask + maskPosition.x;
-                int y_canvas = y_mask + maskPosition.y;
-                // check this also, to exactly match loop 2
-                if (oilPaintSurface.IsInBounds(x_canvas, y_canvas))
-                {
-                    oilPaintSurface.AddPaint(x_canvas, y_canvas, emitted[emitted_counter++]);
-                }
-            }
-        }
 
         //// 1. Transfer paint from Canvas to Rakel: Looping through PickupMap
         //// -> color comes from: reservoir coordinate rotation to mask coordinate

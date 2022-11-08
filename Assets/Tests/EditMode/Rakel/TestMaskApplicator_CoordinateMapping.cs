@@ -66,7 +66,7 @@ public class TestMaskApplicator_CoordinateMapping
             new int[,]
             {
                 { 0, 0, 0 },
-                { 0, 2, 0 },
+                { 0, 1, 0 },
                 { 0, 0, 0 },
             },
             oilPaintSurface_mock.IsInBoundsLog
@@ -130,9 +130,9 @@ public class TestMaskApplicator_CoordinateMapping
         Assert.AreEqual(
             new int[,]
             {
-                { 0, 2, 0 },
-                { 0, 2, 0 },
-                { 0, 2, 0 },
+                { 0, 1, 0 },
+                { 0, 1, 0 },
+                { 0, 1, 0 },
             },
             oilPaintSurface_mock.IsInBoundsLog
         );
@@ -193,9 +193,9 @@ public class TestMaskApplicator_CoordinateMapping
         Assert.AreEqual(
             new int[,]
             {
-                { 0, 2, 2 },
-                { 0, 2, 2 },
-                { 0, 2, 2 },
+                { 0, 1, 1 },
+                { 0, 1, 1 },
+                { 0, 1, 1 },
             },
             oilPaintSurface_mock.IsInBoundsLog
         );
@@ -267,8 +267,8 @@ public class TestMaskApplicator_CoordinateMapping
                 { 0, 0, 0},
                 { 0, 0, 0},
                 { 0, 0, 0},
-                { 2, 2, 2},
-                { 2, 2, 2},
+                { 1, 1, 1},
+                { 1, 1, 1},
             },
             oilPaintSurface_mock.IsInBoundsLog
         );
