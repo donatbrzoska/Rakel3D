@@ -975,6 +975,7 @@ public class Notes : MonoBehaviour
  * 
  * Alle Farben im Reservoir zusammenmischen und Volumen addieren
  * 
+ * 
  * 12.09.2022
  * TODO
  * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
@@ -996,6 +997,7 @@ public class Notes : MonoBehaviour
  * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
  * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
  * 
+ * 
  * 16.09.2022
  * GPU-Beschleunigung?
  * - https://docs.unity3d.com/ScriptReference/GraphicsBuffer.html
@@ -1003,6 +1005,7 @@ public class Notes : MonoBehaviour
  * - https://www.youtube.com/watch?v=dhVJE7g3hig
  * 
  * Millisekunden je Abdruck messen
+ * 
  * 
  * 07.10.2022
  * - Farbreservoir
@@ -1012,9 +1015,17 @@ public class Notes : MonoBehaviour
  *   - abhängig von Volumen
  *   - abhängig von Abdrucksverzerrung
  *   
+ *   
  * 24.10.2022
  * ComputeShaders
  * - https://www.youtube.com/watch?v=BrZ4pWwkpto
  * - ComputeBuffers
  * - HLSL
+ * 
+ * 
+ * 08.11.2022
+ * Testing:
+ * - manche Features (Volumenimplementierung) erfordern erst Anpassungen am Design und Testdesign
+ *   - TestRakelPaintResevoir hat viel zu viel getestet, was sehr schwer durchschaubar und anpassbar gewesen wäre
+ *   - Das Redesign der Tests musste vor der Volumenimplementierung geschehen, gleichzeitig mit der Volumenimplementierung wäre es zu unübersichtlich geworden
  */

@@ -2,18 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickupPaintReservoir
+public class PaintReservoir
 {
+    public int Height { get; private set; }
+    public int Width { get; private set; }
+
     private int[,] volumes;
     private Color[,] colors;
 
-    public PickupPaintReservoir(int height, int width)
+    public PaintReservoir(int height, int width)
     {
+        Height = height;
+        Width = width;
         volumes = new int[height, width];
         colors = new Color[height, width];
     }
 
-    public void Add(int x, int y, Color color, int volume)
+    public void Set(int x, int y, Color color, int volume)
+    {
+        colors[y, x] = color;
+        volumes[y, x] = volume;
+    }
+
+    public void Pickup(int x, int y, Color color, int volume)
     {
         if (!color.Equals(Colors.NO_PAINT_COLOR))
         {

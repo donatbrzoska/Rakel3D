@@ -7,16 +7,16 @@ public class RakelPaintReservoir : IRakelPaintReservoir
     public int Width { get; private set; }
     public Vector2Int Pivot { get { return new Vector2Int(Width - 1, Height / 2); } }
 
-    private PickupPaintReservoir PickupReservoir;
-    private ApplicationPaintReservoir ApplicationReservoir;
+    private PaintReservoir PickupReservoir;
+    private PaintReservoir ApplicationReservoir;
 
     public RakelPaintReservoir(int height, int width)
     {
         Height = height;
         Width = width;
 
-        PickupReservoir = new PickupPaintReservoir(height, width);
-        ApplicationReservoir = new ApplicationPaintReservoir(height, width);
+        PickupReservoir = new PaintReservoir(height, width);
+        ApplicationReservoir = new PaintReservoir(height, width);
     }
 
     public void Fill(Color color, int volume)
@@ -32,7 +32,7 @@ public class RakelPaintReservoir : IRakelPaintReservoir
 
     public void Pickup(int x, int y, Color color, int volume)
     {
-        PickupReservoir.Add(x, y, color, volume);
+        PickupReservoir.Pickup(x, y, color, volume);
     }
 
     public Color Emit(int x, int y)
