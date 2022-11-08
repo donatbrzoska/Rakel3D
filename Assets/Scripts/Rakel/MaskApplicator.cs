@@ -60,7 +60,7 @@ public class MaskApplicator: IMaskApplicator
             {
                 int x_canvas = x_mask + maskPosition.x;
                 int y_canvas = y_mask + maskPosition.y;
-                // if the canvas coordinated are out of range, we MUST NOT emit paint from the reservoir
+                // if the canvas coordinates are out of range, we MUST NOT emit paint from the reservoir
                 if (oilPaintSurface.IsInBounds(x_canvas, y_canvas))
                 {
                     Vector2Int coord_mask = new Vector2Int(x_mask, y_mask);
