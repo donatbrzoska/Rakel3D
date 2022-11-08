@@ -5,6 +5,7 @@ public class RakelPaintReservoir : IRakelPaintReservoir
 {
     public int Height { get; private set; }
     public int Width { get; private set; }
+    public Vector2Int Pivot { get { return new Vector2Int(Width - 1, Height / 2); } }
 
     private PickupPaintReservoir PickupReservoir;
     private ApplicationPaintReservoir ApplicationReservoir;

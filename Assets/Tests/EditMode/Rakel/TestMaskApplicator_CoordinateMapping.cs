@@ -318,6 +318,7 @@ class PaintReservoirMock : IRakelPaintReservoir
 
     public int Height { get;  private set; }
     public int Width { get; private set; }
+    public Vector2Int Pivot { get { return new RakelPaintReservoir(Height, Width).Pivot; } } // HACK this is not good but still better than copying the getter and having duplicate code
 
     public PaintReservoirMock(int height, int width)
     {

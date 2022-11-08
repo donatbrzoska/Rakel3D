@@ -39,8 +39,7 @@ public class MaskApplicator: IMaskApplicator
             {
                 Vector2Int coord_reservoir = new Vector2Int(x_reservoir, y_reservoir);
                 // TODO what about even values for Height?
-                Vector2Int coord_reservoir_mask_aligned = coord_reservoir
-                                                          - new Vector2Int(paintReservoir.Width - 1, paintReservoir.Height / 2); // TODO duplicate code
+                Vector2Int coord_reservoir_mask_aligned = coord_reservoir - paintReservoir.Pivot;
                 Vector2Int coord_texture = MathUtil.RotateAroundOrigin(coord_reservoir_mask_aligned, maskAngle) + maskPosition;
 
                 pickedUp[y_reservoir, x_reservoir] = oilPaintSurface.GetPaint(coord_texture.x, coord_texture.y);
@@ -65,8 +64,7 @@ public class MaskApplicator: IMaskApplicator
                 {
                     Vector2Int coord_mask = new Vector2Int(x_mask, y_mask);
                     Vector2Int coord_mask_reservoir_aligned = MathUtil.RotateAroundOrigin(coord_mask, -maskAngle);
-                    Vector2Int coord_reservoir = coord_mask_reservoir_aligned
-                                            + new Vector2Int(paintReservoir.Width - 1, paintReservoir.Height / 2); // TODO duplicate code
+                    Vector2Int coord_reservoir = coord_mask_reservoir_aligned + paintReservoir.Pivot;
 
                     Color emitted = paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y);
                     oilPaintSurface.AddPaint(x_canvas, y_canvas, emitted);

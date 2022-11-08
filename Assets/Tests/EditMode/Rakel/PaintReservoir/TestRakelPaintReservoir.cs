@@ -202,4 +202,30 @@ public class TestRakelPaintReservoir
             emitted
         );
     }
+
+    [Test]
+    public void Pivot()
+    {
+        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(3, 2);
+
+        Vector2Int pivot = paintReservoir.Pivot;
+
+        Assert.AreEqual(
+            new Vector2Int(1, 1),
+            pivot
+        );
+    }
+
+    [Test]
+    public void Pivot_Even_Height()
+    {
+        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(2, 2);
+
+        Vector2Int pivot = paintReservoir.Pivot;
+
+        Assert.AreEqual(
+            new Vector2Int(1, 1),
+            pivot
+        );
+    }
 }

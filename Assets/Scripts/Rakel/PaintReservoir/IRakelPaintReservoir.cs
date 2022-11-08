@@ -5,6 +5,7 @@ public interface IRakelPaintReservoir
 {
     public int Height { get; }
     public int Width { get; }
+    public Vector2Int Pivot { get; }
 
     public void Fill(Color color, int volume);
     public void Pickup(int x, int y, Color color, int volume);
