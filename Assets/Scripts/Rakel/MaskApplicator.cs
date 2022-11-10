@@ -32,7 +32,7 @@ public class MaskApplicator: IMaskApplicator
 
         // 1. Get paint from canvas: Looping through PickupMap
         // TODO Volume through int[,] pickedUpVolumes ...
-        Color[,] pickedUp = new Color[paintReservoir.Height, paintReservoir.Width];
+        Paint[,] pickedUp = new Paint[paintReservoir.Height, paintReservoir.Width];
         Parallel.For(0, paintReservoir.Height, (y_reservoir, state) =>
         {
             for (int x_reservoir = 0; x_reservoir < paintReservoir.Width; x_reservoir++)
@@ -42,7 +42,7 @@ public class MaskApplicator: IMaskApplicator
                 Vector2Int coord_reservoir_mask_aligned = coord_reservoir - paintReservoir.Pivot;
                 Vector2Int coord_texture = MathUtil.RotateAroundOrigin(coord_reservoir_mask_aligned, maskAngle) + maskPosition;
 
-                pickedUp[y_reservoir, x_reservoir] = oilPaintSurface.GetPaint(coord_texture.x, coord_texture.y);
+                pickedUp[y_reservoir, x_reservoir] = oilPaintSurface.GetPaint(coord_texture.x, coord_texture.y, 1);
             }
         });
 
@@ -66,7 +66,7 @@ public class MaskApplicator: IMaskApplicator
                     Vector2Int coord_mask_reservoir_aligned = MathUtil.RotateAroundOrigin(coord_mask, -maskAngle);
                     Vector2Int coord_reservoir = coord_mask_reservoir_aligned + paintReservoir.Pivot;
 
-                    Color emitted = paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y);
+                    Paint emitted = paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y, 1, 1);
                     oilPaintSurface.AddPaint(x_canvas, y_canvas, emitted);
                 }
             }
@@ -77,7 +77,7 @@ public class MaskApplicator: IMaskApplicator
         {
             for (int x_reservoir = 0; x_reservoir < paintReservoir.Width; x_reservoir++)
             {
-                paintReservoir.Pickup(x_reservoir, y_reservoir, pickedUp[y_reservoir, x_reservoir], 1);
+                paintReservoir.Pickup(x_reservoir, y_reservoir, pickedUp[y_reservoir, x_reservoir]);
             }
         });
 

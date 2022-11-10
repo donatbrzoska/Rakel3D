@@ -12,17 +12,17 @@ public class TestOilPaintSurface_RakelView
      * -----------------------------------------------------------------------------------------------------------
      */
 
-    private Color[,] GetPaintAll(OilPaintSurface o)
+    private Paint[,] GetPaintAll(OilPaintSurface o)
     {
-        Color[,] colors = new Color[CanvasHeight, CanvasWidth];
+        Paint[,] paint = new Paint[CanvasHeight, CanvasWidth];
         for (int i = 0; i < CanvasHeight; i++)
         {
             for (int j = 0; j < CanvasWidth; j++)
             {
-                colors[i, j] = o.GetPaint(j, i);
+                paint[i, j] = o.GetPaint(j, i, 1);
             }
         }
-        return colors;
+        return paint;
     }
 
     /* 
@@ -46,61 +46,61 @@ public class TestOilPaintSurface_RakelView
     [Test]
     public void InitialState()
     {
-        Color[,] colors = GetPaintAll(oilPaintSurface);
+        Paint[,] paint = GetPaintAll(oilPaintSurface);
 
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,]
+        Assert.AreEqual(
+            new Paint[,]
             {
-                { Colors.NO_PAINT_COLOR, Colors.NO_PAINT_COLOR },
-                { Colors.NO_PAINT_COLOR, Colors.NO_PAINT_COLOR },
+                { Paint.EMPTY_PAINT, Paint.EMPTY_PAINT },
+                { Paint.EMPTY_PAINT, Paint.EMPTY_PAINT },
             },
-            colors
+            paint
         );
     }
 
     [Test]
     public void AddPaint_GetPaint()
     {
-        oilPaintSurface.AddPaint(0, 0, new Color(0.2f, 0.2f, 0.2f));
+        oilPaintSurface.AddPaint(0, 0, new Paint(new Color(0.2f, 0.2f, 0.2f), 1));
 
         // 1. we should obtain paint
-        Color[,] colors = GetPaintAll(oilPaintSurface);
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,]
+        Paint[,] paint = GetPaintAll(oilPaintSurface);
+        Assert.AreEqual(
+            new Paint[,]
             {
-                { new Color(0.2f, 0.2f, 0.2f), Colors.NO_PAINT_COLOR },
-                { Colors.NO_PAINT_COLOR,       Colors.NO_PAINT_COLOR },
+                { new Paint(new Color(0.2f, 0.2f, 0.2f), 1), Paint.EMPTY_PAINT },
+                { Paint.EMPTY_PAINT,                         Paint.EMPTY_PAINT },
             },
-            colors
+            paint
         );
 
         // 2. now the paint should be gone
-        colors = GetPaintAll(oilPaintSurface);
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,]
+        paint = GetPaintAll(oilPaintSurface);
+        Assert.AreEqual(
+            new Paint[,]
             {
-                { Colors.NO_PAINT_COLOR, Colors.NO_PAINT_COLOR },
-                { Colors.NO_PAINT_COLOR, Colors.NO_PAINT_COLOR },
+                { Paint.EMPTY_PAINT, Paint.EMPTY_PAINT },
+                { Paint.EMPTY_PAINT, Paint.EMPTY_PAINT },
             },
-            colors
+            paint
         );
     }
 
     [Test]
-    public void AddPaint_NO_PAINT_COLOR()
+    public void AddPaint_EMPTY_PAINT_DoesNothing()
     {
-        oilPaintSurface.AddPaint(0, 0, new Color(0.2f, 0.2f, 0.2f));
+        oilPaintSurface.AddPaint(0, 0, new Paint(new Color(0.2f, 0.2f, 0.2f), 1));
 
-        oilPaintSurface.AddPaint(0, 0, Colors.NO_PAINT_COLOR);
+        oilPaintSurface.AddPaint(0, 0, Paint.EMPTY_PAINT);
 
-        Color[,] colors = GetPaintAll(oilPaintSurface);
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,]
+        Paint[,] paint = GetPaintAll(oilPaintSurface);
+        Assert.AreEqual(
+            new Paint[,]
             {
-                { new Color(0.2f, 0.2f, 0.2f), Colors.NO_PAINT_COLOR },
-                { Colors.NO_PAINT_COLOR,       Colors.NO_PAINT_COLOR },
+                { new Paint(new Color(0.2f, 0.2f, 0.2f), 1), Paint.EMPTY_PAINT },
+                { Paint.EMPTY_PAINT,                         Paint.EMPTY_PAINT },
             },
-            colors
+            paint
         );
     }
 }

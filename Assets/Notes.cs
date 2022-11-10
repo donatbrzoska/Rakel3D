@@ -58,6 +58,7 @@ public class Notes : MonoBehaviour
  * - OilPaintSurface Referenz aus Rakel entfernen und stattdessen übergeben
  * - RakelReferenz aus OilPaintEngine entfernen
  * - RakelNormal -> Angle
+ * - Tests für OilPaintSurface IsInBounds -> reicht aktuell nur weiter an FastTexture2D
  * - Tests für Rakel im initial state
      - TODO wrong usage (Apply before set values)
  * - Tests für Mocks
@@ -1028,4 +1029,30 @@ public class Notes : MonoBehaviour
  * - manche Features (Volumenimplementierung) erfordern erst Anpassungen am Design und Testdesign
  *   - TestRakelPaintResevoir hat viel zu viel getestet, was sehr schwer durchschaubar und anpassbar gewesen wäre
  *   - Das Redesign der Tests musste vor der Volumenimplementierung geschehen, gleichzeitig mit der Volumenimplementierung wäre es zu unübersichtlich geworden
+ *
+ *
+ * 09.11.2022
+ * Testing
+ * - für manche neuen Features müssen seeehr viele Tests angepasst werden (Color -> Paint)
+ * -> alle direkt betroffenen auskommentieren
+ * -> alle indirekt betroffenen (andere Komponenten) einfach nachziehen mit erstem direkt betroffenen Testcase
+ * -> Fehler eingebaut aber auch gefunden durch Tests
+ * 
+ * TODO
+ * absolute vs relative Volumenwerte
+ * 
+ * Next Steps:
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
+ * - Winklige Rakel:
+ *   - Anteiliges Emit aus dem Reservoir implementieren
+ *   - irgendwie geht die Farbe beim Pickup verloren
+ *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
+ *     -> anteiliges Emit löst dieses Problem
+ * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
+ * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
  */

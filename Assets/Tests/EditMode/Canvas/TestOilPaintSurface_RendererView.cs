@@ -36,13 +36,13 @@ public class TestOilPaintSurface_RendererView
     [Test]
     public void AddPaint()
     {
-        oilPaintSurface.AddPaint(0, 0, new Color(0.2f, 0.2f, 0.2f));
+        oilPaintSurface.AddPaint(0, 0, new Paint(new Color(0.2f, 0.4f, 0.6f), 1));
 
         Color[] colors = fastTexture2D.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(
             new Color[]
             {
-                new Color(0.2f, 0.2f, 0.2f), Colors.CANVAS_COLOR,
+                new Color(0.2f, 0.4f, 0.6f), Colors.CANVAS_COLOR,
                 Colors.CANVAS_COLOR,         Colors.CANVAS_COLOR,
             },
             colors
@@ -50,11 +50,11 @@ public class TestOilPaintSurface_RendererView
     }
 
     [Test]
-    public void AddPaint_NO_PAINT_COLOR_DoesNothing()
+    public void AddPaint_EMPTY_PAINT_DoesNothing()
     {
-        oilPaintSurface.AddPaint(0, 0, new Color(0.2f, 0.2f, 0.2f));
+        oilPaintSurface.AddPaint(0, 0, new Paint(new Color(0.2f, 0.2f, 0.2f), 1));
 
-        oilPaintSurface.AddPaint(0, 0, Colors.NO_PAINT_COLOR);
+        oilPaintSurface.AddPaint(0, 0, Paint.EMPTY_PAINT);
 
         Color[] colors = fastTexture2D.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(
@@ -70,8 +70,8 @@ public class TestOilPaintSurface_RendererView
     [Test]
     public void GetPaint()
     {
-        oilPaintSurface.AddPaint(0, 0, new Color(0.2f, 0.2f, 0.2f));
-        Color c = oilPaintSurface.GetPaint(0, 0);
+        oilPaintSurface.AddPaint(0, 0, new Paint(new Color(0.2f, 0.2f, 0.2f), 1));
+        oilPaintSurface.GetPaint(0, 0, 1);
 
         // added paint should be gone again
         Color[] colors = fastTexture2D.Texture.GetPixels();

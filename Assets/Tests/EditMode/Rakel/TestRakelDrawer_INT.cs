@@ -20,11 +20,10 @@ public class TestRakelDrawer_INT
         rakelDrawer = new RakelDrawer(rakel);
     }
 
-    // This is an integration test and should be moved maybe later though
     [Test]
     public void PointRakel_Line()
     {
-        rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 3);
+        rakelPaintReservoir.Fill(new Paint(new Color(0, 0.4f, 0.8f), 3));
 
         rakelDrawer.NewStroke();
         rakelDrawer.AddNode(oilPaintSurface, new Vector2Int(0, 1), Vector2Int.right);

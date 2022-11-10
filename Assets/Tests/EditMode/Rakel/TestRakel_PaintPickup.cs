@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class TestRakelPaintPickup
+public class TestRakel_PaintPickup
 {
     FastTexture2D texture;
     OilPaintSurface oilPaintSurface;
@@ -22,7 +22,7 @@ public class TestRakelPaintPickup
     [Test]
     public void PointRakel_EmptyRakel_PaintPickup()
     {
-        oilPaintSurface.AddPaint(1, 1, new Color(0, 0.4f, 0.8f));
+        oilPaintSurface.AddPaint(1, 1, new Paint(new Color(0, 0.4f, 0.8f), 1));
 
         // pickup
         rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
@@ -43,7 +43,7 @@ public class TestRakelPaintPickup
 
         // repeating the process should yield the same result
 
-        oilPaintSurface.AddPaint(1, 1, new Color(0, 0.8f, 0.8f));
+        oilPaintSurface.AddPaint(1, 1, new Paint(new Color(0, 0.8f, 0.8f), 1));
 
         // pickup
         rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));
@@ -65,7 +65,7 @@ public class TestRakelPaintPickup
     [Test]
     public void PointRakel_EmptyRakel_PaintPickup_OOB()
     {
-        oilPaintSurface.AddPaint(1, 1, new Color(0, 0.4f, 0.8f));
+        oilPaintSurface.AddPaint(1, 1, new Paint(new Color(0, 0.4f, 0.8f), 1));
 
         // pickup
         rakel.ApplyAt(oilPaintSurface, new Vector2Int(1, 1));

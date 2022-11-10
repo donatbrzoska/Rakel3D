@@ -19,61 +19,27 @@ public class RakelPaintReservoir : IRakelPaintReservoir
         ApplicationReservoir = new PaintReservoir(height, width);
     }
 
-    public void Fill(Color color, int volume)
+    public void Fill(Paint paint)
     {
         for (int i = 0; i < Height; i++)
         {
             for (int j = 0; j < Width; j++)
             {
-                ApplicationReservoir.Set(j, i, color, volume);
+                ApplicationReservoir.Set(j, i, paint);
             }
         }
     }
 
-    public void Pickup(int x, int y, Color color, int volume)
+    public void Pickup(int x, int y, Paint paint)
     {
-        PickupReservoir.Pickup(x, y, color, volume);
+        PickupReservoir.Pickup(x, y, paint);
     }
 
-    public Color Emit(int x, int y)
+    public Paint Emit(int x, int y, int applicationReservoirVolume, int pickupReservoirVolume)
     {
-        bool in_range = x >= 0
-                        && x < Width
-                        && y >= 0
-                        && y < Height;
-        if (in_range)
-        {
-            Color ar_col = ApplicationReservoir.Emit(x, y);
-            bool ar_filled = !ar_col.Equals(Colors.NO_PAINT_COLOR);
+        Paint ar_paint = ApplicationReservoir.Emit(x, y, applicationReservoirVolume);
+        Paint pr_paint = PickupReservoir.Emit(x, y, pickupReservoirVolume);
 
-            Color pr_col = PickupReservoir.Emit(x, y);
-            bool pr_filled = !pr_col.Equals(Colors.NO_PAINT_COLOR);
-
-            if (ar_filled && pr_filled)
-            {
-                return new Color(
-                    (ar_col.r + pr_col.r) / 2,
-                    (ar_col.g + pr_col.g) / 2,
-                    (ar_col.b + pr_col.b) / 2,
-                    (ar_col.a + pr_col.a) / 2
-                );
-            }
-            else if (ar_filled)
-            {
-                return ar_col;
-            }
-            else if (pr_filled)
-            {
-                return pr_col;
-            }
-            else // could be removed if this was the default case for the entire function (if nothing else hits beforehand)
-            {
-                return Colors.NO_PAINT_COLOR;
-            }
-        }
-        else
-        {
-            return Colors.NO_PAINT_COLOR;
-        }
+        return ar_paint + pr_paint;
     }
 }

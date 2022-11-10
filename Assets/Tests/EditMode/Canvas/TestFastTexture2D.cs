@@ -27,15 +27,15 @@ public class TestFastTexture2D
     [Test]
     public void SetPixelFast_Usual()
     {
-        t.SetPixelFast(0, 0, new Color(0, 0, 0));
+        t.SetPixelFast(0, 0, new Color(0.2f, 0.4f, 0.6f));
 
         // NOTE the array representation mirrors the entire coordinate system by the x axis (for us with the 180° rotated canvas at least)
         Color[] colors = t.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(
             new Color[]
             {
-                new Color(0, 0, 0), DEFAULT_COLOR,
-                DEFAULT_COLOR,      DEFAULT_COLOR,
+                new Color(0.2f, 0.4f, 0.6f), DEFAULT_COLOR,
+                DEFAULT_COLOR,               DEFAULT_COLOR,
             },
             colors
         );
@@ -43,7 +43,7 @@ public class TestFastTexture2D
         // NOTE 0,0 means array upper left
         Color color = t.Texture.GetPixel(0, 0);
         AssertUtil.AssertColorsAreEqual(
-            new Color(0, 0, 0),
+            new Color(0.2f, 0.4f, 0.6f),
             color
         );
     }
@@ -183,5 +183,43 @@ public class TestFastTexture2D
             Colors.NO_PAINT_COLOR,
             color
         );
+    }
+
+    /* 
+     * -----------------------------------------------------------------------------------------------------------
+     * ------------------------------------------------ InBounds -------------------------------------------------
+     * -----------------------------------------------------------------------------------------------------------
+     */
+
+    [Test]
+    public void IsInBounds_Lower()
+    {
+        bool inBounds = t.IsInBounds(0, -1);
+
+        Assert.IsFalse(inBounds);
+    }
+
+    [Test]
+    public void IsInBounds_Right()
+    {
+        bool inBounds = t.IsInBounds(2, 0);
+
+        Assert.IsFalse(inBounds);
+    }
+
+    [Test]
+    public void IsInBounds_Upper()
+    {
+        bool inBounds = t.IsInBounds(0, 2);
+
+        Assert.IsFalse(inBounds);
+    }
+
+    [Test]
+    public void IsInBounds_Left()
+    {
+        bool inBounds = t.IsInBounds(-1, 0);
+
+        Assert.IsFalse(inBounds);
     }
 }

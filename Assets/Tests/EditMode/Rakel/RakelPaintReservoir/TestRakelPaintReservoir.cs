@@ -10,14 +10,14 @@ public class TestRakelPaintReservoir
      * -----------------------------------------------------------------------------------------------------------
      */
 
-    private Color[,] EmitAll(RakelPaintReservoir paintReservoir)
+    private Paint[,] EmitAll(RakelPaintReservoir paintReservoir)
     {
-        Color[,] emitted = new Color[paintReservoir.Height, paintReservoir.Width];
+        Paint[,] emitted = new Paint[paintReservoir.Height, paintReservoir.Width];
         for (int i = 0; i < paintReservoir.Height; i++)
         {
             for (int j = 0; j < paintReservoir.Width; j++)
             {
-                emitted[i, j] = paintReservoir.Emit(j, i);
+                emitted[i, j] = paintReservoir.Emit(j, i, 1, 1);
             }
         }
         return emitted;
@@ -30,14 +30,31 @@ public class TestRakelPaintReservoir
      */
 
     [Test]
+    public void Fill()
+    {
+        RakelPaintReservoir paintReservoir = new RakelPaintReservoir(2, 1);
+
+        paintReservoir.Fill(new Paint(new Color(0.2f, 0.4f, 0.6f), 1));
+
+        Paint[,] emitted = EmitAll(paintReservoir);
+        Assert.AreEqual(
+            new Paint[,] {
+                { new Paint(new Color(0.2f, 0.4f, 0.6f), 1) },
+                { new Paint(new Color(0.2f, 0.4f, 0.6f), 1) },
+            },
+            emitted
+        );
+    }
+
+    [Test]
     public void Emit_EmptyApplicationReservoir_EmptyPickupReservoir()
     {
         RakelPaintReservoir paintReservoir = new RakelPaintReservoir(3, 2);
 
-        Color emitted = paintReservoir.Emit(0, 0);
+        Paint emitted = paintReservoir.Emit(0, 0, 1, 1);
 
-        AssertUtil.AssertColorsAreEqual(
-            Colors.NO_PAINT_COLOR,
+        Assert.AreEqual(
+            Paint.EMPTY_PAINT,
             emitted
         );
     }
@@ -46,15 +63,15 @@ public class TestRakelPaintReservoir
     public void Emit_FilledApplicationReservoir_EmptyPickupReservoir()
     {
         RakelPaintReservoir paintReservoir = new RakelPaintReservoir(3, 2);
-        paintReservoir.Fill(new Color(0.2f, 0.3f, 0.4f), 1);
+        paintReservoir.Fill(new Paint(new Color(0.2f, 0.3f, 0.4f), 1));
 
-        Color[,] emitted = EmitAll(paintReservoir);
+        Paint[,] emitted = EmitAll(paintReservoir);
 
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,] {
-                { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
-                { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
-                { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
+        Assert.AreEqual(
+            new Paint[,] {
+                { new Paint(new Color(0.2f, 0.3f, 0.4f), 1), new Paint(new Color(0.2f, 0.3f, 0.4f), 1) },
+                { new Paint(new Color(0.2f, 0.3f, 0.4f), 1), new Paint(new Color(0.2f, 0.3f, 0.4f), 1) },
+                { new Paint(new Color(0.2f, 0.3f, 0.4f), 1), new Paint(new Color(0.2f, 0.3f, 0.4f), 1) },
             },
             emitted
         );
@@ -64,15 +81,15 @@ public class TestRakelPaintReservoir
     public void Emit_EmptyApplicationReservoir_FilledPickupReservoir()
     {
         RakelPaintReservoir paintReservoir = new RakelPaintReservoir(3, 2);
-        paintReservoir.Pickup(0, 0, new Color(0.4f, 0.5f, 0.6f), 1);
+        paintReservoir.Pickup(0, 0, new Paint(new Color(0.4f, 0.5f, 0.6f), 1));
 
-        Color[,] emitted = EmitAll(paintReservoir);
+        Paint[,] emitted = EmitAll(paintReservoir);
 
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,] {
-                { new Color(0.4f, 0.5f, 0.6f), Colors.NO_PAINT_COLOR },
-                { Colors.NO_PAINT_COLOR,       Colors.NO_PAINT_COLOR },
-                { Colors.NO_PAINT_COLOR,       Colors.NO_PAINT_COLOR },
+        Assert.AreEqual(
+            new Paint[,] {
+                { new Paint(new Color(0.4f, 0.5f, 0.6f), 1), Paint.EMPTY_PAINT },
+                { Paint.EMPTY_PAINT,                         Paint.EMPTY_PAINT },
+                { Paint.EMPTY_PAINT,                         Paint.EMPTY_PAINT },
             },
             emitted
         );
@@ -82,16 +99,16 @@ public class TestRakelPaintReservoir
     public void Emit_FilledApplicationReservoir_FilledPickupReservoir_ResultsInColorMixing()
     {
         RakelPaintReservoir paintReservoir = new RakelPaintReservoir(3, 2);
-        paintReservoir.Fill(new Color(0.2f, 0.3f, 0.4f), 1);
-        paintReservoir.Pickup(0, 0, new Color(0.4f, 0.5f, 0.6f), 1);
 
-        Color[,] emitted = EmitAll(paintReservoir);
+        paintReservoir.Fill(new Paint(new Color(0.2f, 0.3f, 0.4f), 1));
+        paintReservoir.Pickup(0, 0, new Paint(new Color(0.4f, 0.5f, 0.6f), 2));
 
-        AssertUtil.AssertColorsAreEqual(
-            new Color[,] {
-                { new Color(0.3f, 0.4f, 0.5f), new Color(0.2f, 0.3f, 0.4f) },
-                { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
-                { new Color(0.2f, 0.3f, 0.4f), new Color(0.2f, 0.3f, 0.4f) },
+        Paint[,] emitted = EmitAll(paintReservoir);
+        Assert.AreEqual(
+            new Paint[,] {
+                { new Paint(new Color(0.3f, 0.4f, 0.5f), 2), new Paint(new Color(0.2f, 0.3f, 0.4f), 1) },
+                { new Paint(new Color(0.2f, 0.3f, 0.4f), 1), new Paint(new Color(0.2f, 0.3f, 0.4f), 1) },
+                { new Paint(new Color(0.2f, 0.3f, 0.4f), 1), new Paint(new Color(0.2f, 0.3f, 0.4f), 1) },
             },
             emitted
         );

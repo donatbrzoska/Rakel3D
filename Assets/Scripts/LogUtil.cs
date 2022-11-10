@@ -87,11 +87,11 @@ public class LogUtil
 
         string result = "";
         int cols = colors.GetLength(0) / rows;
-        for (int i=0; i<rows; i++)
+        for (int i = 0; i < rows; i++)
         {
-            for (int j=0; j<cols; j++)
+            for (int j = 0; j < cols; j++)
             {
-                result += colors[i*cols + j].ToString() + " ";
+                result += colors[i * cols + j].ToString() + " ";
             }
             result += "\n";
         }

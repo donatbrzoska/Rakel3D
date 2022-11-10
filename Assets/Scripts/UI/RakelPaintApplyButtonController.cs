@@ -56,7 +56,7 @@ public class RakelPaintApplyButtonController : MonoBehaviour
     public void Start()
     {
         ColorDropdown.SetValueWithoutNotify(9); // TODO retrieve from OilPaintEngine? Requires backwards mapping though ...
-        VolumeInputField.SetTextWithoutNotify("" + OilPaintEngine.RakelPaintVolume);
+        VolumeInputField.SetTextWithoutNotify("40");
     }
 
     public void OnClick()
@@ -64,6 +64,6 @@ public class RakelPaintApplyButtonController : MonoBehaviour
         Color color = ColorMapper[ColorDropdown.options[ColorDropdown.value].text];
         int volume = int.Parse(VolumeInputField.text);
 
-        OilPaintEngine.UpdateRakelPaint(color, volume);
+        OilPaintEngine.UpdateRakelPaint(new Paint(color, volume));
     }
 }

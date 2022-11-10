@@ -21,7 +21,7 @@ public class FastTexture2D : IFastTexture2D
 
     public Color GetPixelFast(int x, int y)
     {
-        if (PixelInBounds(x, y))
+        if (IsInBounds(x, y))
         {
             int index_1D = y * Width + x;
             return Texture_raw[index_1D];
@@ -34,14 +34,14 @@ public class FastTexture2D : IFastTexture2D
 
     public void SetPixelFast(int x, int y, Color color)
     {
-        if (PixelInBounds(x, y))
+        if (IsInBounds(x, y))
         {
             int index_1D = y * Width + x;
             Texture_raw[index_1D] = color;
         }
     }
 
-    public bool PixelInBounds(int x, int y)
+    public bool IsInBounds(int x, int y)
     {
         return x < Width
             && x >= 0

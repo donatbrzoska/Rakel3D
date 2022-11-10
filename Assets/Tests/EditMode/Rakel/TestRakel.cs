@@ -62,7 +62,7 @@ public class TestRakel
         IOilPaintSurface oilPaintSurface = new OilPaintSurface(texture);
 
         IRakelPaintReservoir rakelPaintReservoir = new RakelPaintReservoir(3, 1);
-        rakelPaintReservoir.Fill(new Color(0, 0.4f, 0.8f), 1);
+        rakelPaintReservoir.Fill(new Paint(new Color(0, 0.4f, 0.8f), 1));
 
         IRakel rakel = new Rakel(3, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         rakel.UpdateNormal(Vector2.left); // make sure that not only the first update is considered

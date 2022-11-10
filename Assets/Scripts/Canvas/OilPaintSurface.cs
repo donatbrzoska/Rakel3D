@@ -5,9 +5,13 @@ public class OilPaintSurface : IOilPaintSurface
 {
     public IFastTexture2D Texture { get; private set; }
 
+    private PaintReservoir PaintReservoir;
+
     public OilPaintSurface(IFastTexture2D texture)
     {
         Texture = texture;
+        PaintReservoir = new PaintReservoir(texture.Height, texture.Width);
+
         Initialize();
     }
 
@@ -24,26 +28,34 @@ public class OilPaintSurface : IOilPaintSurface
 
     public bool IsInBounds(int x, int y)
     {
-        return Texture.PixelInBounds(x, y);
+        return Texture.IsInBounds(x, y);
     }
 
-    public void AddPaint(int x, int y, Color color)
+    public void AddPaint(int x, int y, Paint paint)
     {
-        if (!color.Equals(Colors.NO_PAINT_COLOR))
-        {
-            Texture.SetPixelFast(x, y, color);
-        }
+        PaintReservoir.Pickup(x, y, paint);
+        UpdateTexture(x, y);
     }
 
-    public Color GetPaint(int x, int y)
+    public Paint GetPaint(int x, int y, int volume)
     {
-        Color color = Texture.GetPixelFast(x, y);
-        if (color.Equals(Colors.CANVAS_COLOR))
+        Paint emitted = PaintReservoir.Emit(x, y, volume);
+        UpdateTexture(x, y);
+
+        return emitted;
+    }
+
+    private void UpdateTexture(int x, int y)
+    {
+        Paint reservoirPaint = PaintReservoir.Get(x, y);
+        if (reservoirPaint.IsEmpty())
         {
-            color = Colors.NO_PAINT_COLOR;
+            Texture.SetPixelFast(x, y, Colors.CANVAS_COLOR);
         }
-        Texture.SetPixelFast(x, y, Colors.CANVAS_COLOR);
-        return color;
+        else
+        {
+            Texture.SetPixelFast(x, y, reservoirPaint.Color);
+        }
     }
 
     public void Apply()

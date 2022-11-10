@@ -24,8 +24,7 @@ public class OilPaintEngine : MonoBehaviour
     public Vector2 RakelNormal { get; private set; } = new Vector2(1, 0);
     public float RakelLength { get; private set; } = 4f; // world space
     public float RakelWidth { get; private set; } = 0.3f; // world space
-    public Color RakelPaintColor { get; private set; } = new Color(0.3f, 0, 0.7f); // TODO this will be overriden anyways
-    public int RakelPaintVolume { get; private set; } = 40;
+    public Paint RakelPaint { get; private set; }
 
     public RakelDrawer RakelDrawer;
 
@@ -130,12 +129,11 @@ public class OilPaintEngine : MonoBehaviour
         RakelNormal = normal;
     }
 
-    public void UpdateRakelPaint(Color color, int volume)
+    public void UpdateRakelPaint(Paint paint)
     {
-        RakelPaintColor = color;
-        RakelPaintVolume = volume;
+        RakelPaint = paint;
 
-        RakelPaintReservoir.Fill(color, volume);
+        RakelPaintReservoir.Fill(paint);
     }
 
     public void UpdateTextureResolution(int pixelsPerWorldSpaceUnit)

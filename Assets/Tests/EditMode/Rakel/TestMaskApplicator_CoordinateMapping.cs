@@ -294,13 +294,13 @@ class OilPaintSurfaceMock : IOilPaintSurface
         return true;
     }
 
-    public Color GetPaint(int x, int y)
+    public Paint GetPaint(int x, int y, int volume)
     {
         GetPaintLog[y, x] += 1;
-        return new Color(0, 0, 0);
+        return Paint.EMPTY_PAINT;
     }
 
-    public void AddPaint(int x, int y, Color color)
+    public void AddPaint(int x, int y, Paint paint)
     {
         AddPaintLog[y, x] += 1;
     }
@@ -329,18 +329,18 @@ class PaintReservoirMock : IRakelPaintReservoir
         Height = height;
     }
 
-    public void Pickup(int x, int y, Color color, int volume)
+    public void Pickup(int x, int y, Paint paint)
     {
         PickupLog[y, x] += 1;
     }
 
-    public Color Emit(int x, int y)
+    public Paint Emit(int x, int y, int applicationReservoirVolume, int pickupReservoirVolume)
     {
         EmitLog[y, x] += 1;
-        return new Color(0, 0, 0);
+        return Paint.EMPTY_PAINT;
     }
 
-    public void Fill(Color color, int volume)
+    public void Fill(Paint paint)
     {
         throw new NotImplementedException();
     }
