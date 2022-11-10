@@ -132,7 +132,6 @@ public class OilPaintEngine : MonoBehaviour
     public void UpdateRakelPaint(Paint paint)
     {
         RakelPaint = paint;
-
         RakelPaintReservoir.Fill(paint);
     }
 

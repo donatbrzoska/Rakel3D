@@ -26,7 +26,7 @@ public class PaintReservoir
 
     public void Set(int x, int y, Paint paint)
     {
-        Reservoir[y, x] = paint;
+        Reservoir[y, x] = new Paint(paint);
     }
 
     public Paint Get(int x, int y)

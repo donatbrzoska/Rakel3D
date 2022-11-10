@@ -131,6 +131,8 @@ public class Notes : MonoBehaviour
  * - Vector2.Angle liefert immer den kleinsten Winkel und geht damit von 0-180, nicht von 0-360
  * 
  * Altes PaintReservoir (1x1) aus dem Init()-Block in neuen Rakel injected, der ist aber größer (3x1) ...
+ * 
+ * Ein gesamtes 2D Array mit Objekten besetzen wollen. Aber vergessen, dass ich dafür nicht einfach nur die Referenz setzen darf, weil dann ändern sich ja immer alle Objekte, wenn eines sich ändert.
  */
 
 
@@ -1044,6 +1046,8 @@ public class Notes : MonoBehaviour
  * Next Steps:
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
  *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ * - Bug: nur schmale Streifen bei jedem zweiten Zug
+ * - Bug: Egal wie viel Volumen auf der Rakel ist -> es reicht immer für die gleiche Strecke
  * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
  * - Winklige Rakel:
  *   - Anteiliges Emit aus dem Reservoir implementieren
@@ -1055,4 +1059,27 @@ public class Notes : MonoBehaviour
  * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
  * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
  * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * 
+ * 10.11.2022
+ * Next Steps:
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ *   - absolute vs relative Volumenwerte
+ * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
+ * - Winklige Rakel:
+ *   - Anteiliges Emit aus dem Reservoir implementieren
+ *   - irgendwie geht die Farbe beim Pickup verloren
+ *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
+ *     -> anteiliges Emit löst dieses Problem
+ * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
+ * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * Testing:
+ * - Integration-Tests müssen simpel gehalten werden aber nicht zu simpel
+ * -> Bug mit der gleichen Referenz aller Paint-Objekte im Reservoir ist nicht aufgefallen, weil das Reservoir
+ *    im Integrationtest nur 1x1 groß war
  */

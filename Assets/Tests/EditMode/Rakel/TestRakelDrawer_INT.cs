@@ -15,27 +15,27 @@ public class TestRakelDrawer_INT
     {
         texture = new FastTexture2D(3, 3);
         oilPaintSurface = new OilPaintSurface(texture);
-        rakelPaintReservoir = new RakelPaintReservoir(1, 1);
-        rakel = new Rakel(1, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
+        rakelPaintReservoir = new RakelPaintReservoir(3, 1);
+        rakel = new Rakel(3, 1, rakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         rakelDrawer = new RakelDrawer(rakel);
     }
 
     [Test]
-    public void PointRakel_Line()
+    public void LineRakel_Rectangle()
     {
-        rakelPaintReservoir.Fill(new Paint(new Color(0, 0.4f, 0.8f), 3));
+        rakelPaintReservoir.Fill(new Paint(new Color(0, 0.4f, 0.8f), 2));
 
         rakelDrawer.NewStroke();
         rakelDrawer.AddNode(oilPaintSurface, new Vector2Int(0, 1), Vector2Int.right);
-        rakelDrawer.AddNode(oilPaintSurface, new Vector2Int(2, 1), Vector2Int.right);
+        rakelDrawer.AddNode(oilPaintSurface, new Vector2Int(1, 1), Vector2Int.right);
 
         Color[] colors = texture.Texture.GetPixels();
         AssertUtil.AssertColorsAreEqual(
             new Color[]
             {
-                Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,
-                new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f),
-                Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,      Colors.CANVAS_COLOR,
+                new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
+                new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
+                new Color(0, 0.4f, 0.8f), new Color(0, 0.4f, 0.8f), Colors.CANVAS_COLOR,
             },
             colors
         );

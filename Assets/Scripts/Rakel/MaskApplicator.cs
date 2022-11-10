@@ -50,6 +50,7 @@ public class MaskApplicator: IMaskApplicator
         // TODO Volume through int[,] emittedVolumes ...
         // 4. Add emitted paint to canvas: ALSO Looping through Mask
         Parallel.For(0, mask.coordinates.GetLength(0), (i, state) =>
+        //for (int i=0; i<mask.coordinates.GetLength(0); i++)
         {
             int x_mask_start = mask.coordinates[i, 0];
             int x_mask_end = mask.coordinates[i, 1];

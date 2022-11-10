@@ -61,5 +61,14 @@ public class TestPaint
         Assert.AreEqual("Paint(r=0.4, g=0.5, b=0.6, vol=2)", p.ToString());
     }
 
-    
+    [Test]
+    public void CopyConstructor()
+    {
+        Paint p1 = new Paint(new Color(0.1f, 0.2f, 0.3f), 2);
+
+        Paint p2 = new Paint(p1);
+        p1.Volume -= 1;
+
+        Assert.AreEqual(2, p2.Volume);
+    }
 }

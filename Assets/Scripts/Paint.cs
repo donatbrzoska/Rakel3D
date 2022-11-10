@@ -34,6 +34,12 @@ public class Paint : IEquatable<Paint>
         Volume = volume;
     }
 
+    public Paint(Paint paint)
+    {
+        Color = paint.Color;
+        Volume = paint.Volume;
+    }
+
     public bool IsEmpty()
     {
         return this.Equals(EMPTY_PAINT);
