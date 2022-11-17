@@ -13,7 +13,7 @@ public class OilPaintEngine : MonoBehaviour
     private float CanvasWidth; // world space
     private float CanvasHeight; // world space
 
-    public int TextureResolution { get; private set; } = 100; // texture space pixels per 1 world space
+    public int TextureResolution { get; private set; } = 20; // texture space pixels per 1 world space
     private FastTexture2D Texture;
     private int TextureWidth; // texture space
     private int TextureHeight; // texture space
