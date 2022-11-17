@@ -48,6 +48,8 @@ public class OilPaintEngine : MonoBehaviour
         TextureHeight = WorldSpaceLengthToTextureSpaceLength(CanvasHeight, TextureResolution);
         Texture = new FastTexture2D(TextureWidth, TextureHeight);
         CanvasRenderer.material.SetTexture("_MainTex", Texture.Texture);
+        //CanvasRenderer.material.EnableKeyword("_NORMALMAP");
+        //CanvasRenderer.material.SetTexture("_BumpMap", Texture.NormalMap);
 
         OilPaintSurface = new OilPaintSurface(Texture);
 
