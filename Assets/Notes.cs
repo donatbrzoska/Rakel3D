@@ -1237,4 +1237,11 @@ public class Notes : MonoBehaviour
  * - Schauen ob man irgendwie aus der GPU schnell Daten in den RAM bekommt
  * - bestehende Software anschauen
  * 
+ * 
+ * 23.11.2022
+ * Aufgehört bei:
+ * - GPU Beschleunigung etwas genauer untersucht -> auf jeden Fall sinnvoll
+ * - System neu entwerfen mit Pose als Basis
+ * - ggf. virtuelle Rakel zeichnen
+ * - ggf. Atelier modellieren
  */
