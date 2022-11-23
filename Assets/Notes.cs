@@ -18,6 +18,65 @@ public class Notes : MonoBehaviour
 }
 
 /* TODO
+ * 
+ * - Bestehende Software zum Malen mit Ölfarbe anschauen
+ * - Zeichnen asynchron ausführen
+ * - Zusammenhang zwischen Neigungswinkel und Menge der Farbe untersuchen
+ * - NormalMap über Sobel-Filter
+ *   - Edge Cases müssen noch gemacht werden
+ *   - Tests
+ *   - Wert für z und scale finden
+ * - Clean Rakel Button
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ *   - absolute vs relative Volumenwerte
+ * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
+ * - Winklige Rakel:
+ *   - Anteiliges Emit aus dem Reservoir implementieren
+ *     -> Multithreading könnte hier zum Problem werden, weil nicht geklärt ist,
+ *        welcher Thread die Farbe aus den Nachbarpixeln zuerst bekommt
+ *     -> Parallel For genauer untersuchen
+ *     -> Sieht aus wie RangedPartitioning https://devblogs.microsoft.com/pfxteam/partitioning-in-plinq/
+ *   - irgendwie geht die Farbe beim Pickup verloren
+ *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
+ *     -> anteiliges Emit löst dieses Problem
+ * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * GPU-Beschleunigung
+ * - Pipeline anpassen
+ *   - z.B.
+ *      - erstmal komplett Farbe kopieren und dann schauen, wie viel noch übrig ist
+ *      - wenn mehr genommen wurde, als da war, die Differenz wieder entfernen
+ * - Volumenwerte als Farbwerte kodieren für billineare Interpolation
+ * 
+ * Farbschichten
+ * - Teil wird in darunterliegende Schicht gemischt
+ * - Teil wird obendraufgelegt
+ *
+ * PerlinNoise
+ * - Fill
+ * - PartialFill
+ *
+ * Transferrate variieren
+ * -> exponentiell, linear, …
+ * -> Ersatz für Biegung
+ *
+ * Farbmitnahme auch abhängig von Bergen machen (dicke Farbhaufen werden dann auch mitgenommen, wenn man eigentlich nur Farbe auftragen möchte)
+ *
+ * Farbmitnahme auch abhängig von Trockenheit
+ *
+ * Farbtrocknung muss je nach Farbe variierbar sein
+ *
+ * Menge der aufgetragenen Farbe von Platz auf Leinwand abhängig machen (Berge werden nicht noch mehr Farbe bekommen)
+ *
+ * Menge der aufgetragenen Farbe von Anpressdruck abhängig machen
+ * -> Nähe der Rakel zur Leinwand
+ * 
+ * Subtraktive Farbmischung
+ * 
  * Features
  * - Anpressdruck beim über die Leinwand ziehen
  * - Farbe ausfaden lassen wenn nur noch wenig Volume
@@ -42,8 +101,6 @@ public class Notes : MonoBehaviour
  * - aktuell ist die Neigung im Prinzip 0°, der Rakel liegt also immer flach auf der Leiwand auf
  * - Maske muss dann entsprechend von RakelPosition wegverschoben werden
  * 
- * Farbmenge über BumpMap / NormalMap
- * 
  * Haken am Rand beim Ziehen
  * - Berechnungen optimieren -> bringt nicht wirklich was, wahrscheinlich wird Update() einfach gar nicht oft genug aufgerufen
  * - Implementierung so anpassen, dass der Rakel "Pixel für Pixel" übers Bild gezogen wird
@@ -66,6 +123,22 @@ public class Notes : MonoBehaviour
  * - Tests für Masks mit z.B. 70° Rotation
  * - Tests für MaskApplicator CoordinateMapping:
  *   - TODO unlucky cases
+ */
+
+/* NOTIZEN
+ *
+ * Streifenbug
+ * - Farbe wird aufgetragen (aber nur eine Schicht)
+ * - beim nächsten Schritt alles außer wieder mitgenommen außer die letzte Position (das ist dann ein Streifen)
+ * - beim nächsten Schritt wieder nur eine Schicht aufgetragen
+ * - usw.
+ * -> eher Rendering Problem
+ *
+ * NormalMap über Sobel-Filter
+ * - schräges Ziehen macht Stufen -> das passiert, weil man für einen Pixel nur nach oben zieht -> da liegt dann mehr Farbe
+ * - evtl. noch sobel_x und sobel_y invertieren?
+ *   -> komischerweise nur sobel_y
+ *
  */
 
 
@@ -1066,14 +1139,18 @@ public class Notes : MonoBehaviour
  * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
  *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
  *   - absolute vs relative Volumenwerte
+ * - Bug: Irgendwo wird schwarze Farbe ins Reservoir gemischt und abgegeben
+ *        -> passiert beim Wischen im 45° Winkel über schon aufgetragene Farbe
+ *        -> nach dem Zurückrotieren auf 0° kommen dann die schwarzen Streifen
  * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
  * - Winklige Rakel:
  *   - Anteiliges Emit aus dem Reservoir implementieren
+ *     -> Multithreading könnte hier zum Problem werden, weil nicht geklärt ist,
+ *        welcher Thread die Farbe aus den Nachbarpixeln zuerst bekommt
  *   - irgendwie geht die Farbe beim Pickup verloren
  *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
  *     -> anteiliges Emit löst dieses Problem
  * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
- * - IntegrationTests für RakelDrawer, sonst ist aktuell nicht geklärt, ob beim Apply-Call auch OPS weitergegeben wird
  * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
  * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
  * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
@@ -1082,4 +1159,82 @@ public class Notes : MonoBehaviour
  * - Integration-Tests müssen simpel gehalten werden aber nicht zu simpel
  * -> Bug mit der gleichen Referenz aller Paint-Objekte im Reservoir ist nicht aufgefallen, weil das Reservoir
  *    im Integrationtest nur 1x1 groß war
+ *    
+ * 11.11.2022
+ * Next Steps:
+ * - Streifenbug finden
+ * - Zeichnen asynchron ausführen
+ * - Zusammenhang zwischen Neigungswinkel und Menge der Farbe untersuchen
+ * - NormalMap über Sobel-Filter (oder doch irgendwie BumpMap in den Shader schieben?)
+ * - Painting-Knife Paper lesen und beschreiben
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ *   - absolute vs relative Volumenwerte
+ * - Bug: Irgendwo wird schwarze Farbe ins Reservoir gemischt und abgegeben
+ *        -> passiert beim Wischen im 45° Winkel über schon aufgetragene Farbe
+ *        -> nach dem Zurückrotieren auf 0° kommen dann die schwarzen Streifen
+ * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
+ * - Winklige Rakel:
+ *   - Anteiliges Emit aus dem Reservoir implementieren
+ *     -> Multithreading könnte hier zum Problem werden, weil nicht geklärt ist,
+ *        welcher Thread die Farbe aus den Nachbarpixeln zuerst bekommt
+ *     -> Parallel For genauer untersuchen
+ *     -> Sieht aus wie RangedPartitioning https://devblogs.microsoft.com/pfxteam/partitioning-in-plinq/
+ *   - irgendwie geht die Farbe beim Pickup verloren
+ *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
+ *     -> anteiliges Emit löst dieses Problem
+ * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * 
+ * 17.11.2022
+ * Next Steps:
+ * - Streifenbug finden
+ *   - Farbe wird aufgetragen (aber nur eine Schicht)
+ *   - beim nächsten Schritt alles außer wieder mitgenommen außer die letzte Position (das ist dann ein Streifen)
+ *   - beim nächsten Schritt wieder nur eine Schicht aufgetragen
+ *   - usw.
+ *   -> eher Rendering Problem
+ * - Zeichnen asynchron ausführen
+ * - Zusammenhang zwischen Neigungswinkel und Menge der Farbe untersuchen
+ * - NormalMap über Sobel-Filter
+ *   - Edge Cases müssen noch gemacht werden
+ *   - Tests + Test für Apply Call
+ *   - Thread Safety?
+ *   - schräges Ziehen macht Stufen -> das passiert, weil man für einen Pixel nur nach oben zieht -> da liegt dann mehr Farbe
+ *   - evtl. noch sobel_x und sobel_y invertieren?
+ *      -> komischerweise nur sobel_y
+ *   - Wert für z und scale finden
+ * - Painting-Knife Paper lesen und beschreiben
+ * - Volumen Implementierung für OilPaintSurface <--> Farbschichten Implementierung <--> Farbschichten + Volumen
+ *   - es kommt sonst vor, dass Pickup alles mitnimmt, was sehr unnatürlich aussieht
+ *   - absolute vs relative Volumenwerte
+ * - TestOilPaintSurface_RakelView noch in dieser Form benötigt?
+ * - Winklige Rakel:
+ *   - Anteiliges Emit aus dem Reservoir implementieren
+ *     -> Multithreading könnte hier zum Problem werden, weil nicht geklärt ist,
+ *        welcher Thread die Farbe aus den Nachbarpixeln zuerst bekommt
+ *     -> Parallel For genauer untersuchen
+ *     -> Sieht aus wie RangedPartitioning https://devblogs.microsoft.com/pfxteam/partitioning-in-plinq/
+ *   - irgendwie geht die Farbe beim Pickup verloren
+ *     - nein, sie wird nur nicht wieder abgegeben, weil das mit der zurück-Rotation dann genau nicht hinhaut
+ *     -> anteiliges Emit löst dieses Problem
+ * - Volumen für Emit und Pickup steuerbar machen, aktuell wird sonst von der Farbmischung im Reservoir kein Gebrauch gemacht, denn dort kann nie mehr als 1 Stück Farbe liegen
+ * - Canvas Snapshot Buffer (oder Delay in AddPaint auf OilPaintSurface)
+ * - Irgendwas überlegen, damit sich die Farbe auch auf dem Reservoir verschiebt?
+ * - GUI: Rotation für gegebene Strichlänge ermöglichen (Winkel_Anfang, Winkel_Ende, Strichlänge)
+ * 
+ * 
+ * 18.11.2022
+ * Aufgehört bei:
+ * - Sobel Filter Details
+ * - Apps untersucht
+ * Next Steps:
+ * - Corel Painter Ölfarbe anschauen
+ * - Sobel Filter beenden
+ * - Schauen ob man irgendwie aus der GPU schnell Daten in den RAM bekommt
+ * - bestehende Software anschauen
+ * 
  */

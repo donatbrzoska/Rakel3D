@@ -63,10 +63,14 @@ public class TestMaskApplicator_CoordinateMapping
             oilPaintSurface_mock.AddPaintLog
         );
         Assert.AreEqual(
+            oilPaintSurface_mock.AddPaintLog,
+            oilPaintSurface_mock.UpdateNormalLog
+        );
+        Assert.AreEqual(
             new int[,]
             {
                 { 0, 0, 0 },
-                { 0, 1, 0 },
+                { 0, 2, 0 },
                 { 0, 0, 0 },
             },
             oilPaintSurface_mock.IsInBoundsLog
@@ -128,11 +132,15 @@ public class TestMaskApplicator_CoordinateMapping
             oilPaintSurface_mock.AddPaintLog
         );
         Assert.AreEqual(
+            oilPaintSurface_mock.AddPaintLog,
+            oilPaintSurface_mock.UpdateNormalLog
+        );
+        Assert.AreEqual(
             new int[,]
             {
-                { 0, 1, 0 },
-                { 0, 1, 0 },
-                { 0, 1, 0 },
+                { 0, 2, 0 },
+                { 0, 2, 0 },
+                { 0, 2, 0 },
             },
             oilPaintSurface_mock.IsInBoundsLog
         );
@@ -191,11 +199,15 @@ public class TestMaskApplicator_CoordinateMapping
             oilPaintSurface_mock.AddPaintLog
         );
         Assert.AreEqual(
+            oilPaintSurface_mock.AddPaintLog,
+            oilPaintSurface_mock.UpdateNormalLog
+        );
+        Assert.AreEqual(
             new int[,]
             {
-                { 0, 1, 1 },
-                { 0, 1, 1 },
-                { 0, 1, 1 },
+                { 0, 2, 2 },
+                { 0, 2, 2 },
+                { 0, 2, 2 },
             },
             oilPaintSurface_mock.IsInBoundsLog
         );
@@ -261,14 +273,18 @@ public class TestMaskApplicator_CoordinateMapping
             oilPaintSurface_mock.AddPaintLog
         );
         Assert.AreEqual(
+            oilPaintSurface_mock.AddPaintLog,
+            oilPaintSurface_mock.UpdateNormalLog
+        );
+        Assert.AreEqual(
             new int[,]
             {
                 { 0, 0, 0},
                 { 0, 0, 0},
                 { 0, 0, 0},
                 { 0, 0, 0},
-                { 1, 1, 1},
-                { 1, 1, 1},
+                { 2, 2, 2},
+                { 2, 2, 2},
             },
             oilPaintSurface_mock.IsInBoundsLog
         );
@@ -280,12 +296,14 @@ class OilPaintSurfaceMock : IOilPaintSurface
     public int[,] IsInBoundsLog { get; private set; }
     public int[,] GetPaintLog { get; private set; }
     public int[,] AddPaintLog { get; private set; }
+    public int[,] UpdateNormalLog { get; private set; }
 
     public OilPaintSurfaceMock(int width, int height)
     {
         IsInBoundsLog = new int[height, width];
         GetPaintLog = new int[height, width];
         AddPaintLog = new int[height, width];
+        UpdateNormalLog = new int[height, width];
     }
 
     public bool IsInBounds(int x, int y)
@@ -303,6 +321,11 @@ class OilPaintSurfaceMock : IOilPaintSurface
     public void AddPaint(int x, int y, Paint paint)
     {
         AddPaintLog[y, x] += 1;
+    }
+
+    public void UpdateNormal(int x, int y)
+    {
+        UpdateNormalLog[y, x] += 1;
     }
 
     public void Apply()

@@ -39,8 +39,9 @@ public class TestOilPaintSurface_RakelView
     [SetUp]
     public void Init()
     {
-        FastTexture2D fastTexture2D = new FastTexture2D(CanvasWidth, CanvasHeight);
-        oilPaintSurface = new OilPaintSurface(fastTexture2D);
+        FastTexture2D texture = new FastTexture2D(CanvasWidth, CanvasHeight);
+        FastTexture2D normalMap = new FastTexture2D(CanvasWidth, CanvasHeight);
+        oilPaintSurface = new OilPaintSurface(texture, normalMap);
     }
 
     [Test]

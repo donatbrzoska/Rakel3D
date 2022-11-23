@@ -5,6 +5,41 @@ using UnityEngine;
 public class TestPaint
 {
     [Test]
+    public void Equals_VolumeOnly_IsNotEqual()
+    {
+        Paint p1 = new Paint(new Color(0.2f, 0.2f, 0.2f), 1);
+        Paint p2 = new Paint(new Color(0.2f, 0.2f, 0.4f), 1);
+
+        Assert.AreNotEqual(p1, p2);
+    }
+
+    [Test]
+    public void Equals_ColorOnly_IsNotEqual()
+    {
+        Paint p1 = new Paint(new Color(0.2f, 0.2f, 0.2f), 1);
+        Paint p2 = new Paint(new Color(0.2f, 0.2f, 0.2f), 2);
+
+        Assert.AreNotEqual(p1, p2);
+    }
+
+    [Test]
+    public void Equals()
+    {
+        Paint p1 = new Paint(new Color(0.2f, 0.3f, 0.4f), 1);
+        Paint p2 = new Paint(new Color(0.2f, 0.3f, 0.4f), 1);
+
+        Assert.AreEqual(p1, p2);
+    }
+
+    [Test]
+    public void Constructor_ZeroVolumeResultsInEmptyPaint()
+    {
+        Paint p = new Paint(new Color(0.2f, 0.2f, 0.2f), 0);
+
+        Assert.AreEqual(p, Paint.EMPTY_PAINT);
+    }
+
+    [Test]
     public void IsEmpty()
     {
         Paint p = new Paint(Colors.NO_PAINT_COLOR, 0);

@@ -30,7 +30,14 @@ public class Paint : IEquatable<Paint>
 
     public Paint(Color color, int volume)
     {
-        Color = color;
+        if (volume == 0)
+        {
+            Color = Colors.NO_PAINT_COLOR;
+        }
+        else
+        {
+            Color = color;
+        }
         Volume = volume;
     }
 

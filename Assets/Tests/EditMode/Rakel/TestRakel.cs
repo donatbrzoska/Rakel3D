@@ -59,7 +59,8 @@ public class TestRakel
     public void UpdateNormal_RecalculatesMask()
     {
         IFastTexture2D texture = new FastTexture2D(3, 3);
-        IOilPaintSurface oilPaintSurface = new OilPaintSurface(texture);
+        IFastTexture2D normalMap = new FastTexture2D(3, 3);
+        IOilPaintSurface oilPaintSurface = new OilPaintSurface(texture, normalMap);
 
         IRakelPaintReservoir rakelPaintReservoir = new RakelPaintReservoir(3, 1);
         rakelPaintReservoir.Fill(new Paint(new Color(0, 0.4f, 0.8f), 1));

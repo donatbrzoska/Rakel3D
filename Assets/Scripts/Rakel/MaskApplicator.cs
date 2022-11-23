@@ -28,6 +28,7 @@ public class MaskApplicator: IMaskApplicator
         // - GetPaint g from Canvas
         // - Emit e from Reservoir
         // - AddPaint e to Canvas
+        // - Normal recalculation on Canvas
         // - Pickup g to Reservoir
 
         // 1. Get paint from canvas: Looping through PickupMap
@@ -67,8 +68,30 @@ public class MaskApplicator: IMaskApplicator
                     Vector2Int coord_mask_reservoir_aligned = MathUtil.RotateAroundOrigin(coord_mask, -maskAngle);
                     Vector2Int coord_reservoir = coord_mask_reservoir_aligned + paintReservoir.Pivot;
 
-                    Paint emitted = paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y, 1, 1);
+                    Paint emitted = paintReservoir.Emit(coord_reservoir.x, coord_reservoir.y, 2, 1);
+
                     oilPaintSurface.AddPaint(x_canvas, y_canvas, emitted);
+                }
+            }
+        });
+
+        // 5. Update normals on oil paint surface, can't be done together with AddPaint efficiently,
+        // because volumes around a pixel are used for this
+        Parallel.For(0, mask.coordinates.GetLength(0), (i, state) =>
+        //for (int i=0; i<mask.coordinates.GetLength(0); i++)
+        {
+            int x_mask_start = mask.coordinates[i, 0];
+            int x_mask_end = mask.coordinates[i, 1];
+            int y_mask = mask.y_eq_0_index - i; // because mask.y0_index is also the first y coordinate
+
+            for (int x_mask = x_mask_start; x_mask <= x_mask_end; x_mask++)
+            {
+                int x_canvas = x_mask + maskPosition.x;
+                int y_canvas = y_mask + maskPosition.y;
+                // if the canvas coordinates are out of range, normal calculation does not make sense
+                if (oilPaintSurface.IsInBounds(x_canvas, y_canvas))
+                {
+                    oilPaintSurface.UpdateNormal(x_canvas, y_canvas);
                 }
             }
         });

@@ -15,6 +15,7 @@ public class OilPaintEngine : MonoBehaviour
 
     public int TextureResolution { get; private set; } = 20; // texture space pixels per 1 world space
     private FastTexture2D Texture;
+    private FastTexture2D NormalMap;
     private int TextureWidth; // texture space
     private int TextureHeight; // texture space
 
@@ -46,12 +47,15 @@ public class OilPaintEngine : MonoBehaviour
     {
         TextureWidth = WorldSpaceLengthToTextureSpaceLength(CanvasWidth, TextureResolution);
         TextureHeight = WorldSpaceLengthToTextureSpaceLength(CanvasHeight, TextureResolution);
+
         Texture = new FastTexture2D(TextureWidth, TextureHeight);
         CanvasRenderer.material.SetTexture("_MainTex", Texture.Texture);
-        //CanvasRenderer.material.EnableKeyword("_NORMALMAP");
-        //CanvasRenderer.material.SetTexture("_BumpMap", Texture.NormalMap);
 
-        OilPaintSurface = new OilPaintSurface(Texture);
+        NormalMap = new FastTexture2D(TextureWidth, TextureHeight);
+        CanvasRenderer.material.EnableKeyword("_NORMALMAP");
+        CanvasRenderer.material.SetTexture("_BumpMap", NormalMap.Texture);
+
+        OilPaintSurface = new OilPaintSurface(Texture, NormalMap);
 
         CreateRakelDrawer();
     }

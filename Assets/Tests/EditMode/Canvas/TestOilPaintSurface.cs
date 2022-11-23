@@ -7,25 +7,39 @@ using UnityEngine.TestTools;
 public class TestOilPaintSurface
 {
     [Test]
-    public void Apply()
+    public void Apply_OnInit()
     {
-        FastTexture2DMock ft_mock = new FastTexture2DMock();
-        OilPaintSurface o = new OilPaintSurface(ft_mock);
+        FastTexture2DMock ft_t_mock = new FastTexture2DMock();
+        FastTexture2DMock ft_nm_mock = new FastTexture2DMock();
+        OilPaintSurface o = new OilPaintSurface(ft_t_mock, ft_nm_mock);
+
+        Assert.AreEqual("Apply ", ft_t_mock.Log);
+        Assert.AreEqual("Apply ", ft_nm_mock.Log);
+    }
+
+    [Test]
+    public void Apply_Throughpass()
+    {
+        FastTexture2DMock ft_t_mock = new FastTexture2DMock();
+        FastTexture2DMock ft_nm_mock = new FastTexture2DMock();
+        OilPaintSurface o = new OilPaintSurface(ft_t_mock, ft_nm_mock);
 
         o.Apply();
 
-        Assert.AreEqual("Apply ", ft_mock.Log);
+        Assert.AreEqual("Apply Apply ", ft_t_mock.Log); // first Apply is from init
+        Assert.AreEqual("Apply Apply ", ft_nm_mock.Log); // first Apply is from init
     }
 
     [Test]
     public void IsInBounds()
     {
-        FastTexture2DMock ft_mock = new FastTexture2DMock();
-        OilPaintSurface o = new OilPaintSurface(ft_mock);
+        FastTexture2DMock ft_t_mock = new FastTexture2DMock();
+        FastTexture2DMock ft_nm_mock = new FastTexture2DMock();
+        OilPaintSurface o = new OilPaintSurface(ft_t_mock, ft_nm_mock);
 
         o.IsInBounds(1, 2);
 
-        Assert.AreEqual("IsInBounds(1,2) ", ft_mock.Log);
+        Assert.AreEqual("Apply IsInBounds(1,2) ", ft_t_mock.Log); // first Apply is from init
     }
 }
 
