@@ -19,6 +19,44 @@ public class Notes : MonoBehaviour
 
 /* TODO
  * 
+ * ## Eingabeparameter
+ * Pose der Rakel
+ * -> Position
+ * -> Neigung
+ * -> Drehung
+ * 
+ * # Auswirkungen der Position
+ * - Pfad der Bewegung
+ * - Abstand zur Oberfläche
+ *   - Druck
+ *     - Druck fängt ab bestimmter Nähe zur Leinwand an und wird dann immer größer
+ *     - müsste theoretisch auch beeinflussen wie groß die Auswirkung des Neigungswinkels
+ *       auf die Farbmitnahme ist
+ * 
+ * # Auswirkungen des Neigungswinkels:
+ * - kleiner
+ *   -> breitere Kontaktfläche (Realisierung über Abstandsmessung)
+ * - größer
+ *   -> schmalere Kontaktfläche
+ *   -> mehr Farbmitnahme
+ * - Auswirkungen der Position
+ * 
+ * 
+ * 
+ * ## Bidirektionaler Farbaustausch
+ * 
+ * # Farbübertragung bei hinreichend kleinem Abstand
+ * - Abstand zur Rakel
+ *   - Abstand zur Farbe wäre realistischer aber könnte schwierig werden,
+ *     weil vermutlich an manchen Stellen mehr Farbe als realistisch gesammelt wird
+ * 
+ * # Farbmitnahme bei großem Neigungswinkel und genügend Druck
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * - Bestehende Software zum Malen mit Ölfarbe anschauen
  * - Zeichnen asynchron ausführen
  * - Zusammenhang zwischen Neigungswinkel und Menge der Farbe untersuchen
@@ -80,7 +118,7 @@ public class Notes : MonoBehaviour
  * Features
  * - Anpressdruck beim über die Leinwand ziehen
  * - Farbe ausfaden lassen wenn nur noch wenig Volume
- * - mehrere verschiedene Farbschichten auf den Rakel auftragen können
+ * - mehrere verschiedene Farbschichten auf der Rakel auftragen können
  *
  * Refinements
  * - Antialiasing für Rakelabdruck?
@@ -98,7 +136,7 @@ public class Notes : MonoBehaviour
  *   + Menge
  *   
  * Rakel-Neigung
- * - aktuell ist die Neigung im Prinzip 0°, der Rakel liegt also immer flach auf der Leiwand auf
+ * - aktuell ist die Neigung im Prinzip 0°, die Rakel liegt also immer flach auf der Leiwand auf
  * - Maske muss dann entsprechend von RakelPosition wegverschoben werden
  * 
  * Haken am Rand beim Ziehen
