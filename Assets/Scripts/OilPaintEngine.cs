@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class OilPaintEngine : MonoBehaviour
 {
+    public int BENCHMARK_STEPS = 0;
+
     private const bool LOG_MASK_CALC_APPLY_TIME = false;
 
     private Camera Camera;
@@ -28,6 +30,7 @@ public class OilPaintEngine : MonoBehaviour
     public Paint RakelPaint { get; private set; }
 
     public RakelDrawer RakelDrawer;
+    public IRakel Rakel;
 
     void Awake()
     {
@@ -39,6 +42,13 @@ public class OilPaintEngine : MonoBehaviour
         // convert scale attribute to world space
         CanvasWidth = GameObject.Find("Canvas").GetComponent<Transform>().localScale.x * 10;
         CanvasHeight = GameObject.Find("Canvas").GetComponent<Transform>().localScale.y * 10;
+
+        if (BENCHMARK_STEPS > 0)
+        {
+            TextureResolution = 50;
+            RakelLength = 1;
+            RakelWidth = 1;
+        }
 
         CreateCanvasAndTools();
     }
@@ -68,7 +78,7 @@ public class OilPaintEngine : MonoBehaviour
 
         int length = WorldSpaceLengthToTextureSpaceLength(RakelLength, TextureResolution);
         int width = WorldSpaceLengthToTextureSpaceLength(RakelWidth, TextureResolution);
-        IRakel Rakel = new Rakel(length, width, RakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
+        Rakel = new Rakel(length, width, RakelPaintReservoir, new MaskCalculator(), new MaskApplicator());
         Debug.Log("Rakel is " + Rakel.Length + "x" + Rakel.Width + " = " + Rakel.Length * Rakel.Width);
         Rakel.UpdateNormal(RakelNormal, LOG_MASK_CALC_APPLY_TIME);
 
@@ -78,16 +88,29 @@ public class OilPaintEngine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 worldSpaceHit = InputUtil.GetMouseHit(Camera, CanvasColliderID);
-        if (!worldSpaceHit.Equals(Vector3.negativeInfinity))
+        if (BENCHMARK_STEPS > 0)
         {
-            Vector2Int preciseBrushPosition = WorldSpaceCoordinateToTextureSpaceCoordinate(worldSpaceHit);
-
-            if (Input.GetMouseButtonDown(0))
+            for (int i = 0; i < BENCHMARK_STEPS; i++)
             {
-                RakelDrawer.NewStroke();
+                float x = Random.Range(-5f, 5f);
+                float y = Random.Range(-3f, 3f);
+                Vector2Int position = WorldSpaceCoordinateToTextureSpaceCoordinate(new Vector3(x, y, 0));
+                Rakel.ApplyAt(OilPaintSurface, position);
             }
-            RakelDrawer.AddNode(OilPaintSurface, preciseBrushPosition, RakelNormal, LOG_MASK_CALC_APPLY_TIME);
+        }
+        else
+        {
+            Vector3 worldSpaceHit = InputUtil.GetMouseHit(Camera, CanvasColliderID);
+            if (!worldSpaceHit.Equals(Vector3.negativeInfinity))
+            {
+                Vector2Int preciseBrushPosition = WorldSpaceCoordinateToTextureSpaceCoordinate(worldSpaceHit);
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    RakelDrawer.NewStroke();
+                }
+                RakelDrawer.AddNode(OilPaintSurface, preciseBrushPosition, RakelNormal, LOG_MASK_CALC_APPLY_TIME);
+            }
         }
     }
 
