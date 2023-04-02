@@ -21,10 +21,10 @@ public class RakelPaintApplyButtonController : MonoBehaviour
         { "Ultramarine Blue", new Color(33/255f, 66/255f, 171/255f)}, // https://www.color-name.com/ultramarine.color
         { "Ultramarine Blue (RAL)", new Color(30/255f, 54/255f, 123/255f)}, // RAL
         { "Lemon Yellow", new Color(254/255f, 242/255f, 80/255f)}, // https://www.color-name.com/lemon-yellow.color
-        { "Cadmium Yellow", new Color(255/255f, 246/255f, 0/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
-        { "Cadmium Orange", new Color(237/255f, 135/255f, 45/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
-        { "Cadmium Red", new Color(227/255f, 0/255f, 34/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
-        { "Cadmium Green", new Color(0/255f, 107/255f, 60/255f)}, // https://en.wikipedia.org/wiki/Cadmium_pigments
+        { "Cadmium Yellow", new Color(255/255f, 246/255f, 0/255f)}, // https://www.colorhexa.com/color-names
+        { "Cadmium Orange", new Color(237/255f, 135/255f, 45/255f)}, // https://www.colorhexa.com/color-names
+        { "Cadmium Red", new Color(227/255f, 0/255f, 34/255f)}, // https://www.colorhexa.com/color-names
+        { "Cadmium Green", new Color(0/255f, 107/255f, 60/255f)}, // https://www.colorhexa.com/color-names
         { "Cadmium Green Light", new Color(128/255f, 181/255f, 46/255f)}, // just taken from https://www.kremer-pigmente.com/en/shop/pigments/44500-cadmium-green-light.html
 
         { "Anthracite", new Color(0.25f, 0.25f, 0.25f) },
