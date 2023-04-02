@@ -17,7 +17,7 @@ public class RakelPaintApplyButtonController : MonoBehaviour
     {
         { "Titan White", new Color(243/255.0f, 244/255.0f, 247/255.0f)}, // https://www.color-name.com/titanium-white.color
         { "Ivory Black", new Color(35/255f, 31/255f, 32/255f)}, // https://www.color-name.com/ivory-black.color
-        { "Red", new Color(0.58f, 0.06f, 0f) },
+        { "Dark Red", new Color(0.58f, 0.06f, 0f) },
         { "Ultramarine Blue", new Color(33/255f, 66/255f, 171/255f)}, // https://www.color-name.com/ultramarine.color
         { "Ultramarine Blue (RAL)", new Color(30/255f, 54/255f, 123/255f)}, // RAL
         { "Lemon Yellow", new Color(254/255f, 242/255f, 80/255f)}, // https://www.color-name.com/lemon-yellow.color
@@ -29,7 +29,6 @@ public class RakelPaintApplyButtonController : MonoBehaviour
 
         { "Anthracite", new Color(0.25f, 0.25f, 0.25f) },
         { "Red_", new Color(0.8f, 0.08f, 0.03f) },
-        { "Dark Red", new Color(0.58f, 0.06f, 0f) },
         { "Green", new Color(0.02f, 0.57f, 0.04f) },
         { "Blue", new Color(0.12f, 0.49f, 0.93f) },
         { "Dark Blue", new Color(0.05f, 0.12f, 0.32f) },

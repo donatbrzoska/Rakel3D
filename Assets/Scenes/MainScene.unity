@@ -724,7 +724,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Ivory Black
       m_Image: {fileID: 0}
-    - m_Text: Red
+    - m_Text: Dark Red
       m_Image: {fileID: 0}
     - m_Text: Ultramarine Blue
       m_Image: {fileID: 0}
@@ -745,8 +745,6 @@ MonoBehaviour:
     - m_Text: Anthracite
       m_Image: {fileID: 0}
     - m_Text: Red
-      m_Image: {fileID: 0}
-    - m_Text: Dark Red
       m_Image: {fileID: 0}
     - m_Text: Green
       m_Image: {fileID: 0}
